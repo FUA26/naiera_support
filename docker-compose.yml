@@ -1,0 +1,51 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: naiera-admin-postgres
+    environment:
+      POSTGRES_USER: naiera
+      POSTGRES_PASSWORD: naiera123
+      POSTGRES_DB: naiera_admin
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - naiera-admin-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U naiera"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO (S3-compatible storage)
+  minio:
+    image: minio/minio:latest
+    container_name: naiera-admin-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9100:9000"
+      - "9101:9001"
+    volumes:
+      - minio_data:/data
+    restart: unless-stopped
+    networks:
+      - naiera-admin-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+networks:
+  naiera-admin-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  minio_data:

@@ -427,13 +427,14 @@ export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
         onSuccess={onRefresh}
       />
 
-      <DeleteConfirmDialog
+      {/* TODO: Create TaskDeleteConfirmDialog for task deletion */}
+      {/* <DeleteConfirmDialog
         open={deleteDialog.open}
         onOpenChange={(open) => setDeleteDialog({ open, taskId: "" })}
         taskId={deleteDialog.taskId}
         taskName={tasks.find((t) => t.id === deleteDialog.taskId)?.title || ""}
         onConfirm={handleDeleteTask}
-      />
+      /> */}
     </>
   );
 }

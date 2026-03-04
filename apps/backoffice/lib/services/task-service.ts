@@ -14,7 +14,9 @@
  * @pattern docs/patterns/activity-logs.md
  */
 
-import type { TaskStatus, TaskPriority } from "@prisma/client";
+// Define enums locally since they're not in Prisma schema
+export type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE" | "ARCHIVED";
+export type TaskPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 
 // ============================================================================
 // Type Definitions
@@ -71,8 +73,8 @@ export interface TaskActivity {
   id: string;
   taskId: string;
   action: string;
-  changes?: Record<string, unknown>;
-  metadata?: Record<string, unknown>;
+  changes?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown> | null;
   createdAt: Date;
   user: TaskUser;
 }
@@ -127,8 +129,8 @@ let mockTasks: Task[] = [
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[1],
-    tags: [mockTags[1], mockTags[2]],
+    assignee: mockUsers[1]!,
+    tags: [mockTags[1]!, mockTags[2]!],
     commentCount: 5,
     attachmentCount: 2,
   },
@@ -141,8 +143,8 @@ let mockTasks: Task[] = [
     dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[2],
-    tags: [mockTags[0]],
+    assignee: mockUsers[2]!,
+    tags: [mockTags[0]!],
     commentCount: 2,
     attachmentCount: 0,
   },
@@ -155,8 +157,8 @@ let mockTasks: Task[] = [
     dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[0],
-    tags: [mockTags[3]],
+    assignee: mockUsers[0]!,
+    tags: [mockTags[3]!],
     commentCount: 1,
     attachmentCount: 1,
   },
@@ -169,8 +171,8 @@ let mockTasks: Task[] = [
     dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[1],
-    tags: [mockTags[1]],
+    assignee: mockUsers[1]!,
+    tags: [mockTags[1]!],
     commentCount: 8,
     attachmentCount: 0,
   },
@@ -183,8 +185,8 @@ let mockTasks: Task[] = [
     dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[0],
-    tags: [mockTags[0], mockTags[4]],
+    assignee: mockUsers[0]!,
+    tags: [mockTags[0]!, mockTags[4]!],
     commentCount: 3,
     attachmentCount: 1,
   },
@@ -197,8 +199,8 @@ let mockTasks: Task[] = [
     dueDate: null,
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[2],
-    tags: [mockTags[2]],
+    assignee: mockUsers[2]!,
+    tags: [mockTags[2]!],
     commentCount: 4,
     attachmentCount: 0,
   },
@@ -212,7 +214,7 @@ let mockComments: TaskComment[] = [
     content: "I've started working on the Google OAuth integration. Need to set up the callback URL.",
     createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-    author: mockUsers[1],
+    author: mockUsers[1]!,
   },
   {
     id: "comment-2",
@@ -220,7 +222,7 @@ let mockComments: TaskComment[] = [
     content: "Great progress! Let me know if you need help with the GitHub provider.",
     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    author: mockUsers[0],
+    author: mockUsers[0]!,
   },
   {
     id: "comment-3",
@@ -228,7 +230,7 @@ let mockComments: TaskComment[] = [
     content: "I've attached a screenshot showing the issue on iPhone SE.",
     createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
-    author: mockUsers[2],
+    author: mockUsers[2]!,
   },
 ];
 
@@ -240,7 +242,7 @@ let mockActivities: TaskActivity[] = [
     action: "CREATED",
     changes: null,
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    user: mockUsers[0],
+    user: mockUsers[0]!,
   },
   {
     id: "activity-2",
@@ -248,7 +250,7 @@ let mockActivities: TaskActivity[] = [
     action: "ASSIGNED",
     changes: { assignee: "John Developer" },
     createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
-    user: mockUsers[0],
+    user: mockUsers[0]!,
   },
   {
     id: "activity-3",
@@ -256,7 +258,7 @@ let mockActivities: TaskActivity[] = [
     action: "STATUS_CHANGED",
     changes: { from: "TODO", to: "IN_PROGRESS" },
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    user: mockUsers[1],
+    user: mockUsers[1]!,
   },
 ];
 
@@ -310,12 +312,13 @@ export async function getTasks(
 
   // Sort tasks
   filtered.sort((a, b) => {
-    let aVal: unknown, bVal: unknown;
+    let aVal: number, bVal: number;
 
     switch (sortBy) {
       case "status":
-        aVal = a.status;
-        bVal = b.status;
+        const statusOrder = { TODO: 0, IN_PROGRESS: 1, REVIEW: 2, DONE: 3, ARCHIVED: 4 };
+        aVal = statusOrder[a.status];
+        bVal = statusOrder[b.status];
         break;
       case "priority":
         const priorityOrder = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
@@ -370,7 +373,7 @@ export async function getTaskById(id: string): Promise<Task | null> {
  * Create a new task
  */
 export async function createTask(
-  data: Omit<Task, "id" | "createdAt" | "updatedAt" | "commentCount" | "attachmentCount"> & {
+  data: Omit<Task, "id" | "createdAt" | "updatedAt" | "commentCount" | "attachmentCount" | "assignee" | "tags"> & {
     assigneeId?: string;
     tagIds?: string[];
   }
@@ -397,7 +400,7 @@ export async function createTask(
   mockTasks.unshift(newTask);
 
   // Log activity
-  await logActivity(newTask.id, "CREATED", null, mockUsers[0]);
+  await logActivity(newTask.id, "CREATED", null, mockUsers[0]!);
 
   return newTask;
 }
@@ -417,10 +420,10 @@ export async function updateTask(
   const index = mockTasks.findIndex((t) => t.id === id);
   if (index === -1) return null;
 
-  const existing = mockTasks[index];
+  const existing = mockTasks[index]!;
   const changes: Record<string, unknown> = {};
 
-  // Track changes for activity log
+  // Track changes for activity log (only if existing is defined)
   if (data.status && data.status !== existing.status) {
     changes.status = { from: existing.status, to: data.status };
   }
@@ -439,21 +442,27 @@ export async function updateTask(
 
   const updated: Task = {
     ...existing,
-    ...data,
+    title: data.title ?? existing.title,
+    description: data.description ?? existing.description,
+    status: data.status ?? existing.status,
+    priority: data.priority ?? existing.priority,
+    dueDate: data.dueDate ?? existing.dueDate,
     updatedAt: new Date(),
     assignee: data.assigneeId !== undefined
-      ? mockUsers.find((u) => u.id === data.assigneeId)
+      ? mockUsers.find((u) => u.id === data.assigneeId) ?? existing.assignee
       : existing.assignee,
     tags: data.tagIds
-      ? data.tagIds.map((tagId) => mockTags.find((t) => t.id === tagId)).filter(Boolean) as TaskTag[]
+      ? data.tagIds.map((tagId) => mockTags.find((t) => t.id === tagId)!).filter(Boolean) as TaskTag[]
       : existing.tags,
+    commentCount: existing.commentCount,
+    attachmentCount: existing.attachmentCount,
   };
 
   mockTasks[index] = updated;
 
   // Log activity if there are changes
   if (Object.keys(changes).length > 0) {
-    await logActivity(id, "UPDATED", changes, mockUsers[0]);
+    await logActivity(id, "UPDATED", changes, mockUsers[0]!);
   }
 
   return updated;
@@ -474,7 +483,7 @@ export async function deleteTask(id: string): Promise<boolean> {
   mockComments = mockComments.filter((c) => c.taskId !== id);
 
   // Log activity
-  await logActivity(id, "DELETED", null, mockUsers[0]);
+  await logActivity(id, "DELETED", null, mockUsers[0]!);
 
   return true;
 }
@@ -500,7 +509,7 @@ export async function bulkUpdateStatus(
         id,
         "STATUS_CHANGED",
         { from: task.status, to: status },
-        mockUsers[0]
+        mockUsers[0]!
       );
 
       updated++;
@@ -551,7 +560,7 @@ export async function addTaskComment(
 ): Promise<TaskComment> {
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const author = mockUsers.find((u) => u.id === authorId) || mockUsers[0];
+  const author = mockUsers.find((u) => u.id === authorId) || mockUsers[0]!;
   const task = mockTasks.find((t) => t.id === taskId);
 
   if (!task) throw new Error("Task not found");

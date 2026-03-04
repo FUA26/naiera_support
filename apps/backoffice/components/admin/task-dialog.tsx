@@ -34,12 +34,13 @@ import {
   type UpdateTaskInput,
   type TaskStatus,
   type TaskPriority,
+  taskSchema,
+  updateTaskSchema,
 } from "@/lib/validations/task";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { taskSchema } from "@/lib/validations/task";
 import {
   createTask,
   getAssignableUsers,
@@ -47,7 +48,7 @@ import {
   getTaskById,
   updateTask,
 } from "@/lib/services/task-service";
-import { Checkbox01Icon } from "@hugeicons/core-free-icons";
+import { CheckSquare } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { XIcon } from "lucide-react";
 
@@ -68,8 +69,8 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
   const [availableTags, setAvailableTags] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
-  const form = useForm<CreateTaskInput>({
-    resolver: zodResolver(taskSchema),
+  const form = useForm<CreateTaskInput | UpdateTaskInput>({
+    resolver: zodResolver(mode === "create" ? taskSchema : updateTaskSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -119,7 +120,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
           description: task.description || "",
           status: task.status as TaskStatus,
           priority: task.priority as TaskPriority,
-          dueDate: task.dueDate ? task.dueDate.toISOString().split("T")[0] : "",
+          dueDate: task.dueDate ? task.dueDate : undefined,
           assigneeId: task.assignee?.id || "",
           tagIds: task.tags.map((t) => t.id),
         });
@@ -136,20 +137,31 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
     }
   }
 
-  async function handleSubmit(data: CreateTaskInput) {
+  async function handleSubmit(data: CreateTaskInput | UpdateTaskInput) {
     setIsLoading(true);
     try {
+      const taskData = {
+        ...data,
+        description: data.description ?? null,
+        dueDate: data.dueDate ?? null,
+        tagIds: selectedTagIds,
+      };
+
       if (mode === "create") {
+        // For create, ensure required fields are present
+        const createData = data as CreateTaskInput;
         await createTask({
-          ...data,
+          title: createData.title,
+          description: createData.description ?? null,
+          status: createData.status,
+          priority: createData.priority,
+          dueDate: createData.dueDate ?? null,
+          assigneeId: createData.assigneeId || undefined,
           tagIds: selectedTagIds,
         });
         toast.success("Task created successfully");
       } else {
-        await updateTask(taskId!, {
-          ...data,
-          tagIds: selectedTagIds,
-        });
+        await updateTask(taskId!, taskData);
         toast.success("Task updated successfully");
       }
       onSuccess?.();
@@ -201,7 +213,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                     disabled={isLoading}
                   />
                 </FieldContent>
-                <FieldError errors={form.formState.errors.title} />
+                <FieldError errors={form.formState.errors.title ? [form.formState.errors.title] : []} />
               </Field>
 
               <Field>
@@ -215,7 +227,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                     disabled={isLoading}
                   />
                 </FieldContent>
-                <FieldError errors={form.formState.errors.description} />
+                <FieldError errors={form.formState.errors.description ? [form.formState.errors.description] : []} />
               </Field>
 
               <div className="grid grid-cols-2 gap-4">
@@ -241,7 +253,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                       </SelectContent>
                     </Select>
                   </FieldContent>
-                  <FieldError errors={form.formState.errors.status} />
+                  <FieldError errors={form.formState.errors.status ? [form.formState.errors.status] : []} />
                 </Field>
 
                 <Field>
@@ -265,7 +277,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                       </SelectContent>
                     </Select>
                   </FieldContent>
-                  <FieldError errors={form.formState.errors.priority} />
+                  <FieldError errors={form.formState.errors.priority ? [form.formState.errors.priority] : []} />
                 </Field>
               </div>
 
@@ -280,7 +292,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                       disabled={isLoading}
                     />
                   </FieldContent>
-                  <FieldError errors={form.formState.errors.dueDate} />
+                  <FieldError errors={form.formState.errors.dueDate ? [form.formState.errors.dueDate] : []} />
                 </Field>
 
                 <Field>
@@ -304,7 +316,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                       </SelectContent>
                     </Select>
                   </FieldContent>
-                  <FieldError errors={form.formState.errors.assigneeId} />
+                  <FieldError errors={form.formState.errors.assigneeId ? [form.formState.errors.assigneeId] : []} />
                 </Field>
               </div>
 
@@ -320,7 +332,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                         onClick={() => toggleTag(tag.id)}
                       >
                         {selectedTagIds.includes(tag.id) && (
-                          <HugeiconsIcon icon={Checkbox01Icon} className="h-3 w-3 mr-1" />
+                          <HugeiconsIcon icon={CheckSquare} className="h-3 w-3 mr-1" />
                         )}
                         {tag.name}
                       </Badge>

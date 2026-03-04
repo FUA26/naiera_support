@@ -1,13 +1,6 @@
-import Image from "next/image";
-
+// Icon generation - using app icon from public folder
 export default function Icon() {
-  return (
-    <Image
-      src="/logo.svg"
-      alt="Naiera Logo"
-      width={108}
-      height={108}
-      priority
-    />
-  );
+  // This file is used for generating the app icon
+  // The actual icon.svg is in the public folder
+  return null;
 }

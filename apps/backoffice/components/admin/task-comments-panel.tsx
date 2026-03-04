@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Send01Icon } from "@hugeicons/core-free-icons";
+import { SentIcon } from "@hugeicons/core-free-icons";
 import { formatDistanceToNow } from "date-fns";
 import {
   addTaskComment,
@@ -81,7 +81,7 @@ export function TaskCommentsPanel({ taskId, taskTitle }: TaskCommentsPanelProps)
     }
   }
 
-  const getActionLabel = (action: string, changes?: Record<string, unknown>) => {
+  const getActionLabel = (action: string, changes?: Record<string, unknown> | null) => {
     switch (action) {
       case "CREATED":
         return "created this task";
@@ -207,7 +207,7 @@ export function TaskCommentsPanel({ taskId, taskTitle }: TaskCommentsPanelProps)
                 "Sending..."
               ) : (
                 <>
-                  <HugeiconsIcon icon={Send01Icon} className="h-4 w-4 mr-2" />
+                  <HugeiconsIcon icon={SentIcon} className="h-4 w-4 mr-2" />
                   Send
                 </>
               )}
