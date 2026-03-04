@@ -1,0 +1,154 @@
+[
+  {
+    "slug": "ppdb",
+    "icon": "GraduationCap",
+    "name": "PPDB Online",
+    "description": "Penerimaan Peserta Didik Baru",
+    "categoryId": "education",
+    "badge": "Baru",
+    "stats": "3.7k",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Penerimaan Peserta Didik Baru (PPDB) secara online untuk jenjang SD, SMP, SMA, dan SMK. PPDB dilaksanakan setiap tahun ajaran baru dengan sistem zonasi, afirmasi, dan perpindahan orang tua.",
+    "requirements": [
+      "Ijazah atau Surat Keterangan Lulus (SKL)",
+      "Fotokopi Akta Kelahiran",
+      "Fotokopi Kartu Keluarga",
+      "Pas foto terbaru 3x4 (2 lembar)",
+      "Surat Keterangan Tidak Mampu (SKTM) jika jalur afirmasi",
+      "Sertifikat prestasi (jika ada)"
+    ],
+    "process": [
+      "Registrasi akun di portal PPDB online",
+      "Mengisi data diri dan upload dokumen",
+      "Memilih sekolah tujuan (maksimal 3 pilihan)",
+      "Menunggu hasil seleksi",
+      "Daftar ulang di sekolah yang diterima"
+    ],
+    "duration": "Sesuai jadwal PPDB",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Pendidikan",
+      "phone": "(021) 1234-5678",
+      "email": "ppdb@disdik.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Panduan PPDB Online",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["beasiswa", "surat-keterangan-sekolah"],
+    "faqs": [
+      {
+        "question": "Kapan jadwal PPDB?",
+        "answer": "PPDB biasanya dilaksanakan bulan Mei-Juli setiap tahun. Jadwal resmi diumumkan oleh Dinas Pendidikan beberapa bulan sebelumnya."
+      },
+      {
+        "question": "Bagaimana sistem zonasi PPDB?",
+        "answer": "Sistem zonasi memprioritaskan siswa yang domisili dekat dengan sekolah (berdasarkan KK) dengan kuota minimal 50% dari daya tampung."
+      },
+      {
+        "question": "Apa saja jalur penerimaan PPDB?",
+        "answer": "Terdapat 3 jalur: Zonasi (50%), Afirmasi untuk KIP/PKH/DTKS (15%), dan Perpindahan tugas orang tua (5%), serta Prestasi (30%)."
+      }
+    ]
+  },
+  {
+    "slug": "beasiswa",
+    "icon": "Award",
+    "name": "Beasiswa Pendidikan",
+    "description": "Informasi dan pendaftaran beasiswa",
+    "categoryId": "education",
+    "stats": "1.5k",
+    "showInMenu": true,
+    "order": 2,
+    "isIntegrated": false,
+    "detailedDescription": "Program beasiswa pendidikan untuk siswa berprestasi dan kurang mampu. Beasiswa tersedia untuk berbagai jenjang pendidikan dari SD hingga perguruan tinggi dari sumber pemerintah dan swasta.",
+    "requirements": [
+      "Fotokopi rapor semester terakhir",
+      "Surat Keterangan Tidak Mampu dari kelurahan (untuk beasiswa prestasi)",
+      "Fotokopi Kartu Keluarga dan E-KTP",
+      "Surat rekomendasi dari sekolah",
+      "Fotokopi bukti pembayaran listrik (untuk verifikasi)",
+      "Esai/pernyataan alasan membutuhkan beasiswa"
+    ],
+    "process": [
+      "Cek ketersediaan program beasiswa",
+      "Mengisi formulir pendaftaran beasiswa",
+      "Upload dokumen persyaratan lengkap",
+      "Seleksi administrasi dan wawancara",
+      "Pengumuman penerima beasiswa"
+    ],
+    "duration": "1-2 bulan",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Pendidikan",
+      "phone": "(021) 1234-5678",
+      "email": "beasiswa@disdik.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran Beasiswa",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["ppdb", "surat-keterangan-sekolah"],
+    "faqs": [
+      {
+        "question": "Apa saja jenis beasiswa yang tersedia?",
+        "answer": "Beberapa beasiswa populer: KIP Kuliah, Beasiswa Prestasi, Beasiswa Daerah, dan beasiswa dari swasta."
+      },
+      {
+        "question": "Apakah beasiswa harus dikembalikan?",
+        "answer": "Sebagian besar beasiswa adalah hibah yang tidak perlu dikembalikan, namun ada juga beasiswa ikatan dinas yang mengharuskan penerima bekerja di instansi tertentu."
+      }
+    ]
+  },
+  {
+    "slug": "surat-keterangan-sekolah",
+    "icon": "FileText",
+    "name": "Surat Keterangan Sekolah",
+    "description": "Pengurusan surat keterangan",
+    "categoryId": "education",
+    "stats": "2.8k",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": false,
+    "detailedDescription": "Layanan pengurusan berbagai surat keterangan dari sekolah seperti surat keterangan aktif kuliah, surat keterangan lulus, dan surat keterangan lainnya untuk keperluan administrasi.",
+    "requirements": [
+      "Surat permohonan dari orang tua/wali siswa",
+      "Fotokopi rapor terakhir",
+      "Fotokopi E-KTP orang tua/wali",
+      "Fotokopi Kartu Pelajar",
+      "Materai 10.000"
+    ],
+    "process": [
+      "Mengajukan permohonan ke sekolah",
+      "Menyerahkan surat permohonan dan persyaratan",
+      "Proses verifikasi oleh sekolah",
+      "Penerbitan surat keterangan",
+      "Pengambilan dokumen di sekolah"
+    ],
+    "duration": "1-3 hari kerja",
+    "cost": "Gratis - Rp 10.000",
+    "contactInfo": {
+      "office": "Sekolah Setempat",
+      "phone": "Sesuai sekolah",
+      "email": "-"
+    },
+    "downloadForms": [],
+    "relatedServices": ["ppdb", "beasiswa"],
+    "faqs": [
+      {
+        "question": "Berapa lama proses pembuatan surat keterangan?",
+        "answer": "Biasanya 1-3 hari kerja tergantung jenis surat dan ketersediaan pejabat penandatangan."
+      },
+      {
+        "question": "Apa saja jenis surat keterangan yang bisa dibuat?",
+        "answer": "Surat keterangan aktif, surat keterangan lulus, surat keterangan prestasi, surat keterangan berkelakuan baik, dan lainnya."
+      }
+    ]
+  }
+]

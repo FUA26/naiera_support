@@ -1,0 +1,569 @@
+@import "tailwindcss";
+
+@source "../**/*.{ts,tsx}";
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ========================================
+   NAIERA COLOR SYSTEM
+   ========================================
+
+   This file defines the complete color system for Naiera Super App.
+   To change the theme, modify the color values in the :root section below.
+
+   COLOR CATEGORIES:
+   - Brand Colors (primary, secondary, accent)
+   - Semantic Colors (success, warning, error, info)
+   - Neutral Colors (background, foreground, muted, border)
+   - Chart Colors (for data visualization)
+
+   ======================================== */
+
+:root {
+  /* ========================================
+     BRAND COLORS
+     ======================================== */
+
+  /* Primary - Main brand color (Blue) */
+  --primary: oklch(0.546 0.245 262); /* blue-600 */
+  --primary-hover: oklch(0.488 0.243 264); /* blue-700 */
+  --primary-active: oklch(0.424 0.199 265); /* blue-800 */
+  --primary-light: oklch(0.932 0.032 255); /* blue-100 */
+  --primary-lighter: oklch(0.97 0.014 254); /* blue-50 */
+  --primary-foreground: oklch(1 0 0); /* white */
+
+  /* Secondary - Supporting brand color (Slate/Gray) */
+  --secondary: oklch(0.554 0.025 264); /* slate-600 */
+  --secondary-hover: oklch(0.446 0.03 264); /* slate-700 */
+  --secondary-active: oklch(0.342 0.03 264); /* slate-800 */
+  --secondary-light: oklch(0.929 0.008 264); /* slate-200 */
+  --secondary-lighter: oklch(0.968 0.003 264); /* slate-100 */
+  --secondary-foreground: oklch(1 0 0); /* white */
+
+  /* Accent - Used for UI hover states (synced with primary for consistency) */
+  --accent: var(--primary-lighter); /* matches primary theme */
+  --accent-hover: var(--primary-light); /* matches primary theme */
+  --accent-active: var(--primary-light); /* matches primary theme */
+  --accent-light: var(--primary-lighter); /* matches primary theme */
+  --accent-lighter: var(--primary-lighter); /* matches primary theme */
+  --accent-foreground: var(--primary); /* text on accent bg */
+
+  /* ========================================
+     SEMANTIC COLORS
+     ======================================== */
+
+  /* Success - Positive actions/states */
+  --success: oklch(0.586 0.189 130); /* green-500 */
+  --success-light: oklch(0.905 0.08 130); /* green-100 */
+  --success-foreground: oklch(0.36 0.13 130); /* green-800 */
+
+  /* Warning - Caution/attention states */
+  --warning: oklch(0.75 0.18 75); /* amber-500 */
+  --warning-light: oklch(0.95 0.08 85); /* amber-100 */
+  --warning-foreground: oklch(0.4 0.13 75); /* amber-800 */
+
+  /* Error/Destructive - Error/danger states */
+  --destructive: oklch(0.577 0.245 27); /* red-500 */
+  --destructive-light: oklch(0.936 0.08 25); /* red-100 */
+  --destructive-foreground: oklch(0.396 0.18 25); /* red-800 */
+
+  /* Info - Informational states */
+  --info: oklch(0.6 0.2 250); /* blue-500 */
+  --info-light: oklch(0.93 0.07 250); /* blue-100 */
+  --info-foreground: oklch(0.39 0.15 250); /* blue-800 */
+
+  /* ========================================
+     NEUTRAL & BACKGROUND COLORS
+     ======================================== */
+
+  --background: oklch(1 0 0); /* white */
+  --foreground: oklch(0.145 0 0); /* black */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  --muted: oklch(0.968 0.003 264); /* slate-100 */
+  --muted-foreground: oklch(0.5 0.015 264); /* slate-500 */
+
+  --border: oklch(0.922 0.008 264); /* slate-200 */
+  --input: oklch(0.922 0.008 264);
+  --ring: var(--primary); /* ring uses primary color */
+
+  /* ========================================
+     CATEGORY-SPECIFIC COLORS
+     For different content types
+     ======================================== */
+
+  /* Government/Official - Blue */
+  --category-government: oklch(0.54 0.2 250);
+  --category-government-light: oklch(0.93 0.07 250);
+
+  /* Health - Red/Pink */
+  --category-health: oklch(0.6 0.2 15);
+  --category-health-light: oklch(0.94 0.06 15);
+
+  /* Education - Purple */
+  --category-education: oklch(0.55 0.2 300);
+  --category-education-light: oklch(0.93 0.07 300);
+
+  /* Finance - Green */
+  --category-finance: oklch(0.53 0.18 155);
+  --category-finance-light: oklch(0.9 0.08 155);
+
+  /* Tourism - Orange */
+  --category-tourism: oklch(0.65 0.2 50);
+  --category-tourism-light: oklch(0.94 0.07 50);
+
+  /* Social - Pink */
+  --category-social: oklch(0.6 0.18 340);
+  --category-social-light: oklch(0.94 0.06 340);
+
+  /* ========================================
+     CHART COLORS
+     For data visualization
+     ======================================== */
+
+  --chart-1: oklch(0.53 0.18 155); /* primary */
+  --chart-2: oklch(0.6 0.2 250); /* blue */
+  --chart-3: oklch(0.75 0.18 75); /* amber */
+  --chart-4: oklch(0.55 0.2 300); /* purple */
+  --chart-5: oklch(0.6 0.15 180); /* teal */
+
+  /* ========================================
+     SIDEBAR COLORS
+     ======================================== */
+
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.53 0.18 155);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.96 0.04 155);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.53 0.18 155);
+
+  /* ========================================
+     GRADIENT PRESETS
+     ======================================== */
+
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--accent));
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.24 0.03 264),
+    oklch(0.18 0.02 264)
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    oklch(0.985 0 0),
+    oklch(0.97 0.003 264)
+  );
+
+  /* ========================================
+     MISC
+     ======================================== */
+
+  --radius: 0.625rem;
+}
+
+/* ========================================
+   DARK MODE COLORS
+   ======================================== */
+
+.dark {
+  /* Brand Colors - Dark Mode */
+  --primary: oklch(0.707 0.165 254); /* blue-400 for dark mode */
+  --primary-hover: oklch(0.623 0.214 259); /* blue-500 */
+  --primary-active: oklch(0.546 0.245 262); /* blue-600 */
+  --primary-light: oklch(0.282 0.091 267); /* blue-900/40 */
+  --primary-lighter: oklch(0.208 0.042 265); /* blue-950/30 */
+  --primary-foreground: oklch(0.145 0 0);
+
+  --secondary: oklch(0.3 0.01 264); /* Darker background for dark mode */
+  --secondary-hover: oklch(0.35 0.01 264);
+  --secondary-light: oklch(0.25 0.01 264);
+  --secondary-lighter: oklch(0.2 0.01 264);
+  --secondary-foreground: oklch(0.95 0 0); /* Light text on dark bg */
+
+  --accent: var(--primary-lighter);
+  --accent-hover: var(--primary-light);
+  --accent-light: var(--primary-lighter);
+  --accent-lighter: var(--primary-lighter);
+  --accent-foreground: var(--primary);
+
+  /* Semantic Colors - Dark Mode */
+  --success: oklch(0.7 0.17 140);
+  --success-light: oklch(0.25 0.06 140);
+  --success-foreground: oklch(0.145 0 0);
+
+  --warning: oklch(0.8 0.15 80);
+  --warning-light: oklch(0.28 0.06 80);
+  --warning-foreground: oklch(0.145 0 0);
+
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-light: oklch(0.28 0.08 25);
+  --destructive-foreground: oklch(0.145 0 0);
+
+  --info: oklch(0.7 0.18 250);
+  --info-light: oklch(0.25 0.06 250);
+  --info-foreground: oklch(0.145 0 0);
+
+  /* Neutral Colors - Dark Mode */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.18 0.005 264);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.18 0.005 264);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  --border: oklch(0.269 0.01 264);
+  --input: oklch(0.269 0.01 264);
+  --ring: oklch(0.707 0.165 254);
+
+  /* Category Colors - Dark Mode */
+  --category-government: oklch(0.7 0.18 250);
+  --category-government-light: oklch(0.25 0.06 250);
+
+  --category-health: oklch(0.7 0.18 15);
+  --category-health-light: oklch(0.28 0.06 15);
+
+  --category-education: oklch(0.7 0.18 300);
+  --category-education-light: oklch(0.25 0.06 300);
+
+  --category-finance: oklch(0.696 0.17 162);
+  --category-finance-light: oklch(0.25 0.05 155);
+
+  --category-tourism: oklch(0.75 0.18 50);
+  --category-tourism-light: oklch(0.28 0.06 50);
+
+  --category-social: oklch(0.7 0.16 340);
+  --category-social-light: oklch(0.28 0.05 340);
+
+  /* Chart Colors - Dark Mode */
+  --chart-1: oklch(0.696 0.17 162);
+  --chart-2: oklch(0.7 0.18 250);
+  --chart-3: oklch(0.8 0.15 80);
+  --chart-4: oklch(0.7 0.18 300);
+  --chart-5: oklch(0.75 0.14 180);
+
+  /* Sidebar - Dark Mode */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.696 0.17 162);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+
+  /* Gradients - Dark Mode */
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--accent));
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.18 0.02 264),
+    oklch(0.12 0.015 264)
+  );
+}
+
+/* ========================================
+   TAILWIND THEME MAPPING
+   ======================================== */
+
+@theme inline {
+  /* Core Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Brand Colors */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-light: var(--primary-light);
+  --color-primary-lighter: var(--primary-lighter);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-active: var(--secondary-active);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-lighter: var(--secondary-lighter);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-light: var(--accent-light);
+  --color-accent-lighter: var(--accent-lighter);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-light: var(--destructive-light);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Neutral Colors */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Category Colors */
+  --color-category-government: var(--category-government);
+  --color-category-government-light: var(--category-government-light);
+  --color-category-health: var(--category-health);
+  --color-category-health-light: var(--category-health-light);
+  --color-category-education: var(--category-education);
+  --color-category-education-light: var(--category-education-light);
+  --color-category-finance: var(--category-finance);
+  --color-category-finance-light: var(--category-finance-light);
+  --color-category-tourism: var(--category-tourism);
+  --color-category-tourism-light: var(--category-tourism-light);
+  --color-category-social: var(--category-social);
+  --color-category-social-light: var(--category-social-light);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Custom animations for landing page */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   For using theme colors in components
+   ======================================== */
+
+@layer utilities {
+  /* Primary Button Styles */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active;
+  }
+
+  /* Secondary Button Styles */
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active;
+  }
+
+  /* Accent Button Styles */
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent-hover active:bg-accent-active;
+  }
+
+  /* Success Styles */
+  .badge-success {
+    @apply bg-success-light text-success-foreground;
+  }
+
+  /* Warning Styles */
+  .badge-warning {
+    @apply bg-warning-light text-warning-foreground;
+  }
+
+  /* Error/Destructive Styles */
+  .badge-error {
+    @apply bg-destructive-light text-destructive-foreground;
+  }
+
+  /* Info Styles */
+  .badge-info {
+    @apply bg-info-light text-info-foreground;
+  }
+
+  /* Card with hover effect */
+  .card-interactive {
+    @apply bg-card border-border hover:border-primary-light rounded-lg border shadow-sm transition-all hover:shadow-md;
+  }
+
+  /* Hero gradient background */
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  /* Primary gradient */
+  .bg-primary-gradient {
+    background: var(--gradient-primary);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY UTILITIES
+   ======================================== */
+
+:root {
+  --a11y-font-scale: 1;
+  --a11y-line-height: 1.5;
+  --a11y-letter-spacing: 0;
+}
+
+/* Text Size Scaling */
+html.a11y-text-scale {
+  font-size: calc(16px * var(--a11y-font-scale)) !important;
+}
+
+/* Line Height Scaling */
+body.a11y-line-height * {
+  line-height: var(--a11y-line-height) !important;
+}
+
+/* Letter Spacing */
+body.a11y-letter-spacing * {
+  letter-spacing: var(--a11y-letter-spacing) !important;
+}
+
+/* Readable Font */
+body.a11y-readable-font,
+body.a11y-readable-font * {
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
+}
+
+/* Links Underline */
+body.a11y-links-underline a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+/* Monochrome Mode - Apply to main content, not body */
+body.a11y-monochrome > *:not(.a11y-widget-root) {
+  filter: grayscale(100%) !important;
+}
+
+/* High Contrast Mode - Apply to main content, not body */
+body.a11y-high-contrast > *:not(.a11y-widget-root) {
+  filter: contrast(1.5) !important;
+}
+body.a11y-high-contrast {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+}
+body.a11y-high-contrast *:not(.a11y-widget-root):not(.a11y-widget-root *) {
+  border-color: currentColor !important;
+}
+
+/* Zoom Cursor */
+body.a11y-zoom-cursor,
+body.a11y-zoom-cursor * {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8v8M8 12h8'/%3E%3C/svg%3E")
+      24 24,
+    auto !important;
+}
+
+/* Stop Animations */
+body.a11y-stop-animation *,
+body.a11y-stop-animation *::before,
+body.a11y-stop-animation *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Hide Images */
+body.a11y-hide-images img,
+body.a11y-hide-images picture,
+body.a11y-hide-images video,
+body.a11y-hide-images svg:not(.a11y-icon),
+body.a11y-hide-images [style*="background-image"] {
+  opacity: 0.1 !important;
+}
+
+/* Text Align Classes */
+body.a11y-align-left * {
+  text-align: left !important;
+}
+body.a11y-align-center * {
+  text-align: center !important;
+}
+body.a11y-align-right * {
+  text-align: right !important;
+}
+body.a11y-align-justify * {
+  text-align: justify !important;
+}

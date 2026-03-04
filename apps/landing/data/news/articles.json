@@ -1,0 +1,80 @@
+[
+  {
+    "id": "1",
+    "slug": "peresmian-sistem-informasi-daerah-2026",
+    "title": "Bupati Resmikan Sistem Informasi Daerah Terintegrasi",
+    "excerpt": "Sistem informasi daerah terintegrasi kini telah resmi diluncurkan untuk meningkatkan pelayanan publik dan transparansi administrasi pemerintahan.",
+    "category": "Teknologi",
+    "date": "2026-01-13",
+    "image": "/images/news-1.jpg",
+    "author": "Dinas Komunikasi dan Informatika",
+    "readTime": "3 menit",
+    "featured": true,
+    "tags": ["teknologi", "pemerintahan", "digitalisasi"]
+  },
+  {
+    "id": "2",
+    "slug": "pelatihan-umkm-digital-2026",
+    "title": "Pelatihan Digital Marketing untuk 500 UMKM",
+    "excerpt": "Program pelatihan intensif digital marketing untuk meningkatkan daya saing UMKM di era digital mencapai tahap kedua.",
+    "category": "Ekonomi",
+    "date": "2026-01-12",
+    "image": "/images/news-2.jpg",
+    "author": "Dinas Koperasi dan UMKM",
+    "readTime": "4 menit",
+    "featured": false,
+    "tags": ["umkm", "pelatihan", "ekonomi"]
+  },
+  {
+    "id": "3",
+    "slug": "penghargaan-adipura-2026",
+    "title": "Kabupaten Raih Penghargaan Adipura 2026",
+    "excerpt": "Penghargaan Adipura kembali diraih berkat keberhasilan dalam pengelolaan lingkungan hidup dan kebersihan kota.",
+    "category": "Lingkungan",
+    "date": "2026-01-10",
+    "image": "/images/news-3.jpg",
+    "author": "Dinas Lingkungan Hidup",
+    "readTime": "5 menit",
+    "featured": false,
+    "tags": ["lingkungan", "penghargaan", "adipura"]
+  },
+  {
+    "id": "4",
+    "slug": "pembangunan-puskesmas-baru",
+    "title": "Pembangunan 3 Puskesmas Baru Dimulai",
+    "excerpt": "Pembangunan fasilitas kesehatan baru dimulai untuk meningkatkan akses pelayanan kesehatan di wilayah perdesaan.",
+    "category": "Kesehatan",
+    "date": "2026-01-08",
+    "image": "/images/news-4.jpg",
+    "author": "Dinas Kesehatan",
+    "readTime": "4 menit",
+    "featured": false,
+    "tags": ["kesehatan", "infrastruktur", "puskesmas"]
+  },
+  {
+    "id": "5",
+    "slug": "program-beasiswa-prestasi",
+    "title": "Program Beasiswa Prestasi Dibuka",
+    "excerpt": "Pemerintah daerah membuka program beasiswa prestasi untuk 100 mahasiswa berprestasi dari keluarga kurang mampu.",
+    "category": "Pendidikan",
+    "date": "2026-01-05",
+    "image": "/images/news-5.jpg",
+    "author": "Dinas Pendidikan",
+    "readTime": "3 menit",
+    "featured": false,
+    "tags": ["pendidikan", "beasiswa", "prestasi"]
+  },
+  {
+    "id": "6",
+    "slug": "festival-budaya-daerah",
+    "title": "Festival Budaya Daerah 2026 Siap Digelar",
+    "excerpt": "Festival budaya tahunan akan menampilkan seni tradisional, kuliner lokal, dan pertunjukan budaya dari berbagai daerah.",
+    "category": "Pariwisata",
+    "date": "2026-01-03",
+    "image": "/images/news-6.jpg",
+    "author": "Dinas Kebudayaan dan Pariwisata",
+    "readTime": "5 menit",
+    "featured": false,
+    "tags": ["budaya", "pariwisata", "festival"]
+  }
+]

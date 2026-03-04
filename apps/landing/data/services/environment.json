@@ -1,0 +1,98 @@
+[
+  {
+    "slug": "bank-sampah",
+    "icon": "Sprout",
+    "name": "Bank Sampah",
+    "description": "Program pengelolaan sampah",
+    "categoryId": "environment",
+    "stats": "890",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": false,
+    "detailedDescription": "Bank Sampah adalah sistem pengelolaan sampah dengan prinsip 3R (Reduce, Reuse, Recycle). Warga dapat menyetor sampah yang sudah dipilah dan ditukar dengan tabungan yang dapat dicairkan.",
+    "requirements": [
+      "Fotokopi E-KTP",
+      "Fotokopi Kartu Keluarga",
+      "Pas foto 3x4 (1 lembar)"
+    ],
+    "process": [
+      "Daftar sebagai nasabah bank sampah terdekat",
+      "Pilah sampah di rumah (organik, anorganik, residu)",
+      "Setor sampah ke bank sampah sesuai jadwal",
+      "Pencatatan berat dan jenis sampah",
+      "Tabungan masuk ke rekening bank sampah"
+    ],
+    "duration": "Sesuai jadwal operasional",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "DLHK / Bank Sampah Unit",
+      "phone": "(021) 1234-5678",
+      "email": "banksampah@dlhk.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran Bank Sampah",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["aduan-lingkungan"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara menyetor sampah?",
+        "answer": "Setor sampah yang sudah dipilah ke bank sampah unit sesuai jadwal operasional (biasanya seminggu sekali)."
+      },
+      {
+        "question": "Apa saja jenis sampah yang diterima?",
+        "answer": "Sampah anorganik seperti botol plastik, kertas, karton, kaleng, dan kertas koran. Sampah organik biasanya untuk kompos."
+      },
+      {
+        "question": "Bagaimana cara mencairkan tabungan?",
+        "answer": "Tabungan dapat dicairkan kapan saja dengan datang ke bank sampah dan mengisi form penarikan."
+      }
+    ]
+  },
+  {
+    "slug": "aduan-lingkungan",
+    "icon": "MessageCircle",
+    "name": "Aduan Lingkungan",
+    "description": "Laporan masalah lingkungan",
+    "categoryId": "environment",
+    "stats": "450",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pelaporan masalah lingkungan seperti pencemaran, pembuangan sampah sembarangan, dan masalah kebersihan lainnya untuk ditindaklanjuti oleh dinas terkait.",
+    "requirements": [
+      "Foto lokasi masalah",
+      "Deskripsi detail masalah lingkungan",
+      "Lokasi/alamat lengkap",
+      "Nama pelapor (opsional untuk anonim)"
+    ],
+    "process": [
+      "Buat laporan aduan melalui hotline atau aplikasi",
+      "Upload foto dan deskripsi masalah",
+      "Verifikasi laporan oleh petugas DLHK",
+      "Tindak lanjut penanganan oleh tim",
+      "Update status penyelesaian laporan"
+    ],
+    "duration": "3-14 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Lingkungan Hidup dan Kebersihan",
+      "phone": "(021) 1234-5678",
+      "email": "pengaduan@dlhk.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["bank-sampah"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara melaporkan pembuangan sampah liar?",
+        "answer": "Laporkan dengan foto lokasi dan deskripsi ke hotline DLHK atau aplikasi pengaduan lingkungan."
+      },
+      {
+        "question": "Apakah pelapor dapat mengajukan laporan secara anonim?",
+        "answer": "Ya, pelapor dapat memilih untuk anonim, namun memberikan identitas akan membantu petugas menghubungi jika perlu informasi tambahan."
+      }
+    ]
+  }
+]

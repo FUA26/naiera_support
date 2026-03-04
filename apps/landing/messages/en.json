@@ -1,0 +1,707 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "news": "News",
+    "contact": "Contact",
+    "login": "Login",
+    "menu": "Menu",
+    "brandName": "Super App Naiera",
+    "brandSubtitle": "Naiera Regency",
+    "megaMenu": {
+      "services": {
+        "title": "Public Services",
+        "description": "Access all government services digitally in one place.",
+        "items": {
+          "population": {
+            "title": "Population Admin",
+            "desc": "ID Card, Family Card, Birth Certificate, and other docs."
+          },
+          "health": {
+            "title": "Health",
+            "desc": "Hospital queues, BPJS coverage, and health services."
+          },
+          "education": {
+            "title": "Education",
+            "desc": "School info, Online Student Admission (PPDB), and scholarships."
+          },
+          "tax": {
+            "title": "Tax & Retribution",
+            "desc": "Check and pay property tax, vehicle tax, and local levies."
+          },
+          "business": {
+            "title": "Business Licensing",
+            "desc": "Apply for business permits and SME licenses (UMKM) online."
+          },
+          "social": {
+            "title": "Social Welfare",
+            "desc": "Check social aid eligibility, DTKS, and assistance programs."
+          }
+        },
+        "cta": "View All Services"
+      },
+      "information": {
+        "title": "Public Information",
+        "description": "Center for regional government information and transparency.",
+        "items": {
+          "news": {
+            "title": "Latest News",
+            "desc": "Latest updates on development and government activities."
+          },
+          "agenda": {
+            "title": "Agenda & Events",
+            "desc": "Event calendar, cultural festivals, and official ceremonies."
+          },
+          "transparency": {
+            "title": "Transparency",
+            "desc": "Budget reports (APBD), realization, and accountability."
+          },
+          "regulations": {
+            "title": "Legal Products",
+            "desc": "Database of Local Regulations (Perda) and Regent Regulations."
+          },
+          "tourism": {
+            "title": "Tourism",
+            "desc": "Tourist destinations, culinary guides, and travel info."
+          },
+          "gallery": {
+            "title": "Photo & Video Gallery",
+            "desc": "Visual documentation of regional activities and potential."
+          }
+        }
+      },
+      "agency": {
+        "title": "Government",
+        "description": "Profiles, structure, and work units of Naiera Regency Government.",
+        "items": {
+          "profile": {
+            "title": "Regional Profile",
+            "desc": "History, geography, and vision & mission of Naiera Regency."
+          },
+          "structure": {
+            "title": "Org Structure",
+            "desc": "Regent, Vice Regent, and government organizational chart."
+          },
+          "dinas": {
+            "title": "Regional Agencies",
+            "desc": "List of Agencies, Boards, and Offices in the local government."
+          },
+          "camat": {
+            "title": "Districts & Villages",
+            "desc": "Profile data of all districts and villages in the regency."
+          },
+          "dpr": {
+            "title": "Regional Council",
+            "desc": "Profile and agenda of the Regional People's Rep Council."
+          },
+          "contact": {
+            "title": "Contact Us",
+            "desc": "Office address, email, and official complaint channels."
+          }
+        }
+      }
+    }
+  },
+  "Hero": {
+    "titlePart1": "One App for All Services",
+    "titlePart2": "Naiera Regency",
+    "subtitle": "Access hundreds of government services easily, quickly, and safely in one digital platform",
+    "searchPlaceholder": "Search for services, information, or help...",
+    "popularSearch": "Popular searches:",
+    "stats": {
+      "digitalServices": "Digital Services",
+      "activeUsers": "Active Users",
+      "onlineServices": "Online Services"
+    }
+  },
+  "TopBar": {
+    "greeting": {
+      "morning": "Good Morning",
+      "afternoon": "Good Afternoon",
+      "evening": "Good Evening",
+      "night": "Good Evening"
+    },
+    "citizen": "Citizens of Naiera",
+    "contact": "Contact Us",
+    "help": "Help"
+  },
+  "Services": {
+    "label": "Digital Services",
+    "title": "Service Categories",
+    "subtitle": "Quick access to the most frequently used government services",
+    "allServices": "All Services",
+    "showAll": "Show All Categories",
+    "showLess": "Show Less",
+    "empty": "No services in this category",
+    "access": "Access",
+    "explore": "Explore All Services",
+    "stats": {
+      "services": "Digital Services",
+      "users": "Active Users",
+      "transactions": "Trans/Month",
+      "rating": "Satisfaction Rate"
+    },
+    "categories": {
+      "population": "Population",
+      "health": "Health",
+      "education": "Education",
+      "economy": "Economy & Business",
+      "manpower": "Manpower",
+      "tourism": "Tourism & Culture",
+      "infrastructure": "Infrastructure",
+      "social": "Social",
+      "environment": "Environment",
+      "government": "Government & Village",
+      "ppid": "PPID",
+      "disaster": "Disaster",
+      "multisector": "Multisector"
+    },
+    "items": {
+      "ektp": {
+        "name": "E-KTP",
+        "desc": "Creation and renewal of electronic ID cards"
+      },
+      "kk": {
+        "name": "Family Card",
+        "desc": "Family Card management and updates"
+      },
+      "akta": {
+        "name": "Birth Certificate",
+        "desc": "Birth certificate processing"
+      },
+      "pindah": {
+        "name": "Moving Letter",
+        "desc": "Resident transfer administration"
+      },
+      "bpjs": {
+        "name": "BPJS Health",
+        "desc": "BPJS registration and information"
+      },
+      "puskesmas": {
+        "name": "Online Puskesmas",
+        "desc": "Doctor schedules, queues, and consultation"
+      },
+      "posyandu": {
+        "name": "Posyandu",
+        "desc": "Posyandu schedules and immunization"
+      },
+      "ppdb": {
+        "name": "Online Admission",
+        "desc": "New student registration for SD-SMA"
+      },
+      "beasiswa": {
+        "name": "Scholarship",
+        "desc": "Regional scholarship info and registration"
+      },
+      "suratSekolah": {
+        "name": "School Letter",
+        "desc": "Graduation letter and recommendations"
+      },
+      "izinUsaha": {
+        "name": "Business Permit",
+        "desc": "SIUP, TDP, and micro business permits"
+      },
+      "pajak": {
+        "name": "Regional Tax",
+        "desc": "Land tax and business tax payment"
+      },
+      "modal": {
+        "name": "MSME Capital",
+        "desc": "Capital assistance application"
+      },
+      "kartuKuning": { "name": "Yellow Card", "desc": "Job seeker card (AK1)" },
+      "jobFair": {
+        "name": "Job Fair",
+        "desc": "Job vacancies and career fair info"
+      },
+      "pelatihan": {
+        "name": "Job Training",
+        "desc": "Training and certification programs"
+      },
+      "wisata": {
+        "name": "Tourism Destinations",
+        "desc": "Tourism guide and cultural events"
+      },
+      "izinEvent": {
+        "name": "Event Permit",
+        "desc": "Cultural event and festival permits"
+      },
+      "imb": {
+        "name": "Building Permit",
+        "desc": "Building permit application"
+      },
+      "aduanInfra": {
+        "name": "Infra Complaints",
+        "desc": "Report damaged roads, streetlights, etc."
+      },
+      "transportasi": {
+        "name": "Public Transport",
+        "desc": "Public transport schedules and routes"
+      },
+      "bansos": {
+        "name": "Social Aid",
+        "desc": "PKH, BPNT, and direct assistance"
+      },
+      "dtks": { "name": "DTKS", "desc": "Family data registration and update" },
+      "bankSampah": {
+        "name": "Waste Bank",
+        "desc": "Waste management and recycling"
+      },
+      "aduanLingkungan": {
+        "name": "Env Complaints",
+        "desc": "Report pollution and violations"
+      },
+      "suratRt": {
+        "name": "RT/RW Letter",
+        "desc": "Cover letter service from RT/RW"
+      },
+      "danaDesa": {
+        "name": "Village Fund",
+        "desc": "Village fund transparency and reports"
+      },
+      "infoPublik": {
+        "name": "Info Request",
+        "desc": "Public information access (UU KIP)"
+      },
+      "dokumen": {
+        "name": "Public Documents",
+        "desc": "Access regional regulations and docs"
+      },
+      "darurat": {
+        "name": "Emergency",
+        "desc": "Hotline and 24/7 emergency service"
+      },
+      "infoBencana": {
+        "name": "Disaster Info",
+        "desc": "Early warning and weather info"
+      },
+      "layananTerpadu": {
+        "name": "Integrated Service",
+        "desc": "One-stop service for various needs"
+      },
+      "pengaduan": {
+        "name": "General Complaint",
+        "desc": "Public aspirations and complaints"
+      }
+    },
+    "badges": {
+      "popular": "Popular",
+      "new": "New",
+      "important": "Important"
+    }
+  },
+  "Features": {
+    "label": "Why Choose Us",
+    "title": "Digital Transformation for Better Services",
+    "description": "Super App Naiera is here to provide a modern, efficient, and transparent public service experience for all citizens of Naiera Regency",
+    "ctaStart": "Start Now",
+    "ctaLearn": "Learn More",
+    "items": {
+      "fast": {
+        "title": "Fast & Efficient",
+        "desc": "Faster service processes with integrated systems and digital automation."
+      },
+      "secure": {
+        "title": "Secure & Trusted",
+        "desc": "Your data is protected with high-level encryption and national security standards."
+      },
+      "available": {
+        "title": "24/7 Available",
+        "desc": "Access services anytime, anywhere, without having to visit the office."
+      },
+      "easy": {
+        "title": "Easy to Use",
+        "desc": "Intuitive and user-friendly interface for all age groups."
+      }
+    }
+  },
+  "News": {
+    "label": "Latest News",
+    "title": "News & Announcements",
+    "description": "Latest information on policies, programs, and activities of the Naiera Regency Government",
+    "viewAll": "View All",
+    "viewAllMobile": "View All News",
+    "read": "Read",
+    "readTime": "{minutes} mins",
+    "items": {
+      "news1": {
+        "title": "Naiera Regency Launches Super App for Public Service Ease",
+        "desc": "The Naiera Regency Government officially launched the Super App integrating over 100 public services into one digital platform...",
+        "category": "Technology",
+        "author": "Naiera PR"
+      },
+      "news2": {
+        "title": "Phase 2 Digital MSME Assistance Program Opened",
+        "desc": "The Department of Cooperatives and MSMEs of Naiera Regency reopens the capital assistance and digital training program for micro-entrepreneurs...",
+        "category": "Economy",
+        "author": "Dept of Cooperatives"
+      },
+      "news3": {
+        "title": "2026 Online School Admission Opened, Here's How to Register",
+        "desc": "New Student Admission (PPDB) for SD to SMA levels in Naiera Regency for the 2026/2027 academic year has been opened online...",
+        "category": "Education",
+        "author": "Dept of Education"
+      }
+    }
+  },
+  "Events": {
+    "label": "Agenda & Events",
+    "title": "Naiera Regency Agenda",
+    "description": "Get the latest information on all activities held in Naiera Regency",
+    "viewMore": "Read More",
+    "viewOthers": "View Other Agendas",
+    "representative": "Represent Governor",
+    "completed": "Completed",
+    "finished": "Completed Agendas",
+    "calToday": "Today",
+    "calHasEvent": "Has agenda",
+    "calNoEvent": "No agenda",
+    "calNoEventDesc": "No agenda for this time",
+    "items": {
+      "event1": {
+        "title": "Rakorwasda and Hakordia 2025 Activities of Naiera Regency Inspectorate",
+        "category": "Offline Agenda",
+        "desc": "Rakorwasda and Hakordia 2025 Activities of Naiera Regency Inspectorate"
+      },
+      "event2": {
+        "title": "Majalengka Regency Village Festival 2025",
+        "category": "Festival"
+      },
+      "event3": {
+        "title": "Rahvayana Musical Drama: Love in West Java",
+        "category": "Culture"
+      },
+      "event4": {
+        "title": "MSME Digital Marketing Training",
+        "category": "Training"
+      },
+      "event5": {
+        "title": "Naiera Regency Job Fair 2026",
+        "category": "Career"
+      }
+    }
+  },
+  "AppDownload": {
+    "label": "Download App",
+    "title": "Download Super App Naiera",
+    "description": "Access all government services in one app. Download now and enjoy the convenience of 24/7 digital services.",
+    "downloadAt": "Download on",
+    "qrTitle": "Scan QR Code",
+    "qrDesc": "To download directly from your smartphone",
+    "features": {
+      "fast": {
+        "title": "Fast & Easy",
+        "desc": "Service processes in just minutes"
+      },
+      "secure": {
+        "title": "Secure & Trusted",
+        "desc": "Your data is protected with high-level encryption"
+      },
+      "rating": {
+        "title": "Rating 4.8/5",
+        "desc": "Trusted by 50,000+ active users"
+      }
+    },
+    "banner": {
+      "services": "100+ Digital Services",
+      "praise": "Ready to serve you 24/7"
+    }
+  },
+  "Footer": {
+    "brandDescription": "Integrated digital platform to access all Naiera Regency government services. Digital transformation for better, faster, and transparent public services.",
+    "followUs": "Follow Us",
+    "services": {
+      "title": "Services",
+      "population": "Population",
+      "health": "Health",
+      "education": "Education",
+      "economy": "Economy & Business",
+      "manpower": "Manpower",
+      "tourism": "Tourism",
+      "infrastructure": "Infrastructure",
+      "social": "Social"
+    },
+    "about": {
+      "title": "About",
+      "aboutUs": "About Us",
+      "visionMission": "Vision & Mission",
+      "structure": "Organizational Structure",
+      "news": "News & Announcements",
+      "events": "Events Calendar",
+      "careers": "Careers"
+    },
+    "help": {
+      "title": "Help",
+      "faq": "FAQ",
+      "guide": "User Guide",
+      "contactUs": "Contact Us",
+      "complaints": "Complaint Service",
+      "downloadApp": "Download App"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Address",
+      "addressContent": "123 Government St.\nNaiera Regency, 12345\nIndonesia Province",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "brandName": "Super App Naiera",
+    "brandSubtitle": "Naiera Regency",
+    "relatedLinks": "Related Links",
+    "copyright": "© {year} Naiera Regency Government. All rights reserved.",
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "disclaimer": "Disclaimer",
+      "sitemap": "Sitemap"
+    },
+    "version": "Developed with ❤️ for the people of Naiera Regency"
+  },
+  "Accessibility": {
+    "title": "Accessibility Tools",
+    "speech": "Activate Web Speech",
+    "textSize": "Set Text Size",
+    "lineHeight": "Set Line Height",
+    "letterSpacing": "Letter Spacing",
+    "spacing": {
+      "small": "Small",
+      "normal": "Medium",
+      "large": "Large"
+    },
+    "textAlign": "Text Align",
+    "readableFont": "Readable Font",
+    "linksUnderline": "Links Underline",
+    "monochrome": "Monochrome Mode",
+    "highContrast": "High Contrast Mode",
+    "zoomCursor": "Zoom in Cursor",
+    "stopAnimation": "Stop Animation",
+    "hideImages": "Hide Image",
+    "reset": "Reset Settings"
+  },
+  "Faq": {
+    "title": "Frequently Asked Questions (FAQ)",
+    "subtitle": "Find answers to commonly asked questions about our services",
+    "searchPlaceholder": "Search questions...",
+    "categories": {
+      "general": "General",
+      "account": "Account & Registration",
+      "services": "Services",
+      "payment": "Payment"
+    },
+    "items": {
+      "q1": {
+        "question": "What is Super App Naiera?",
+        "answer": "Super App Naiera is an integrated digital platform providing access to various Naiera Regency government services in one app."
+      },
+      "q2": {
+        "question": "How do I register an account?",
+        "answer": "You can register by clicking the 'Register' button on the homepage, then filling out the registration form with valid personal information."
+      },
+      "q3": {
+        "question": "Is this service free?",
+        "answer": "Yes, most basic services on Super App Naiera are free for Naiera Regency residents. Some specific services may require administrative fees."
+      },
+      "q4": {
+        "question": "How do I report a technical issue?",
+        "answer": "You can report technical issues through the Complaint Service menu or contact our helpdesk at (021) 123-4567."
+      },
+      "q5": {
+        "question": "How do I pay taxes through the app?",
+        "answer": "Select Services > Tax & Retribution, enter your tax object number, then follow the payment instructions using various available methods."
+      }
+    },
+    "notFound": "No questions match your search.",
+    "contactCta": "Can't find an answer?",
+    "contactLink": "Contact Us"
+  },
+  "Guide": {
+    "title": "User Guide",
+    "subtitle": "Learn how to use various features and services of Super App Naiera",
+    "readGuide": "Read Guide",
+    "items": {
+      "register": {
+        "title": "How to Register an Account",
+        "desc": "Complete guide to creating a new account on Super App Naiera.",
+        "steps": [
+          "Open the Register page",
+          "Fill in your personal details",
+          "Verify your email or phone",
+          "Your account is ready to use"
+        ]
+      },
+      "tax": {
+        "title": "Tax Payment Guide",
+        "desc": "Easy steps to pay regional taxes online.",
+        "steps": [
+          "Login to your account",
+          "Select Tax & Retribution menu",
+          "Enter your tax object number",
+          "Choose payment method",
+          "Save payment receipt"
+        ]
+      },
+      "document": {
+        "title": "How to Request Documents",
+        "desc": "Guide for requesting population administration documents.",
+        "steps": [
+          "Select the type of document needed",
+          "Fill out the application form",
+          "Upload supporting documents",
+          "Wait for officer verification",
+          "Pick up at office or download digitally"
+        ]
+      },
+      "complaint": {
+        "title": "How to Submit a Complaint",
+        "desc": "Guide to submitting aspirations or complaints to the local government.",
+        "steps": [
+          "Open the Complaint Service menu",
+          "Select report category",
+          "Fill in complaint details",
+          "Attach evidence if available",
+          "Submit and track report status"
+        ]
+      }
+    }
+  },
+  "Contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help. Please contact us through the channels below.",
+    "info": {
+      "address": "Office Address",
+      "addressContent": "123 Government St.\nNaiera Regency, 12345\nIndonesia Province",
+      "phone": "Phone",
+      "phoneContent": "(021) 123-4567",
+      "email": "Email",
+      "emailContent": "humas@naiera.go.id",
+      "hours": "Operating Hours",
+      "hoursContent": "Monday - Friday: 08:00 AM - 04:00 PM"
+    },
+    "form": {
+      "title": "Send a Message",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "subject": "Subject",
+      "subjectPlaceholder": "Select message subject",
+      "subjects": {
+        "general": "General Inquiry",
+        "support": "Technical Support",
+        "feedback": "Feedback & Suggestions",
+        "partnership": "Partnership"
+      },
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send Message",
+      "success": "Your message has been sent successfully! We will respond shortly."
+    }
+  },
+  "Complaint": {
+    "title": "Complaint Service",
+    "subtitle": "Submit your aspirations, complaints, or reports to the Naiera Regency Government",
+    "intro": "The Online Aspirations and Complaints Service (LAPOR) is a platform to submit various reports, complaints, or aspirations to the local government quickly and transparently.",
+    "process": {
+      "title": "Complaint Process",
+      "steps": {
+        "submit": {
+          "title": "Submit Report",
+          "desc": "Fill out the complaint form completely"
+        },
+        "verify": {
+          "title": "Verification",
+          "desc": "Officers verify your report"
+        },
+        "action": {
+          "title": "Follow Up",
+          "desc": "Related agency handles the report"
+        },
+        "done": {
+          "title": "Completed",
+          "desc": "Report closed and you receive notification"
+        }
+      }
+    },
+    "form": {
+      "title": "Complaint Form",
+      "category": "Report Category",
+      "categoryPlaceholder": "Select category",
+      "categories": {
+        "infrastructure": "Infrastructure (Roads, Bridges, etc.)",
+        "admin": "Administration Services",
+        "social": "Social & Welfare",
+        "health": "Health",
+        "education": "Education",
+        "environment": "Environment",
+        "other": "Other"
+      },
+      "location": "Incident Location",
+      "locationPlaceholder": "E.g.: 45 Freedom St., North Naiera District",
+      "date": "Incident Date",
+      "description": "Complaint Description",
+      "descriptionPlaceholder": "Explain your complaint in detail...",
+      "evidence": "Evidence Attachment (Optional)",
+      "evidenceHint": "Format: JPG, PNG, PDF. Max 5MB.",
+      "anonymous": "Report anonymously",
+      "anonymousHint": "Your identity will be kept confidential",
+      "submit": "Submit Complaint",
+      "success": "Your complaint has been submitted. Ticket number: #NAI-2026-XXXX"
+    }
+  },
+  "Government": {
+    "profile": {
+      "title": "Regional Profile",
+      "subtitle": "Complete information about history, vision mission, and geography of Naiera Regency",
+      "history": "Brief History",
+      "vision": "Vision",
+      "mission": "Mission",
+      "geography": "Geography & Demographics",
+      "symbols": "Regional Symbols",
+      "tabs": {
+        "history": "History",
+        "visionMission": "Vision & Mission",
+        "geography": "Geography"
+      }
+    },
+    "structure": {
+      "title": "Organizational Structure",
+      "subtitle": "Organizational chart of Naiera Regency Government",
+      "regent": "Regent",
+      "viceRegent": "Vice Regent",
+      "secretary": "Regional Secretary",
+      "assistants": "Regional Assistants",
+      "staff": "Expert Staff"
+    },
+    "agencies": {
+      "title": "Regional Agencies",
+      "subtitle": "List of Agencies, Boards, and Offices in Naiera Regency Government",
+      "searchPlaceholder": "Search agencies...",
+      "types": {
+        "all": "All",
+        "dinas": "Agency (Dinas)",
+        "badan": "Board (Badan)",
+        "kantor": "Office (Kantor)",
+        "kecamatan": "District (Kecamatan)"
+      },
+      "website": "Visit Website",
+      "location": "Location"
+    },
+    "districts": {
+      "title": "Districts & Villages",
+      "subtitle": "Administrative data of districts and villages",
+      "searchPlaceholder": "Search district or village...",
+      "villageCount": "{count} Villages",
+      "camat": "Head of District",
+      "villages": "Village List"
+    },
+    "dpr": {
+      "title": "Regional Council",
+      "subtitle": "Regional People's Representative Council of Naiera Regency",
+      "members": "Council Members",
+      "commissions": "Commissions",
+      "agenda": "Meeting Agenda",
+      "fractions": "Fractions"
+    }
+  }
+}

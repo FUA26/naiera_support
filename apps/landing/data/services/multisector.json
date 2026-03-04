@@ -1,0 +1,103 @@
+[
+  {
+    "slug": "layanan-terpadu",
+    "icon": "FileCheck",
+    "name": "Layanan Terpadu",
+    "description": "Layanan publik terintegrasi satu pintu",
+    "categoryId": "multisector",
+    "stats": "2.1k",
+    "showInMenu": true,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Pelayanan Terpadu Satu Pintu (PTSP) adalah layanan yang mengintegrasikan berbagai jenis layanan publik dalam satu tempat. Masyarakat dapat mengurus berbagai administrasi tanpa harus berpindah-pindah kantor.",
+    "requirements": [
+      "Persyaratan sesuai jenis layanan yang dibutuhkan",
+      "Fotokopi identitas (E-KTP/KK)",
+      "Dokumen pendukung lainnya"
+    ],
+    "process": [
+      "Datang ke kantor layanan terpadu (Mall Pelayanan Publik)",
+      "Ambil nomor antrian",
+      "Konsultasi dengan petugas loket",
+      "Serahkan dokumen persyaratan",
+      "Proses layanan hingga selesai"
+    ],
+    "duration": "Bervariasi (1-30 hari tergantung jenis layanan)",
+    "cost": "Bervariasi (Gratis - sesuai jenis layanan)",
+    "contactInfo": {
+      "office": "Mall Pelayanan Publik / PTSP",
+      "phone": "(021) 1234-5678",
+      "email": "ptsp@daerah.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["pengaduan-masyarakat"],
+    "faqs": [
+      {
+        "question": "Apa saja layanan yang tersedia di PTSP?",
+        "answer": "Layanan yang tersedia meliputi perizinan usaha, kependudukan, perizinan bangunan, dan berbagai layanan publik lainnya."
+      },
+      {
+        "question": "Apakah perlu janji temu sebelum datang?",
+        "answer": "Tidak perlu janji temu, cukup datang langsung dan ambil nomor antrian. Namun untuk layanan kompleks disarankan datang pagi."
+      },
+      {
+        "question": "Berapa lama proses layanan di PTSP?",
+        "answer": "Waktu pelayanan bervariasi dari 1 hari hingga 30 hari kerja tergantung jenis layanan yang diajukan."
+      }
+    ]
+  },
+  {
+    "slug": "pengaduan-masyarakat",
+    "icon": "MessageCircle",
+    "name": "Pengaduan Masyarakat",
+    "description": "Saluran pengaduan dan aspirasi warga",
+    "categoryId": "multisector",
+    "badge": "Populer",
+    "stats": "3.4k",
+    "showInMenu": true,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Saluran resmi pengaduan dan aspirasi masyarakat untuk menyampaikan kritik, saran, dan laporan masalah. Masyarakat dapat melaporkan berbagai permasalahan untuk ditindaklanjuti oleh instansi terkait.",
+    "requirements": [
+      "Identitas pelapor (opsional untuk pelaporan anonim)",
+      "Deskripsi detail pengaduan/aspirasi",
+      "Bukti pendukung (foto/dokumen)",
+      "Lokasi kejadian (untuk laporan masalah)"
+    ],
+    "process": [
+      "Buat laporan pengaduan melalui aplikasi, website, atau datang langsung",
+      "Isi detail pengaduan dengan lengkap",
+      "Upload bukti pendukung (jika ada)",
+      "Verifikasi laporan oleh petugas",
+      "Tindak lanjut dan update status penyelesaian"
+    ],
+    "duration": "7-30 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Kominfo / Satuan Tugas Pengaduan",
+      "phone": "(021) 1234-5678",
+      "email": "pengaduan@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pengaduan Masyarakat",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["layanan-terpadu"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara mengajukan pengaduan?",
+        "answer": "Pengaduan dapat diajukan melalui aplikasi pengaduan daerah, website, hotline telepon, atau datang langsung ke kantor pelayanan."
+      },
+      {
+        "question": "Apakah identitas pelapor dirahasiakan?",
+        "answer": "Identitas pelapor akan dirahasiakan dan tidak dipublikasikan. Pelapor juga dapat memilih opsi anonim saat melapor."
+      },
+      {
+        "question": "Berapa lama respon waktu pengaduan?",
+        "answer": "Setiap pengaduan akan mendapat respon awal maksimal 2x24 jam dan penyelesaian sesuai kompleksitas masalah (7-30 hari)."
+      }
+    ]
+  }
+]

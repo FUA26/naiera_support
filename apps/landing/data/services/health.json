@@ -1,0 +1,143 @@
+[
+  {
+    "slug": "bpjs-kesehatan",
+    "icon": "Heart",
+    "name": "BPJS Kesehatan",
+    "description": "Pendaftaran dan informasi BPJS",
+    "categoryId": "health",
+    "badge": "Populer",
+    "stats": "8.5k",
+    "showInMenu": true,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pendaftaran BPJS Kesehatan untuk jaminan kesehatan nasional. BPJS Kesehatan memberikan perlindungan kesehatan menyeluruh bagi seluruh peserta dengan berbagai kelas fasilitas rumah sakit.",
+    "requirements": [
+      "Fotokopi Kartu Keluarga",
+      "Fotokopi E-KTP semua anggota keluarga",
+      "Pas foto 3x4 berwarna (2 lembar)",
+      "Email aktif dan nomor HP",
+      "Nomor rekening bank"
+    ],
+    "process": [
+      "Registrasi online melalui aplikasi atau datang ke kantor BPJS",
+      "Mengisi formulir pendaftaran",
+      "Memilih kelas rawat inap (1, 2, atau 3)",
+      "Pembayaran iuran pertama",
+      "Aktivasi dan pengambilan kartu BPJS"
+    ],
+    "duration": "1-3 hari kerja",
+    "cost": "Mulai dari Rp 42.000/bulan (Kelas 3)",
+    "contactInfo": {
+      "office": "Kantor BPJS Kesehatan Cabang",
+      "phone": "165",
+      "email": "-"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran BPJS",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["puskesmas", "posyandu"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara mendaftar BPJS Kesehatan?",
+        "answer": "Pendaftaran dapat dilakukan secara online melalui aplikasi BPJS Kesehatan atau datang langsung ke kantor cabang dengan membawa persyaratan lengkap."
+      },
+      {
+        "question": "Berapa iuran BPJS per bulan?",
+        "answer": "Iuran bervariasi tergantung kelas: Kelas 3 Rp 42.000, Kelas 2 Rp 110.000, dan Kelas 1 Rp 160.000 per orang per bulan."
+      },
+      {
+        "question": "Apakah ada iuran gratis BPJS?",
+        "answer": "Ya, peserta PBI (Penerima Bantuan Iuran) dibebaskan dari pembayaran iuran oleh pemerintah. Masyarakat bisa mendaftar DTKS untuk mendapatkan status PBI."
+      }
+    ]
+  },
+  {
+    "slug": "puskesmas",
+    "icon": "Building2",
+    "name": "Layanan Puskesmas",
+    "description": "Informasi layanan kesehatan Puskesmas",
+    "categoryId": "health",
+    "stats": "4.2k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Pusat Kesehatan Masyarakat (Puskesmas) menyediakan layanan kesehatan dasar yang terjangkau dan berkualitas. Layanan meliputi pemeriksaan umum, imunisasi, konsultasi gizi, dan rujukan ke rumah sakit.",
+    "requirements": [
+      "Kartu identitas (E-KTP/KK)",
+      "Kartu BPJS Kesehatan (jika ada)",
+      "Surat rujukan (untuk kasus tertentu)"
+    ],
+    "process": [
+      "Datang ke Puskesmas terdekat",
+      "Pendaftaran di loket pendaftaran",
+      "Pemeriksaan oleh dokter/tenaga medis",
+      "Mendapatkan resep atau tindakan medis",
+      "Pengambilan obat di apotek Puskesmas"
+    ],
+    "duration": "Langsung (sesuai antrian)",
+    "cost": "Gratis dengan BPJS, Rp 10.000-50.000 (pasien umum)",
+    "contactInfo": {
+      "office": "Puskesmas Terdekat",
+      "phone": "Sesuai wilayah",
+      "email": "-"
+    },
+    "downloadForms": [],
+    "relatedServices": ["bpjs-kesehatan", "posyandu"],
+    "faqs": [
+      {
+        "question": "Apakah perlu membuat janji temu?",
+        "answer": "Untuk pemeriksaan umum tidak perlu, namun untuk pemeriksaan khusus disarankan membuat janji temu terlebih dahulu."
+      },
+      {
+        "question": "Jam operasional Puskesmas?",
+        "answer": "Umumnya buka Senin-Jumat pukul 08.00-15.00, dan beberapa Puskesmas memiliki layanan malam hari."
+      }
+    ]
+  },
+  {
+    "slug": "posyandu",
+    "icon": "Users",
+    "name": "Posyandu",
+    "description": "Layanan kesehatan ibu dan anak",
+    "categoryId": "health",
+    "stats": "2.3k",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": false,
+    "detailedDescription": "Pos Pelayanan Terpadu (Posyandu) menyediakan layanan kesehatan dasar khusus untuk ibu hamil, ibu menyusui, bayi, dan balita. Layanan utama meliputi penimbangan, imunisasi, dan konsultasi kesehatan.",
+    "requirements": [
+      "Buku KIA (Kesehatan Ibu dan Anak)",
+      "Kartu identitas ibu",
+      "Kartu BPJS (jika ada)"
+    ],
+    "process": [
+      "Datang ke Posyandu sesuai jadwal bulanan",
+      "Pendaftaran dan penimbangan berat badan",
+      "Pemeriksaan kesehatan dasar",
+      "Imunisasi sesuai usia anak",
+      "Konsultasi kesehatan dan gizi"
+    ],
+    "duration": "Sesuai jadwal Posyandu",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Balai Desa/Kelurahan Setempat",
+      "phone": "-",
+      "email": "-"
+    },
+    "downloadForms": [],
+    "relatedServices": ["bpjs-kesehatan", "puskesmas"],
+    "faqs": [
+      {
+        "question": "Kapan jadwal Posyandu?",
+        "answer": "Jadwal Posyandu bervariasi di setiap wilayah, biasanya diadakan sekali sebulan. Silakan hubungi kader desa/kelurahan untuk mengetahui jadwal."
+      },
+      {
+        "question": "Apa layanan yang tersedia di Posyandu?",
+        "answer": "Layanan meliputi penimbangan balita, imunisasi dasar, pemberian vitamin A, konsultasi gizi, dan pemeriksaan kesehatan ibu dan anak."
+      }
+    ]
+  }
+]

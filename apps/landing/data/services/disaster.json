@@ -1,0 +1,25 @@
+[
+  {
+    "slug": "darurat",
+    "icon": "ShieldAlert",
+    "name": "Layanan Darurat",
+    "description": "Nomor darurat dan tanggap bencana",
+    "categoryId": "disaster",
+    "badge": "Penting",
+    "stats": "24/7",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": false
+  },
+  {
+    "slug": "info-bencana",
+    "icon": "Cloud",
+    "name": "Info Bencana",
+    "description": "Peringatan dini dan info cuaca",
+    "categoryId": "disaster",
+    "stats": "Real-time",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true
+  }
+]

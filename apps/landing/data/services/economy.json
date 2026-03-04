@@ -1,0 +1,154 @@
+[
+  {
+    "slug": "izin-usaha",
+    "icon": "FileCheck",
+    "name": "Izin Usaha (NIB)",
+    "description": "Pengurusan Nomor Induk Berusaha",
+    "categoryId": "economy",
+    "stats": "1.9k",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pengurusan Nomor Induk Berusaha (NIB) melalui sistem OSS (Online Single Submission). NIB adalah identitas resmi pelaku usaha yang berlaku selamanya dan menjadi syarat utama untuk menjalankan usaha.",
+    "requirements": [
+      "Fotokopi E-KTP pemilik usaha",
+      "Fotokopi NPWP (jika ada)",
+      "Surat keterangan domisili usaha",
+      "Pas foto 4x6 (2 lembar)",
+      "Denah lokasi usaha"
+    ],
+    "process": [
+      "Registrasi akun di portal OSS",
+      "Mengisi data profil usaha",
+      "Upload dokumen persyaratan",
+      "Verifikasi data oleh sistem",
+      "Penerbitan NIB secara elektronik"
+    ],
+    "duration": "1-7 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Penanaman Modal dan PTSP",
+      "phone": "(021) 1234-5678",
+      "email": "ptsp@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Panduan Registrasi OSS",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["pajak-daerah", "modal-umkm"],
+    "faqs": [
+      {
+        "question": "Apakah NIB dikenakan biaya?",
+        "answer": "Tidak, penerbitan NIB sepenuhnya gratis tanpa dipungut biaya apapun."
+      },
+      {
+        "question": "Berapa lama NIB diterbitkan?",
+        "answer": "Untuk usaha risiko rendah, NIB diterbitkan langsung (real-time). Untuk usaha menengah/tinggi memerlukan waktu 1-7 hari kerja."
+      },
+      {
+        "question": "Apakah perlu perpanjangan NIB?",
+        "answer": "NIB berlaku selamanya selama usaha masih beroperasi dan tidak perlu diperpanjang."
+      }
+    ]
+  },
+  {
+    "slug": "pajak-daerah",
+    "icon": "CreditCard",
+    "name": "Pajak Daerah",
+    "description": "Pembayaran dan informasi pajak",
+    "categoryId": "economy",
+    "badge": "Baru",
+    "stats": "4.5k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pembayaran dan informasi pajak daerah termasuk PBB (Pajak Bumi dan Bangunan), Bea Perolehan Hak atas Tanah dan Bangunan, dan pajak daerah lainnya.",
+    "requirements": [
+      "SPPT PBB (Surat Pemberitahuan Pajak Terutang)",
+      "Fotokopi E-KTP",
+      "Fotokopi sertifikat tanah/bangunan (jika diperlukan)"
+    ],
+    "process": [
+      "Cek tagihan pajak melalui online/offline",
+      "Pembayaran melalui bank, ATM, atau payment channel",
+      "Mendapatkan bukti pembayaran yang sah",
+      "Validasi pembayaran di sistem",
+      "Simpan bukti pembayaran sebagai arsip"
+    ],
+    "duration": "Langsung",
+    "cost": "Sesuai tagihan",
+    "contactInfo": {
+      "office": "Bapenda Daerah",
+      "phone": "(021) 1234-5678",
+      "email": "pajak@bapenda.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["izin-usaha"],
+    "faqs": [
+      {
+        "question": "Kapan batas waktu pembayaran PBB?",
+        "answer": "Pembayaran PBB paling lambat setiap tanggal 31 Agustus untuk mendapat diskon, dan tanggal 31 Desember untuk pembayaran penuh."
+      },
+      {
+        "question": "Apakah ada diskon untuk pembayaran PBB?",
+        "answer": "Ya, biasanya diberikan diskon hingga 20-50% untuk pembayaran sebelum batas waktu tertentu."
+      }
+    ]
+  },
+  {
+    "slug": "modal-umkm",
+    "icon": "Factory",
+    "name": "Bantuan Modal UMKM",
+    "description": "Program bantuan modal UMKM",
+    "categoryId": "economy",
+    "stats": "680",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": false,
+    "detailedDescription": "Program bantuan modal kerja untuk pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) untuk mengembangkan usaha. Bantuan diberikan dalam bentuk pinjaman lunak atau hibah tergantung program yang tersedia.",
+    "requirements": [
+      "Fotokopi E-KTP dan KK pemilik usaha",
+      "NIB/Izin Usaha yang masih berlaku",
+      "Proposal usaha yang lengkap",
+      "Surat keterangan usaha dari kelurahan",
+      "Laporan keuangan sederhana"
+    ],
+    "process": [
+      "Mengajukan permohonan bantuan modal",
+      "Menyerahkan proposal dan dokumen persyaratan",
+      "Survey lokasi usaha oleh tim verifikasi",
+      "Verifikasi kelayakan usaha",
+      "Pencairan dana bantuan modal"
+    ],
+    "duration": "1-3 bulan",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Koperasi dan UMKM",
+      "phone": "(021) 1234-5678",
+      "email": "umkm@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Template Proposal Usaha",
+        "url": "#"
+      },
+      {
+        "name": "Formulir Pendaftaran Bantuan",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["izin-usaha"],
+    "faqs": [
+      {
+        "question": "Berapa besar bantuan modal yang diberikan?",
+        "answer": "Besar bantuan bervariasi mulai dari Rp 2.5 juta hingga Rp 50 juta tergantung program dan skala usaha."
+      },
+      {
+        "question": "Apakah harus dikembalikan?",
+        "answer": "Tergantung jenis program. Ada yang berupa hibah (gratis) dan ada yang berupa pinjaman lunak dengan bunga rendah."
+      }
+    ]
+  }
+]

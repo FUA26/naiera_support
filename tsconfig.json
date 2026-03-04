@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@workspace/ui": ["./packages/ui/src"],
+      "@workspace/ui/*": ["./packages/ui/src/*"],
+      "@workspace/api": ["./packages/api/src"],
+      "@workspace/api/*": ["./packages/api/src/*"],
+      "@workspace/utils": ["./packages/utils/src"],
+      "@workspace/utils/*": ["./packages/utils/src/*"],
+      "@workspace/types": ["./packages/types/src"],
+      "@workspace/types/*": ["./packages/types/src/*"],
+      "@workspace/hooks": ["./packages/hooks/src"],
+      "@workspace/hooks/*": ["./packages/hooks/src/*"],
+      "@workspace/logger": ["./packages/logger/src"],
+      "@workspace/logger/*": ["./packages/logger/src/*"]
+    }
+  }
+}

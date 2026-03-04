@@ -1,0 +1,11 @@
+/* Custom fonts for editorial aesthetic - must be first */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@import "../../../packages/ui/styles/globals.css";
+
+/* Backoffice-specific font overrides */
+@theme inline {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}

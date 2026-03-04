@@ -1,0 +1,156 @@
+[
+  {
+    "slug": "kartu-kuning",
+    "icon": "FileSearch",
+    "name": "Kartu Kuning (AK/I)",
+    "description": "Kartu pencari kerja (AK/I)",
+    "categoryId": "manpower",
+    "stats": "2.4k",
+    "showInMenu": true,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Kartu Kuning atau AK-1 (Alamat Kartu 1) adalah dokumen yang wajib dimiliki pencari kerja untuk mengakses informasi lowongan pekerjaan dan mengikuti seleksi kerja. Kartu ini juga diperlukan untuk administrasi ketenagakerjaan.",
+    "requirements": [
+      "Fotokopi E-KTP",
+      "Fotokopi ijazah terakhir",
+      "Pas foto 3x4 berwarna (2 lembar)",
+      "Surat Pengantar RT/RW",
+      "Surat keterangan domisili (untuk non-permanen)"
+    ],
+    "process": [
+      "Datang ke Dinas Tenaga Kerja atau Disnakertrans",
+      "Mengisi formulir pendaftaran AK-1",
+      "Menyerahkan dokumen persyaratan",
+      "Foto dan pembuatan kartu",
+      "Pengambilan Kartu Kuning (1-3 hari)"
+    ],
+    "duration": "1-3 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Tenaga Kerja",
+      "phone": "(021) 1234-5678",
+      "email": "disnaker@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran Kartu Kuning",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["job-fair", "pelatihan-kerja"],
+    "faqs": [
+      {
+        "question": "Apakah Kartu Kuning berbayar?",
+        "answer": "Pembuatan Kartu Kuning sepenuhnya gratis tanpa dipungut biaya apapun."
+      },
+      {
+        "question": "Berapa lama masa berlaku Kartu Kuning?",
+        "answer": "Kartu Kuning berlaku selama 2 tahun dan dapat diperpanjang dengan datang kembali ke Disnaker."
+      },
+      {
+        "question": "Apakah wajib memiliki Kartu Kuning untuk melamar kerja?",
+        "answer": "Sebagian besar perusahaan mewajibkan pelamar memiliki Kartu Kuning. Dokumen ini menunjukkan bahwa pencari kerja terdaftar secara resmi."
+      }
+    ]
+  },
+  {
+    "slug": "job-fair",
+    "icon": "Building",
+    "name": "Bursa Kerja / Job Fair",
+    "description": "Informasi bursa kerja",
+    "categoryId": "manpower",
+    "badge": "Populer",
+    "stats": "1.8k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Bursa Kerja Khusus atau Job Fair adalah kegiatan pameran lowongan pekerjaan yang mempertemukan pencari kerja dengan perusahaan. Acara ini diselenggarakan secara berkala oleh Dinas Tenaga Kerja.",
+    "requirements": [
+      "Kartu Kuning (AK-1)",
+      "CV atau Daftar Riwayat Hidup terbaru",
+      "Fotokopi ijazah dan transkrip nilai",
+      "Pas foto terbaru",
+      "Fotokopi sertifikat keahlian (jika ada)"
+    ],
+    "process": [
+      "Cek jadwal Job Fair di Disnaker atau media sosial",
+      "Persiapkan dokumen lamaran lengkap",
+      "Datang ke lokasi Job Fair sesuai jadwal",
+      "Kunjungi booth perusahaan yang dituju",
+      "Ikuti seleksi dan interview langsung"
+    ],
+    "duration": "Sesuai jadwal event (1-2 hari)",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Tenaga Kerja",
+      "phone": "(021) 1234-5678",
+      "email": "bkk@disnaker.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["kartu-kuning", "pelatihan-kerja"],
+    "faqs": [
+      {
+        "question": "Kapan Job Fair biasanya diselenggarakan?",
+        "answer": "Job Fair biasanya diselenggarakan 2-4 kali setahun, seringkali setelah kelulusan atau awal tahun."
+      },
+      {
+        "question": "Apa yang harus dibawa saat mengikuti Job Fair?",
+        "answer": "Bawa CV dalam jumlah banyak, fotokopi ijazah, Kartu Kuning, pas foto, dan berpakaian rapi untuk interview."
+      }
+    ]
+  },
+  {
+    "slug": "pelatihan-kerja",
+    "icon": "Award",
+    "name": "Pelatihan Kerja",
+    "description": "Program pelatihan dan sertifikasi",
+    "categoryId": "manpower",
+    "stats": "950",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": false,
+    "detailedDescription": "Program pelatihan kerja dan sertifikasi keahlian untuk meningkatkan kompetensi tenaga kerja. Pelatihan mencakup berbagai bidang seperti otomotif, komputer, tata boga, dan lain-lain.",
+    "requirements": [
+      "Fotokopi E-KTP",
+      "Fotokopi ijazah terakhir",
+      "Pas foto 3x4 (2 lembar)",
+      "Surat keterangan sehat dari dokter/Puskesmas",
+      "CV singkat"
+    ],
+    "process": [
+      "Pendaftaran program pelatihan yang tersedia",
+      "Seleksi administrasi dan tes minat bakat",
+      "Mengikuti pelatihan sesuai jadwal",
+      "Ujian sertifikasi di akhir pelatihan",
+      "Penerimaan sertifikat kompetensi"
+    ],
+    "duration": "1-6 bulan (tergantung program)",
+    "cost": "Gratis - Rp 500.000",
+    "contactInfo": {
+      "office": "Dinas Tenaga Kerja / BLK",
+      "phone": "(021) 1234-5678",
+      "email": "blk@disnaker.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran Pelatihan",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["kartu-kuning", "job-fair"],
+    "faqs": [
+      {
+        "question": "Apakah pelatihan kerja gratis?",
+        "answer": "Sebagian besar pelatihan kerja gratis, terutama yang diselenggarakan oleh BLK. Beberapa program swasta mungkin memungut biaya."
+      },
+      {
+        "question": "Bidang pelatihan apa saja yang tersedia?",
+        "answer": "Pelatihan tersedia untuk berbagai bidang: otomotif, las, komputer, tata boga, menjahit, bahasa Inggris, dan lain-lain."
+      },
+      {
+        "question": "Apakah ada jaminan kerja setelah pelatihan?",
+        "answer": "Tidak semua pelatihan menjamin penempatan kerja, namun banyak program memiliki kerjasama dengan perusahaan untuk penyaluran lulusan."
+      }
+    ]
+  }
+]

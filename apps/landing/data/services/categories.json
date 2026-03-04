@@ -1,0 +1,132 @@
+[
+  {
+    "id": "population",
+    "name": "Kependudukan",
+    "icon": "Users",
+    "color": "primary",
+    "bgColor": "bg-primary-lighter",
+    "slug": "population",
+    "showInMenu": true,
+    "order": 1
+  },
+  {
+    "id": "health",
+    "name": "Kesehatan",
+    "icon": "HeartPulse",
+    "color": "rose",
+    "bgColor": "bg-rose-50 dark:bg-rose-900/30",
+    "slug": "health",
+    "showInMenu": true,
+    "order": 2
+  },
+  {
+    "id": "education",
+    "name": "Pendidikan",
+    "icon": "GraduationCap",
+    "color": "blue",
+    "bgColor": "bg-blue-50 dark:bg-blue-900/30",
+    "slug": "education",
+    "showInMenu": true,
+    "order": 3
+  },
+  {
+    "id": "economy",
+    "name": "Ekonomi",
+    "icon": "Briefcase",
+    "color": "purple",
+    "bgColor": "bg-purple-50 dark:bg-purple-900/30",
+    "slug": "economy",
+    "showInMenu": true,
+    "order": 4
+  },
+  {
+    "id": "manpower",
+    "name": "Ketenagakerjaan",
+    "icon": "Users",
+    "color": "amber",
+    "bgColor": "bg-amber-50 dark:bg-amber-900/30",
+    "slug": "manpower",
+    "showInMenu": true,
+    "order": 5
+  },
+  {
+    "id": "tourism",
+    "name": "Pariwisata",
+    "icon": "Palmtree",
+    "color": "cyan",
+    "bgColor": "bg-cyan-50 dark:bg-cyan-900/30",
+    "slug": "tourism",
+    "showInMenu": false,
+    "order": 6
+  },
+  {
+    "id": "infrastructure",
+    "name": "Infrastruktur",
+    "icon": "Building2",
+    "color": "slate",
+    "bgColor": "bg-slate-100 dark:bg-slate-800",
+    "slug": "infrastructure",
+    "showInMenu": false,
+    "order": 7
+  },
+  {
+    "id": "social",
+    "name": "Sosial",
+    "icon": "Heart",
+    "color": "pink",
+    "bgColor": "bg-pink-50 dark:bg-pink-900/30",
+    "slug": "social",
+    "showInMenu": false,
+    "order": 8
+  },
+  {
+    "id": "environment",
+    "name": "Lingkungan",
+    "icon": "TreePine",
+    "color": "green",
+    "bgColor": "bg-green-50 dark:bg-green-900/30",
+    "slug": "environment",
+    "showInMenu": false,
+    "order": 9
+  },
+  {
+    "id": "government",
+    "name": "Pemerintahan",
+    "icon": "Landmark",
+    "color": "indigo",
+    "bgColor": "bg-indigo-50 dark:bg-indigo-900/30",
+    "slug": "government",
+    "showInMenu": false,
+    "order": 10
+  },
+  {
+    "id": "ppid",
+    "name": "PPID",
+    "icon": "FileSearch",
+    "color": "teal",
+    "bgColor": "bg-teal-50 dark:bg-teal-900/30",
+    "slug": "ppid",
+    "showInMenu": false,
+    "order": 11
+  },
+  {
+    "id": "disaster",
+    "name": "Kebencanaan",
+    "icon": "ShieldAlert",
+    "color": "red",
+    "bgColor": "bg-red-50 dark:bg-red-900/30",
+    "slug": "disaster",
+    "showInMenu": false,
+    "order": 12
+  },
+  {
+    "id": "multisector",
+    "name": "Multisektor",
+    "icon": "Building2",
+    "color": "violet",
+    "bgColor": "bg-violet-50 dark:bg-violet-900/30",
+    "slug": "multisector",
+    "showInMenu": false,
+    "order": 13
+  }
+]

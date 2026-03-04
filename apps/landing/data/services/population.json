@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "e-ktp",
+    "icon": "IdCard",
+    "name": "E-KTP",
+    "description": "Pembuatan dan perpanjangan KTP Elektronik",
+    "categoryId": "population",
+    "badge": "Populer",
+    "stats": "5.2k",
+    "showInMenu": true,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pembuatan KTP Elektronik baru, perpanjangan, dan penggalian KTP yang hilang/rusak. E-KTP adalah dokumen identitas resmi warga negara Indonesia yang wajib dimiliki setiap penduduk yang berusia 17 tahun ke atas atau sudah/pernah kawin.",
+    "requirements": [
+      "Fotokopi Kartu Keluarga",
+      "Surat Pengantar RT/RW",
+      "Pas foto 4x6 berwarna (2 lembar)",
+      "Fotokopi Akta Kelahiran (bagi pemula)",
+      "Surat kehilangan dari kepolisian (jika hilang)"
+    ],
+    "process": [
+      "Datang ke kantor kecamatan dengan membawa persyaratan",
+      "Mengisi formulir permohonan E-KTP",
+      "Foto dan rekam sidik jari biometrik",
+      "Menunggu proses verifikasi dan pencetakan (1-3 hari kerja)",
+      "Pengambilan E-KTP di kecamatan"
+    ],
+    "duration": "3-7 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Kecamatan Setempat",
+      "phone": "(021) 1234-5678",
+      "email": "disdukcapil@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Permohonan E-KTP",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["kk", "akta-kelahiran"],
+    "faqs": [
+      {
+        "question": "Apakah proses pembuatan E-KTP gratis?",
+        "answer": "Ya, pembuatan E-KTP sepenuhnya gratis tanpa dipungut biaya apapun."
+      },
+      {
+        "question": "Berapa lama proses pembuatan E-KTP?",
+        "answer": "Setelah proses rekam data, E-KTP biasanya jadi dalam waktu 3-7 hari kerja. Sementara menunggu, Anda akan mendapat surat keterangan sebagai pengganti."
+      },
+      {
+        "question": "Apa syarat untuk perpanjangan E-KTP?",
+        "answer": "Cukup bawa E-KTP lama dan KTP asli untuk perpanjangan. Jika E-KTP hilang/rusak, perlu surat keterangan hilang dari kepolisian."
+      }
+    ]
+  },
+  {
+    "slug": "kk",
+    "icon": "FileText",
+    "name": "Kartu Keluarga",
+    "description": "Pembuatan dan perubahan Kartu Keluarga",
+    "categoryId": "population",
+    "stats": "3.8k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pembuatan Kartu Keluarga baru, penambahan anggota keluarga, atau perubahan data KK. Kartu Keluarga adalah dokumen identitas kependudukan yang memuat data tentang susunan keluarga dan hubungan antar anggota keluarga.",
+    "requirements": [
+      "Surat Pengantar RT/RW",
+      "Fotokopi E-KTP Kepala Keluarga dan anggota keluarga",
+      "Fotokopi Akta Nikah/Cerai (jika ada perubahan status)",
+      "Fotokopi KK lama (untuk perubahan/penambahan)",
+      "Surat keterangan lahir dari bidan/rs (untuk penambahan anggota baru)"
+    ],
+    "process": [
+      "Mengajukan permohonan di kantor kecamatan",
+      "Menyerahkan semua persyaratan yang lengkap",
+      "Verifikasi data oleh petugas kependudukan",
+      "Pencetakan KK baru",
+      "Pengambilan KK di kecamatan"
+    ],
+    "duration": "1-3 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Kecamatan Setempat",
+      "phone": "(021) 1234-5678",
+      "email": "disdukcapil@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Permohonan KK",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["e-ktp", "akta-kelahiran"],
+    "faqs": [
+      {
+        "question": "Kapan perlu memperbarui Kartu Keluarga?",
+        "answer": "KK perlu diperbarui jika ada penambahan anggota keluarga, perubahan data (pendidikan, pekerjaan), perubahan status perkawinan, atau kesalahan penulisan data."
+      },
+      {
+        "question": "Apakah pembuatan KK dikenakan biaya?",
+        "answer": "Tidak, pembuatan KK sepenuhnya gratis."
+      }
+    ]
+  },
+  {
+    "slug": "akta-kelahiran",
+    "icon": "FileCheck",
+    "name": "Akta Kelahiran",
+    "description": "Pembuatan Akta Kelahiran",
+    "categoryId": "population",
+    "stats": "2.1k",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pembuatan Akta Kelahiran untuk bayi baru lahir atau pelaporan terlambat (akta dilahirkan kembali). Akta Kelahiran adalah dokumen penting sebagai bukti sah mengenai kelahiran seseorang.",
+    "requirements": [
+      "Surat Keterangan Lahir dari Rumah Sakit/Bidan",
+      "Fotokopi KK Orang Tua",
+      "Fotokopi E-KTP Orang Tua",
+      "Fotokopi Akta Nikah Orang Tua",
+      "Surat Pengantar RT/RW (untuk kelahiran terlambat)",
+      "Surat keterangan dari kepala desa/lurah (untuk kelahiran terlambat)"
+    ],
+    "process": [
+      "Mengajukan permohonan di Dinas Kependudukan atau Kecamatan",
+      "Menyerahkan semua persyaratan lengkap",
+      "Verifikasi data dan dokumen oleh petugas",
+      "Penerbitan Akta Kelahiran",
+      "Pengambilan dokumen akta"
+    ],
+    "duration": "1-7 hari kerja",
+    "cost": "Gratis (tepat waktu), Rp 50.000 (terlambat/dilahirkan kembali)",
+    "contactInfo": {
+      "office": "Dinas Kependudukan atau Kecamatan",
+      "phone": "(021) 1234-5678",
+      "email": "disdukcapil@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Permohonan Akta Kelahiran",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["e-ktp", "kk"],
+    "faqs": [
+      {
+        "question": "Berapa batas waktu pelaporan kelahiran?",
+        "answer": "Pelaporan kelahiran harus dilakukan paling lambat 30 hari sejak tanggal kelahiran untuk menghindari denda dan proses yang lebih rumit."
+      },
+      {
+        "question": "Apa yang terjadi jika pelaporan terlambat?",
+        "answer": "Untuk pelaporan terlambat (lebih dari 60 hari), akan dikenakan biaya administrasi sekitar Rp 50.000 dan prosesnya lebih lama karena perlu verifikasi tambahan."
+      },
+      {
+        "question": "Apa syarat untuk akta dilahirkan kembali?",
+        "answer": "Perlu surat keterangan dari kepala desa/lurah, surat pengantar RT/RW, dan dua orang saksi yang mengetahui proses kelahiran."
+      }
+    ]
+  },
+  {
+    "slug": "pindah-domisili",
+    "icon": "Home",
+    "name": "Surat Pindah Domisili",
+    "description": "Pengurusan surat pindah domisili",
+    "categoryId": "population",
+    "stats": "890",
+    "showInMenu": false,
+    "order": 4,
+    "isIntegrated": false,
+    "detailedDescription": "Layanan pengurusan surat pindah domisili antar desa, kecamatan, kabupaten/kota, atau provinsi. Surat pindah domisili diperlukan untuk memindahkan data kependudukan dari wilayah asal ke wilayah tujuan.",
+    "requirements": [
+      "Fotokopi KK dan E-KTP asli",
+      "Fotokopi E-KTP seluruh anggota keluarga yang pindah",
+      "Surat Pengantar RT/RW asal dan tujuan",
+      "Surat Keterangan Pindah dari kelurahan asal",
+      "Alamat lengkap tujuan pindah"
+    ],
+    "process": [
+      "Mengurus surat pengantar dari RT/RW asal",
+      "Mengajukan permohonan di kelurahan asal",
+      "Mendapat Surat Keterangan Pindah (SKP)",
+      "Lapor dan verifikasi di kelurahan tujuan",
+      "Update data kependudukan dan KK baru"
+    ],
+    "duration": "3-5 hari kerja",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Kelurahan Asal dan Tujuan",
+      "phone": "(021) 1234-5678",
+      "email": "disdukcapil@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pindah Domisili (F-102)",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["e-ktp", "kk"],
+    "faqs": [
+      {
+        "question": "Berapa lama masa berlaku surat pindah?",
+        "answer": "Surat Keterangan Pindah (SKP) berlaku selama 30 hari sejak diterbitkan. Pastikan segera melapor di wilayah tujuan sebelum masa berlaku habis."
+      },
+      {
+        "question": "Apakah perlu mengurus surat pindah untuk pindah dalam satu kecamatan?",
+        "answer": "Untuk pindah dalam satu kecamatan, cukup mengurus surat pindah di kelurahan setempat tanpa perlu ke kecamatan atau dinas kependudukan."
+      }
+    ]
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "slug": "bansos",
+    "icon": "Users",
+    "name": "Bantuan Sosial",
+    "description": "Program bantuan sosial masyarakat",
+    "categoryId": "social",
+    "stats": "3.5k",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Program bantuan sosial pemerintah untuk masyarakat kurang mampu. Meliputi berbagai jenis bantuan seperti PKH, BPNT, dan bansos lainnya untuk membantu meringankan beban ekonomi.",
+    "requirements": [
+      "Fotokopi Kartu Keluarga",
+      "Fotokopi E-KTP semua anggota keluarga",
+      "Surat Keterangan Tidak Mampu (SKTM)",
+      "Surat Pengantar RT/RW",
+      "Foto kondisi rumah"
+    ],
+    "process": [
+      "Pendaftaran di kelurahan setempat",
+      "Verifikasi data dan dokumen",
+      "Survey lapangan oleh tim verifikasi",
+      "Penetapan calon penerima bantuan",
+      "Penyaluran bantuan secara berkala"
+    ],
+    "duration": "1-3 bulan",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Sosial",
+      "phone": "(021) 1234-5678",
+      "email": "dinsos@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Pendaftaran Bansos",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["dtks"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara mendaftar bantuan sosial?",
+        "answer": "Masyarakat bisa mendaftar melalui kelurahan setempat dengan melengkapi semua persyaratan yang dibutuhkan atau melalui aplikasi Cek Bansos."
+      },
+      {
+        "question": "Kapan bantuan disalurkan?",
+        "answer": "Bantuan biasanya disalurkan setiap 3 bulan (triwulan) sesuai jadwal penyaluran dari pemerintah pusat/daerah."
+      }
+    ]
+  },
+  {
+    "slug": "dtks",
+    "icon": "Home",
+    "name": "DTKS",
+    "description": "Data Terpadu Kesejahteraan Sosial",
+    "categoryId": "social",
+    "stats": "2.8k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Pendataan dan verifikasi Data Terpadu Kesejahteraan Sosial untuk menentukan calon penerima bantuan sosial. DTKS adalah basis data yang berisi informasi rumah tangga sangat miskin dan miskin.",
+    "requirements": [
+      "Fotokopi Kartu Keluarga",
+      "Fotokopi E-KTP seluruh anggota keluarga",
+      "Surat Pengantar RT/RW",
+      "Data ekonomi keluarga (penghasilan, kondisi rumah)"
+    ],
+    "process": [
+      "Pendaftaran di kelurahan",
+      "Pengisian formulir DTKS lengkap",
+      "Verifikasi data oleh petugas",
+      "Survey rumah tangga",
+      "Input data ke sistem DTKS nasional"
+    ],
+    "duration": "1-2 bulan",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Sosial / Kelurahan",
+      "phone": "(021) 1234-5678",
+      "email": "dinsos@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir DTKS",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["bansos"],
+    "faqs": [
+      {
+        "question": "Apa manfaat terdaftar di DTKS?",
+        "answer": "Terdaftar di DTKS merupakan syarat utama untuk mendapatkan berbagai bantuan sosial seperti PKH, BPNT, dan bansos lainnya."
+      },
+      {
+        "question": "Bagaimana cara cek status DTKS?",
+        "answer": "Status dapat dicek melalui aplikasi Cek Bansos atau dengan menghubungi Dinas Sosil setempat."
+      }
+    ]
+  }
+]

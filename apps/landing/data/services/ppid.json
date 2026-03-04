@@ -1,0 +1,97 @@
+[
+  {
+    "slug": "ppid",
+    "icon": "FileSearch",
+    "name": "Permohonan Informasi Publik",
+    "description": "Permohonan informasi publik (PPID)",
+    "categoryId": "ppid",
+    "stats": "320",
+    "showInMenu": true,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan permohonan informasi publik sesuai UU No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik. Masyarakat berhak meminta dan mendapatkan informasi publik dari badan publik.",
+    "requirements": [
+      "Fotokopi E-KTP",
+      "Surat permohonan informasi (ditulis dan ditandatangani)",
+      "Alasan permohonan informasi",
+      "Rincian informasi yang dibutuhkan"
+    ],
+    "process": [
+      "Mengajukan permohonan informasi tertulis ke Pejabat PPID",
+      "Verifikasi kelengkapan permohonan",
+      "Proses pengumpulan informasi yang diminta",
+      "Pemberitahuan ketersediaan informasi",
+      "Penyerahan informasi kepada pemohon"
+    ],
+    "duration": "10-14 hari kerja",
+    "cost": "Gratis - Rp 50.000 (tergantung jenis dokumen)",
+    "contactInfo": {
+      "office": "Pejabat PPID Utama / Sekretariat Daerah",
+      "phone": "(021) 1234-5678",
+      "email": "ppid@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Permohonan Informasi Publik",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["dokumen-publik"],
+    "faqs": [
+      {
+        "question": "Apa saja informasi yang bisa diminta?",
+        "answer": "Informasi publik yang bisa diminta meliputi: kebijakan publik, laporan kinerja, anggaran, dan informasi lainnya yang dikecualikan."
+      },
+      {
+        "question": "Apakah semua informasi publik dapat diakses?",
+        "answer": "Tidak semua. Beberapa informasi dikecualikan seperti informasi yang berkaitan dengan pertahanan dan keamanan, hak privasi, dan rahasia jabatan."
+      },
+      {
+        "question": "Berapa lama proses permohonan informasi?",
+        "answer": "PPID wajib merespon permohonan dalam waktu 10 hari kerja dan dapat diperpanjang maksimal 7 hari kerja."
+      }
+    ]
+  },
+  {
+    "slug": "dokumen-publik",
+    "icon": "FileText",
+    "name": "Dokumen Publik",
+    "description": "Akses dokumen dan regulasi",
+    "categoryId": "ppid",
+    "stats": "1.5k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Portal akses dokumen dan regulasi pemerintah daerah seperti Perda, Perbup, SK, dan dokumen publik lainnya yang dapat diakses secara bebas oleh masyarakat.",
+    "requirements": [],
+    "process": [
+      "Akses portal dokumen publik daerah",
+      "Cari dokumen yang dibutuhkan",
+      "Download dokumen (PDF/digital)",
+      "Atau datang ke perpustakaan/arsip daerah"
+    ],
+    "duration": "Langsung",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Biro Hukum / Perpustakaan Daerah",
+      "phone": "(021) 1234-5678",
+      "email": "jdih@daerah.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["ppid"],
+    "faqs": [
+      {
+        "question": "Dokumen apa saja yang tersedia?",
+        "answer": "Dokumen yang tersedia meliputi Peraturan Daerah (Perda), Peraturan Bupati, SK Kepala Daerah, dan dokumen publik lainnya."
+      },
+      {
+        "question": "Apakah akses dokumen gratis?",
+        "answer": "Ya, akses dokumen publik melalui portal JDIH atau perpustakaan daerah sepenuhnya gratis."
+      },
+      {
+        "question": "Bagaimana jika dokumen yang dicari tidak ditemukan?",
+        "answer": "Jika dokumen tidak ditemukan, masyarakat dapat mengajukan permohonan informasi publik melalui layanan PPID."
+      }
+    ]
+  }
+]

@@ -1,0 +1,145 @@
+[
+  {
+    "slug": "imb",
+    "icon": "Building",
+    "name": "IMB (PBG)",
+    "description": "Izin Mendirikan Bangunan",
+    "categoryId": "infrastructure",
+    "stats": "780",
+    "showInMenu": false,
+    "order": 1,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pengurusan Izin Mendirikan Bangunan (IMB) atau Persetujuan Bangunan Gedung (PBG). IMB/PBG adalah persetujuan formal untuk pembangunan bangunan sesuai dengan peraturan bangunan yang berlaku.",
+    "requirements": [
+      "Fotokopi sertifikat tanah/Hak Milik",
+      "Fotokopi E-KTP pemilik",
+      "Gambar rencana bangunan (denah, tampak, potong)",
+      "Surat pernyataan kepemilikan lahan",
+      "Fotokopi PBB tahun terakhir",
+      "Surat kuasa (jika dikuasakan)"
+    ],
+    "process": [
+      "Konsultasi rencana bangunan dengan Dinas Tata Kota",
+      "Mengajukan permohonan IMB/PBG",
+      "Menyerahkan dokumen persyaratan lengkap",
+      "Survey lokasi oleh tim teknis",
+      "Penerbitan IMB/PBG setelah verifikasi"
+    ],
+    "duration": "14-30 hari kerja",
+    "cost": "Rp 500.000 - Rp 5.000.000 (tergantung luas dan jenis bangunan)",
+    "contactInfo": {
+      "office": "Dinas Penataan Ruang dan Tata Bangunan",
+      "phone": "(021) 1234-5678",
+      "email": "ptb@daerah.go.id"
+    },
+    "downloadForms": [
+      {
+        "name": "Formulir Permohonan IMB/PBG",
+        "url": "#"
+      },
+      {
+        "name": "Contoh Gambar IMB",
+        "url": "#"
+      }
+    ],
+    "relatedServices": ["aduan-infrastruktur", "transportasi-umum"],
+    "faqs": [
+      {
+        "question": "Apakah IMB wajib dimiliki?",
+        "answer": "Ya, IMB wajib dimiliki untuk setiap bangunan permanen sesuai UU No. 28 Tahun 2002 tentang Bangunan Gedung."
+      },
+      {
+        "question": "Berapa lama proses penerbitan IMB?",
+        "answer": "Proses IMB memakan waktu 14-30 hari kerja tergantung kompleksitas bangunan dan kelengkapan dokumen."
+      },
+      {
+        "question": "Apa yang terjadi jika membangun tanpa IMB?",
+        "answer": "Bangunan tanpa IMB dapat dikenakan sanksi administratif, bahkan pembongkaran paksa oleh pemerintah daerah."
+      }
+    ]
+  },
+  {
+    "slug": "aduan-infrastruktur",
+    "icon": "MessageCircle",
+    "name": "Aduan Infrastruktur",
+    "description": "Laporan kerusakan fasilitas umum",
+    "categoryId": "infrastructure",
+    "badge": "Populer",
+    "stats": "1.2k",
+    "showInMenu": false,
+    "order": 2,
+    "isIntegrated": true,
+    "detailedDescription": "Layanan pelaporan kerusakan jalan, lampu jalan, selokan, dan fasilitas umum lainnya. Masyarakat dapat melaporkan kerusakan infrastruktur untuk ditindaklanjuti oleh dinas terkait.",
+    "requirements": [
+      "Foto lokasi kerusakan",
+      "Deskripsi detail masalah",
+      "Lokasi/alamat lengkap (koordinat GPS jika memungkinkan)",
+      "Nama pelapor (opsional)"
+    ],
+    "process": [
+      "Buat laporan aduan melalui aplikasi/web atau datang ke kantor",
+      "Upload foto dan deskripsi kerusakan",
+      "Verifikasi laporan oleh petugas",
+      "Tindak lanjut perbaikan oleh dinas terkait",
+      "Update status penyelesaian laporan"
+    ],
+    "duration": "3-30 hari (tergantung tingkat kerusakan)",
+    "cost": "Gratis",
+    "contactInfo": {
+      "office": "Dinas Pekerjaan Umum",
+      "phone": "(021) 1234-5678",
+      "email": "aduandal@pu.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["imb", "transportasi-umum"],
+    "faqs": [
+      {
+        "question": "Bagaimana cara melaporkan kerusakan jalan?",
+        "answer": "Laporan dapat dibuat melalui aplikasi pengaduan daerah, hotline telepon, atau datang langsung ke kantor Dinas PU."
+      },
+      {
+        "question": "Berapa lama respon waktu perbaikan?",
+        "answer": "Respon waktu bervariasi: kerusakan ringan 3-7 hari, sedang 7-14 hari, dan berat 14-30 hari tergantung kompleksitas."
+      }
+    ]
+  },
+  {
+    "slug": "transportasi-umum",
+    "icon": "Bus",
+    "name": "Transportasi Umum",
+    "description": "Info rute dan jadwal transportasi",
+    "categoryId": "infrastructure",
+    "stats": "5.6k",
+    "showInMenu": false,
+    "order": 3,
+    "isIntegrated": false,
+    "detailedDescription": "Informasi lengkap mengenai rute, jadwal, dan tarif angkutan umum yang beroperasi di wilayah daerah. Termasuk bus kota, angkot, dan transportasi berbasis aplikasi.",
+    "requirements": [],
+    "process": [
+      "Akses aplikasi atau website informasi transportasi",
+      "Cek rute dan jadwal keberangkatan",
+      "Beli tiket/kartu (jika diperlukan)",
+      "Naik transportasi umum sesuai rute",
+      "Bayar tarif sesuai ketentuan"
+    ],
+    "duration": "Langsung",
+    "cost": "Rp 3.000 - Rp 15.000 (tergantung jenis transportasi)",
+    "contactInfo": {
+      "office": "Dinas Perhubungan",
+      "phone": "(021) 1234-5678",
+      "email": "infohub@dishub.go.id"
+    },
+    "downloadForms": [],
+    "relatedServices": ["aduan-infrastruktur"],
+    "faqs": [
+      {
+        "question": "Apa saja jenis transportasi umum yang tersedia?",
+        "answer": "Transportasi umum yang tersedia meliputi bus kota, angkutan kota (angkot), mikrolet, dan transportasi online."
+      },
+      {
+        "question": "Bagaimana cara cek jadwal bus kota?",
+        "answer": "Jadwal dapat dicek melalui aplikasi transportasi daerah atau di halte/bus stop yang telah disediakan."
+      }
+    ]
+  }
+]
