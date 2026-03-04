@@ -146,7 +146,7 @@ User selects file → Client validation → Presigned URL
 
 | Category | Technology | Rationale |
 |----------|-----------|-----------|
-| Framework | Next.js 15 | App Router, Server Components |
+| Framework | Next.js 16 | App Router, Server Components |
 | Language | TypeScript | Type safety, developer experience |
 | Database | PostgreSQL | Relational, mature, feature-rich |
 | ORM | Prisma | Type-safe queries, migrations |

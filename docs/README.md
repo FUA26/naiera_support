@@ -1,6 +1,6 @@
 # Enterprise Next.js Boilerplate
 
-A production-ready Next.js 15 boilerplate with authentication, role-based access control (RBAC), file uploads, activity logging, and more. Built as a monorepo with Turborepo for optimal development experience.
+A production-ready Next.js 16 boilerplate with authentication, role-based access control (RBAC), file uploads, activity logging, and more. Built as a monorepo with Turborepo for optimal development experience.
 
 ## Quick Start
 
@@ -36,7 +36,7 @@ pnpm dev
 
 ## Tech Stack
 
-- **Framework** - Next.js 15 (App Router)
+- **Framework** - Next.js 16 (App Router)
 - **Language** - TypeScript
 - **Database** - PostgreSQL with Prisma ORM
 - **Storage** - S3-compatible object storage

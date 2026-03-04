@@ -2,17 +2,30 @@
  * Tasks Management Page
  *
  * Main page for managing tasks with filtering, sorting, and CRUD operations
- * Demonstrates server-side data fetching with pagination
+ * Uses API routes for data fetching
  */
 
-import { getTasks, getTaskStats } from "@/lib/services/task-service";
 import { TasksTable } from "./tasks-client";
 import { Suspense } from "react";
 import { TasksTableSkeleton } from "./tasks-skeleton";
+import { getTasks } from "@/lib/services/task-service";
 
 async function TasksContent() {
   // Fetch initial data server-side
-  const [tasksData, stats] = await Promise.all([getTasks({ page: 1, pageSize: 20 }), getTaskStats()]);
+  const tasksData = await getTasks({ page: 1, pageSize: 20 });
+
+  // Fetch stats from API
+  let stats = { total: 0, byStatus: { TODO: 0, IN_PROGRESS: 0, REVIEW: 0, DONE: 0, ARCHIVED: 0 }, byPriority: { LOW: 0, MEDIUM: 0, HIGH: 0, URGENT: 0 }, overdue: 0 };
+  try {
+    const statsRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001"}/api/tasks/stats`, {
+      cache: "no-store",
+    });
+    if (statsRes.ok) {
+      stats = await statsRes.json();
+    }
+  } catch (error) {
+    console.error("Failed to fetch stats:", error);
+  }
 
   return (
     <div className="space-y-6">

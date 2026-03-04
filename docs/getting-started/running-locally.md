@@ -11,8 +11,8 @@ pnpm dev
 ```
 
 This starts:
-- **Backoffice** at http://localhost:3000
-- **Landing** at http://localhost:3001
+- **Backoffice** at http://localhost:3001
+- **Landing** at http://localhost:3002
 
 ## Individual Applications
 

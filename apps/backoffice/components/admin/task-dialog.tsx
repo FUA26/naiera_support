@@ -4,7 +4,7 @@
  * Task Dialog Component
  *
  * Dialog wrapper for task creation/editing form
- * Demonstrates form handling with validation and API integration
+ * Uses API routes for all operations
  */
 
 import {
@@ -41,16 +41,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  createTask,
-  getAssignableUsers,
-  getTags,
-  getTaskById,
-  updateTask,
-} from "@/lib/services/task-service";
 import { CheckSquare } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { XIcon } from "lucide-react";
 
 interface TaskDialogProps {
   open: boolean;
@@ -60,13 +52,38 @@ interface TaskDialogProps {
   onSuccess?: () => void;
 }
 
+interface TaskUser {
+  id: string;
+  name: string | null;
+  email: string;
+}
+
+interface TaskTag {
+  id: string;
+  name: string;
+  color: string | null;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  assignee?: TaskUser;
+  tags: TaskTag[];
+  commentCount: number;
+  attachmentCount: number;
+}
+
 export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: TaskDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
-  const [users, setUsers] = useState<Array<{ id: string; name: string | null; email: string }>>(
-    []
-  );
-  const [availableTags, setAvailableTags] = useState<Array<{ id: string; name: string }>>([]);
+  const [users, setUsers] = useState<TaskUser[]>([]);
+  const [availableTags, setAvailableTags] = useState<TaskTag[]>([]);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   const form = useForm<CreateTaskInput | UpdateTaskInput>({
@@ -76,7 +93,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
       description: "",
       status: "TODO",
       priority: "MEDIUM",
-      assigneeId: "",
+      assigneeId: "unassigned",
       tagIds: [],
     },
   });
@@ -97,9 +114,19 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
   async function loadFormData() {
     setIsLoadingData(true);
     try {
-      const [usersData, tagsData] = await Promise.all([getAssignableUsers(), getTags()]);
-      setUsers(usersData);
-      setAvailableTags(tagsData);
+      const [usersRes, tagsRes] = await Promise.all([
+        fetch("/api/tasks/users"),
+        fetch("/api/tasks/tags"),
+      ]);
+
+      if (usersRes.ok && tagsRes.ok) {
+        const [usersData, tagsData] = await Promise.all([
+          usersRes.json(),
+          tagsRes.json(),
+        ]);
+        setUsers(usersData);
+        setAvailableTags(tagsData);
+      }
     } catch (error) {
       console.error("Failed to load form data:", error);
       toast.error("Failed to load form data");
@@ -113,15 +140,16 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
 
     setIsLoadingData(true);
     try {
-      const task = await getTaskById(taskId);
-      if (task) {
+      const response = await fetch(`/api/tasks/${taskId}`);
+      if (response.ok) {
+        const task: Task = await response.json();
         form.reset({
           title: task.title,
           description: task.description || "",
           status: task.status as TaskStatus,
           priority: task.priority as TaskPriority,
-          dueDate: task.dueDate ? task.dueDate : undefined,
-          assigneeId: task.assignee?.id || "",
+          dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : undefined,
+          assigneeId: task.assignee?.id || "unassigned",
           tagIds: task.tags.map((t) => t.id),
         });
         setSelectedTagIds(task.tags.map((t) => t.id));
@@ -143,32 +171,47 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
       const taskData = {
         ...data,
         description: data.description ?? null,
-        dueDate: data.dueDate ?? null,
+        dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : null,
+        assigneeId: data.assigneeId === "unassigned" ? null : data.assigneeId,
         tagIds: selectedTagIds,
       };
 
       if (mode === "create") {
-        // For create, ensure required fields are present
-        const createData = data as CreateTaskInput;
-        await createTask({
-          title: createData.title,
-          description: createData.description ?? null,
-          status: createData.status,
-          priority: createData.priority,
-          dueDate: createData.dueDate ?? null,
-          assigneeId: createData.assigneeId || undefined,
-          tagIds: selectedTagIds,
+        const response = await fetch("/api/tasks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(taskData),
         });
-        toast.success("Task created successfully");
+
+        if (response.ok) {
+          toast.success("Task created successfully");
+          onSuccess?.();
+          onOpenChange(false);
+          form.reset();
+          setSelectedTagIds([]);
+        } else {
+          const error = await response.json();
+          toast.error(error.error || "Failed to create task");
+        }
       } else {
-        await updateTask(taskId!, taskData);
-        toast.success("Task updated successfully");
+        const response = await fetch(`/api/tasks/${taskId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(taskData),
+        });
+
+        if (response.ok) {
+          toast.success("Task updated successfully");
+          onSuccess?.();
+          onOpenChange(false);
+        } else {
+          const error = await response.json();
+          toast.error(error.error || "Failed to update task");
+        }
       }
-      onSuccess?.();
-      onOpenChange(false);
     } catch (error) {
       console.error("Failed to save task:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to save task");
+      toast.error("Failed to save task");
     } finally {
       setIsLoading(false);
     }
@@ -307,7 +350,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
                         <SelectValue placeholder="Select assignee" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Unassigned</SelectItem>
+                        <SelectItem value="unassigned">Unassigned</SelectItem>
                         {users.map((user) => (
                           <SelectItem key={user.id} value={user.id}>
                             {user.name || user.email}

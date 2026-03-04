@@ -4,7 +4,7 @@ Detailed explanation of the technologies used in the Enterprise Next.js Boilerpl
 
 ## Core Technologies
 
-### Next.js 15
+### Next.js 16
 
 **Why Next.js?**
 

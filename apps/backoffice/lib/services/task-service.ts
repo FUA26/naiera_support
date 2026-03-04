@@ -1,26 +1,22 @@
 /**
  * Task Module - Service Layer
  *
- * Demonstrates service layer patterns:
- * - CRUD operations with relation includes
- * - Activity logging
- * - Status transitions
- * - Pagination and filtering
- *
- * This is a mock service with in-memory data.
- * In production, this would interact with the database via Prisma.
+ * Service layer for task operations using Prisma database.
+ * Provides CRUD operations with relation includes and activity logging.
  *
  * @pattern docs/patterns/service-layer.md
  * @pattern docs/patterns/activity-logs.md
  */
 
-// Define enums locally since they're not in Prisma schema
-export type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE" | "ARCHIVED";
-export type TaskPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+import { prisma } from "@/lib/prisma";
+import type { TaskStatus, TaskPriority, TaskActivityAction } from "@prisma/client";
 
 // ============================================================================
 // Type Definitions
 // ============================================================================
+
+export type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE" | "ARCHIVED";
+export type TaskPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 
 export interface Task {
   id: string;
@@ -32,6 +28,7 @@ export interface Task {
   createdAt: Date;
   updatedAt: Date;
   assignee?: TaskUser;
+  createdBy?: TaskUser;
   tags: TaskTag[];
   commentCount: number;
   attachmentCount: number;
@@ -62,11 +59,9 @@ export interface TaskComment {
 export interface TaskAttachment {
   id: string;
   taskId: string;
-  fileId: string;
   fileName: string;
-  fileUrl: string;
+  fileUrl: string | null;
   description: string | null;
-  createdAt: Date;
 }
 
 export interface TaskActivity {
@@ -99,168 +94,26 @@ export interface PaginatedResult<T> {
 }
 
 // ============================================================================
-// Mock Data
+// Helper Functions
 // ============================================================================
 
-// Mock users (simulating existing User records)
-const mockUsers: TaskUser[] = [
-  { id: "user-1", name: "Admin User", email: "admin@naiera.dev" },
-  { id: "user-2", name: "John Developer", email: "john@naiera.dev" },
-  { id: "user-3", name: "Sarah Designer", email: "sarah@naiera.dev" },
-];
-
-// Mock tags
-const mockTags: TaskTag[] = [
-  { id: "tag-1", name: "Bug", color: "#ef4444" },
-  { id: "tag-2", name: "Feature", color: "#3b82f6" },
-  { id: "tag-3", name: "Enhancement", color: "#10b981" },
-  { id: "tag-4", name: "Documentation", color: "#f59e0b" },
-  { id: "tag-5", name: "Urgent", color: "#dc2626" },
-];
-
-// Mock tasks
-let mockTasks: Task[] = [
-  {
-    id: "task-1",
-    title: "Implement user authentication",
-    description: "Add OAuth2 login flow with Google and GitHub providers",
-    status: "IN_PROGRESS",
-    priority: "HIGH",
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[1]!,
-    tags: [mockTags[1]!, mockTags[2]!],
-    commentCount: 5,
-    attachmentCount: 2,
-  },
-  {
-    id: "task-2",
-    title: "Fix responsive layout issues on mobile",
-    description: "Navigation menu overlaps content on screens smaller than 640px",
-    status: "TODO",
-    priority: "MEDIUM",
-    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[2]!,
-    tags: [mockTags[0]!],
-    commentCount: 2,
-    attachmentCount: 0,
-  },
-  {
-    id: "task-3",
-    title: "Update API documentation",
-    description: "Document all new endpoints added in v2.0 release",
-    status: "REVIEW",
-    priority: "LOW",
-    dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[0]!,
-    tags: [mockTags[3]!],
-    commentCount: 1,
-    attachmentCount: 1,
-  },
-  {
-    id: "task-4",
-    title: "Database migration for user preferences",
-    description: "Create migration script for new user settings table",
-    status: "DONE",
-    priority: "HIGH",
-    dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[1]!,
-    tags: [mockTags[1]!],
-    commentCount: 8,
-    attachmentCount: 0,
-  },
-  {
-    id: "task-5",
-    title: "Security audit and vulnerability fixes",
-    description: "Address findings from latest security scan",
-    status: "TODO",
-    priority: "URGENT",
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[0]!,
-    tags: [mockTags[0]!, mockTags[4]!],
-    commentCount: 3,
-    attachmentCount: 1,
-  },
-  {
-    id: "task-6",
-    title: "Implement dark mode toggle",
-    description: "Add system preference detection and manual override",
-    status: "ARCHIVED",
-    priority: "LOW",
-    dueDate: null,
-    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000),
-    assignee: mockUsers[2]!,
-    tags: [mockTags[2]!],
-    commentCount: 4,
-    attachmentCount: 0,
-  },
-];
-
-// Mock comments
-let mockComments: TaskComment[] = [
-  {
-    id: "comment-1",
-    taskId: "task-1",
-    content: "I've started working on the Google OAuth integration. Need to set up the callback URL.",
-    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-    author: mockUsers[1]!,
-  },
-  {
-    id: "comment-2",
-    taskId: "task-1",
-    content: "Great progress! Let me know if you need help with the GitHub provider.",
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    author: mockUsers[0]!,
-  },
-  {
-    id: "comment-3",
-    taskId: "task-2",
-    content: "I've attached a screenshot showing the issue on iPhone SE.",
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
-    author: mockUsers[2]!,
-  },
-];
-
-// Mock activities
-let mockActivities: TaskActivity[] = [
-  {
-    id: "activity-1",
-    taskId: "task-1",
-    action: "CREATED",
-    changes: null,
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    user: mockUsers[0]!,
-  },
-  {
-    id: "activity-2",
-    taskId: "task-1",
-    action: "ASSIGNED",
-    changes: { assignee: "John Developer" },
-    createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
-    user: mockUsers[0]!,
-  },
-  {
-    id: "activity-3",
-    taskId: "task-1",
-    action: "STATUS_CHANGED",
-    changes: { from: "TODO", to: "IN_PROGRESS" },
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    user: mockUsers[1]!,
-  },
-];
+function formatTask(task: any): Task {
+  return {
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    status: task.status,
+    priority: task.priority,
+    dueDate: task.dueDate,
+    createdAt: task.createdAt,
+    updatedAt: task.updatedAt,
+    assignee: task.assignee,
+    createdBy: task.createdBy,
+    tags: task.tags?.map((tt: any) => tt.tag) || [],
+    commentCount: task._count?.comments || 0,
+    attachmentCount: task._count?.attachments || 0,
+  };
+}
 
 // ============================================================================
 // Service Functions
@@ -283,75 +136,68 @@ export async function getTasks(
     sortOrder = "desc",
   } = params;
 
-  // Simulate async database call
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
-  // Filter tasks
-  let filtered = [...mockTasks];
+  const where: Record<string, unknown> = {};
 
   if (status) {
-    filtered = filtered.filter((t) => t.status === status);
+    where.status = status;
   }
 
   if (priority) {
-    filtered = filtered.filter((t) => t.priority === priority);
+    where.priority = priority;
   }
 
   if (assigneeId) {
-    filtered = filtered.filter((t) => t.assignee?.id === assigneeId);
+    where.assigneeId = assigneeId;
   }
 
   if (search) {
-    const searchLower = search.toLowerCase();
-    filtered = filtered.filter(
-      (t) =>
-        t.title.toLowerCase().includes(searchLower) ||
-        t.description?.toLowerCase().includes(searchLower)
-    );
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+    ];
   }
 
-  // Sort tasks
-  filtered.sort((a, b) => {
-    let aVal: number, bVal: number;
+  // Get total count
+  const total = await prisma.task.count({ where });
 
-    switch (sortBy) {
-      case "status":
-        const statusOrder = { TODO: 0, IN_PROGRESS: 1, REVIEW: 2, DONE: 3, ARCHIVED: 4 };
-        aVal = statusOrder[a.status];
-        bVal = statusOrder[b.status];
-        break;
-      case "priority":
-        const priorityOrder = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
-        aVal = priorityOrder[a.priority];
-        bVal = priorityOrder[b.priority];
-        break;
-      case "dueDate":
-        aVal = a.dueDate ? a.dueDate.getTime() : 0;
-        bVal = b.dueDate ? b.dueDate.getTime() : 0;
-        break;
-      case "updatedAt":
-        aVal = a.updatedAt.getTime();
-        bVal = b.updatedAt.getTime();
-        break;
-      default:
-        aVal = a.createdAt.getTime();
-        bVal = b.createdAt.getTime();
-    }
+  // Get pagination info
+  const skip = (page - 1) * pageSize;
 
-    if (sortOrder === "asc") {
-      return aVal > bVal ? 1 : -1;
-    }
-    return aVal < bVal ? 1 : -1;
+  // Build orderBy
+  const orderBy: Record<string, "asc" | "desc"> = {};
+  orderBy[sortBy] = sortOrder;
+
+  // Get tasks
+  const tasks = await prisma.task.findMany({
+    where,
+    skip,
+    take: pageSize,
+    orderBy,
+    include: {
+      assignee: {
+        select: { id: true, name: true, email: true },
+      },
+      createdBy: {
+        select: { id: true, name: true, email: true },
+      },
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          attachments: true,
+        },
+      },
+    },
   });
 
-  // Paginate
-  const total = filtered.length;
   const totalPages = Math.ceil(total / pageSize);
-  const start = (page - 1) * pageSize;
-  const items = filtered.slice(start, start + pageSize);
 
   return {
-    items,
+    items: tasks.map(formatTask),
     total,
     page,
     pageSize,
@@ -363,46 +209,90 @@ export async function getTasks(
  * Get a single task by ID
  */
 export async function getTaskById(id: string): Promise<Task | null> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const task = await prisma.task.findUnique({
+    where: { id },
+    include: {
+      assignee: {
+        select: { id: true, name: true, email: true },
+      },
+      createdBy: {
+        select: { id: true, name: true, email: true },
+      },
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          attachments: true,
+        },
+      },
+    },
+  });
 
-  const task = mockTasks.find((t) => t.id === id);
-  return task || null;
+  return task ? formatTask(task) : null;
 }
 
 /**
  * Create a new task
  */
 export async function createTask(
-  data: Omit<Task, "id" | "createdAt" | "updatedAt" | "commentCount" | "attachmentCount" | "assignee" | "tags"> & {
-    assigneeId?: string;
+  data: Omit<Task, "id" | "createdAt" | "updatedAt" | "commentCount" | "attachmentCount" | "assignee" | "createdBy" | "tags"> & {
+    createdById: string;
+    assigneeId?: string | null;
     tagIds?: string[];
   }
 ): Promise<Task> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  const assigneeId = data.assigneeId === "unassigned" ? null : data.assigneeId;
 
-  const newTask: Task = {
-    id: `task-${Date.now()}`,
-    title: data.title,
-    description: data.description ?? null,
-    status: data.status,
-    priority: data.priority,
-    dueDate: data.dueDate,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    assignee: data.assigneeId ? mockUsers.find((u) => u.id === data.assigneeId) : undefined,
-    tags: data.tagIds
-      ? data.tagIds.map((tagId) => mockTags.find((t) => t.id === tagId)).filter(Boolean) as TaskTag[]
-      : [],
-    commentCount: 0,
-    attachmentCount: 0,
-  };
-
-  mockTasks.unshift(newTask);
+  const task = await prisma.task.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      status: data.status,
+      priority: data.priority,
+      dueDate: data.dueDate,
+      assigneeId,
+      createdById: data.createdById,
+      tags: {
+        create: data.tagIds?.map((tagId) => ({
+          tagId,
+        })) || [],
+      },
+    },
+    include: {
+      assignee: {
+        select: { id: true, name: true, email: true },
+      },
+      createdBy: {
+        select: { id: true, name: true, email: true },
+      },
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          attachments: true,
+        },
+      },
+    },
+  });
 
   // Log activity
-  await logActivity(newTask.id, "CREATED", null, mockUsers[0]!);
+  await prisma.taskActivity.create({
+    data: {
+      taskId: task.id,
+      action: "CREATED",
+      userId: data.createdById,
+    },
+  });
 
-  return newTask;
+  return formatTask(task);
 }
 
 /**
@@ -410,80 +300,138 @@ export async function createTask(
  */
 export async function updateTask(
   id: string,
-  data: Partial<Omit<Task, "id" | "createdAt" | "updatedAt" | "assignee" | "tags" | "commentCount" | "attachmentCount">> & {
-    assigneeId?: string;
+  data: Partial<Omit<Task, "id" | "createdAt" | "updatedAt" | "assignee" | "createdBy" | "tags" | "commentCount" | "attachmentCount">> & {
+    userId?: string;
+    assigneeId?: string | null;
     tagIds?: string[];
   }
 ): Promise<Task | null> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  const existing = await prisma.task.findUnique({
+    where: { id },
+  });
 
-  const index = mockTasks.findIndex((t) => t.id === id);
-  if (index === -1) return null;
+  if (!existing) return null;
 
-  const existing = mockTasks[index]!;
-  const changes: Record<string, unknown> = {};
+  const updateData: Record<string, unknown> = {};
+  const activities: TaskActivityAction[] = [];
 
-  // Track changes for activity log (only if existing is defined)
-  if (data.status && data.status !== existing.status) {
-    changes.status = { from: existing.status, to: data.status };
+  if (data.title !== undefined) {
+    updateData.title = data.title;
   }
-  if (data.priority && data.priority !== existing.priority) {
-    changes.priority = { from: existing.priority, to: data.priority };
+  if (data.description !== undefined) {
+    updateData.description = data.description;
+  }
+  if (data.status !== undefined && data.status !== existing.status) {
+    updateData.status = data.status;
+    activities.push("STATUS_CHANGED");
+  }
+  if (data.priority !== undefined && data.priority !== existing.priority) {
+    updateData.priority = data.priority;
+    activities.push("PRIORITY_CHANGED");
+  }
+  if (data.dueDate !== undefined) {
+    updateData.dueDate = data.dueDate;
+    if (data.dueDate !== existing.dueDate) {
+      activities.push("DUE_DATE_CHANGED");
+    }
   }
   if (data.assigneeId !== undefined) {
-    const newAssignee = data.assigneeId
-      ? mockUsers.find((u) => u.id === data.assigneeId)
-      : undefined;
-    changes.assignee = {
-      from: existing.assignee?.name || "Unassigned",
-      to: newAssignee?.name || "Unassigned",
-    };
+    const newAssigneeId = data.assigneeId === "unassigned" ? null : data.assigneeId;
+    updateData.assigneeId = newAssigneeId;
+    if (newAssigneeId !== existing.assigneeId) {
+      activities.push(newAssigneeId ? "ASSIGNED" : "UNASSIGNED");
+    }
   }
 
-  const updated: Task = {
-    ...existing,
-    title: data.title ?? existing.title,
-    description: data.description ?? existing.description,
-    status: data.status ?? existing.status,
-    priority: data.priority ?? existing.priority,
-    dueDate: data.dueDate ?? existing.dueDate,
-    updatedAt: new Date(),
-    assignee: data.assigneeId !== undefined
-      ? mockUsers.find((u) => u.id === data.assigneeId) ?? existing.assignee
-      : existing.assignee,
-    tags: data.tagIds
-      ? data.tagIds.map((tagId) => mockTags.find((t) => t.id === tagId)!).filter(Boolean) as TaskTag[]
-      : existing.tags,
-    commentCount: existing.commentCount,
-    attachmentCount: existing.attachmentCount,
-  };
+  // Handle tags update
+  if (data.tagIds !== undefined) {
+    // Delete existing tag relations
+    await prisma.taskTaskTag.deleteMany({
+      where: { taskId: id },
+    });
 
-  mockTasks[index] = updated;
-
-  // Log activity if there are changes
-  if (Object.keys(changes).length > 0) {
-    await logActivity(id, "UPDATED", changes, mockUsers[0]!);
+    // Create new tag relations
+    if (data.tagIds.length > 0) {
+      await prisma.taskTaskTag.createMany({
+        data: data.tagIds.map((tagId) => ({
+          taskId: id,
+          tagId,
+        })),
+      });
+    }
   }
 
-  return updated;
+  // Update task
+  const updated = await prisma.task.update({
+    where: { id },
+    data: updateData,
+    include: {
+      assignee: {
+        select: { id: true, name: true, email: true },
+      },
+      createdBy: {
+        select: { id: true, name: true, email: true },
+      },
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          attachments: true,
+        },
+      },
+    },
+  });
+
+  // Log activities
+  const userId = data.userId || existing.createdById;
+  for (const action of activities) {
+    await prisma.taskActivity.create({
+      data: {
+        taskId: id,
+        action,
+        userId,
+        changes: action === "STATUS_CHANGED"
+          ? { from: existing.status, to: data.status }
+          : action === "PRIORITY_CHANGED"
+          ? { from: existing.priority, to: data.priority }
+          : action === "ASSIGNED" || action === "UNASSIGNED"
+          ? { from: existing.assigneeId, to: data.assigneeId }
+          : null,
+      },
+    });
+  }
+
+  // If no specific activity but fields changed, log generic UPDATE
+  if (activities.length === 0 && Object.keys(updateData).length > 0) {
+    await prisma.taskActivity.create({
+      data: {
+        taskId: id,
+        action: "UPDATED",
+        userId,
+      },
+    });
+  }
+
+  return formatTask(updated);
 }
 
 /**
  * Delete a task
  */
 export async function deleteTask(id: string): Promise<boolean> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  const existing = await prisma.task.findUnique({
+    where: { id },
+  });
 
-  const index = mockTasks.findIndex((t) => t.id === id);
-  if (index === -1) return false;
+  if (!existing) return false;
 
-  mockTasks.splice(index, 1);
-
-  // Remove related comments
-  mockComments = mockComments.filter((c) => c.taskId !== id);
-
-  // Log activity
-  await logActivity(id, "DELETED", null, mockUsers[0]!);
+  await prisma.task.delete({
+    where: { id },
+  });
 
   return true;
 }
@@ -495,59 +443,62 @@ export async function bulkUpdateStatus(
   taskIds: string[],
   status: TaskStatus
 ): Promise<boolean> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  const result = await prisma.task.updateMany({
+    where: {
+      id: { in: taskIds },
+    },
+    data: {
+      status,
+    },
+  });
 
-  let updated = 0;
-
-  for (const id of taskIds) {
-    const task = mockTasks.find((t) => t.id === id);
-    if (task && task.status !== status) {
-      task.status = status;
-      task.updatedAt = new Date();
-
-      await logActivity(
-        id,
-        "STATUS_CHANGED",
-        { from: task.status, to: status },
-        mockUsers[0]!
-      );
-
-      updated++;
-    }
-  }
-
-  return updated > 0;
+  return result.count > 0;
 }
 
 /**
  * Bulk delete tasks
  */
 export async function bulkDeleteTasks(taskIds: string[]): Promise<number> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  const result = await prisma.task.deleteMany({
+    where: { id: { in: taskIds } },
+  });
 
-  let deleted = 0;
-
-  for (const id of taskIds) {
-    const index = mockTasks.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      mockTasks.splice(index, 1);
-      mockComments = mockComments.filter((c) => c.taskId !== id);
-      deleted++;
-    }
-  }
-
-  return deleted;
+  return result.count;
 }
 
 /**
  * Get comments for a task
  */
 export async function getTaskComments(taskId: string): Promise<TaskComment[]> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const comments = await prisma.taskComment.findMany({
+    where: { taskId },
+    include: {
+      author: {
+        select: { id: true, name: true, email: true },
+      },
+      attachment: {
+        include: {
+          file: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  });
 
-  return mockComments
-    .filter((c) => c.taskId === taskId)
-    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  return comments.map((comment) => ({
+    id: comment.id,
+    taskId: comment.taskId,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    author: comment.author,
+    attachment: comment.attachment ? {
+      id: comment.attachment.id,
+      fileName: comment.attachment.fileName,
+      fileUrl: comment.attachment.file?.cdnUrl || null,
+      description: comment.attachment.description,
+    } : undefined,
+  }));
 }
 
 /**
@@ -556,60 +507,107 @@ export async function getTaskComments(taskId: string): Promise<TaskComment[]> {
 export async function addTaskComment(
   taskId: string,
   content: string,
-  authorId: string
+  authorId: string,
+  attachmentId?: string
 ): Promise<TaskComment> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
-  const author = mockUsers.find((u) => u.id === authorId) || mockUsers[0]!;
-  const task = mockTasks.find((t) => t.id === taskId);
-
-  if (!task) throw new Error("Task not found");
-
-  const newComment: TaskComment = {
-    id: `comment-${Date.now()}`,
-    taskId,
-    content,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    author,
-  };
-
-  mockComments.push(newComment);
-  task.commentCount++;
+  const comment = await prisma.taskComment.create({
+    data: {
+      taskId,
+      content,
+      authorId,
+      attachmentId,
+    },
+    include: {
+      author: {
+        select: { id: true, name: true, email: true },
+      },
+      attachment: {
+        include: {
+          file: true,
+        },
+      },
+    },
+  });
 
   // Log activity
-  await logActivity(taskId, "COMMENT_ADDED", null, author);
+  await prisma.taskActivity.create({
+    data: {
+      taskId,
+      action: "COMMENT_ADDED",
+      userId: authorId,
+    },
+  });
 
-  return newComment;
+  return {
+    id: comment.id,
+    taskId: comment.taskId,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    author: comment.author,
+    attachment: comment.attachment ? {
+      id: comment.attachment.id,
+      fileName: comment.attachment.fileName,
+      fileUrl: comment.attachment.file?.cdnUrl || null,
+      description: comment.attachment.description,
+    } : undefined,
+  };
 }
 
 /**
  * Get activity log for a task
  */
 export async function getTaskActivity(taskId: string): Promise<TaskActivity[]> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const activities = await prisma.taskActivity.findMany({
+    where: { taskId },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
-  return mockActivities
-    .filter((a) => a.taskId === taskId)
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  return activities.map((activity) => ({
+    id: activity.id,
+    taskId: activity.taskId,
+    action: activity.action,
+    changes: activity.changes as Record<string, unknown> | null,
+    metadata: activity.metadata as Record<string, unknown> | null,
+    createdAt: activity.createdAt,
+    user: activity.user,
+  }));
 }
 
 /**
  * Get all available tags
  */
 export async function getTags(): Promise<TaskTag[]> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const tags = await prisma.taskTag.findMany({
+    orderBy: { name: "asc" },
+  });
 
-  return mockTags;
+  return tags.map((tag) => ({
+    id: tag.id,
+    name: tag.name,
+    color: tag.color,
+  }));
 }
 
 /**
  * Get all available users for assignment
  */
 export async function getAssignableUsers(): Promise<TaskUser[]> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
+    orderBy: { name: "asc" },
+  });
 
-  return mockUsers;
+  return users;
 }
 
 /**
@@ -621,7 +619,13 @@ export async function getTaskStats(): Promise<{
   byPriority: Record<TaskPriority, number>;
   overdue: number;
 }> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  const tasks = await prisma.task.findMany({
+    select: {
+      status: true,
+      priority: true,
+      dueDate: true,
+    },
+  });
 
   const byStatus: Record<TaskStatus, number> = {
     TODO: 0,
@@ -641,47 +645,25 @@ export async function getTaskStats(): Promise<{
   let overdue = 0;
   const now = new Date();
 
-  for (const task of mockTasks) {
+  for (const task of tasks) {
+    // Count by status
     if (task.status !== "DONE" && task.status !== "ARCHIVED") {
       byStatus[task.status]++;
     }
 
+    // Count by priority
     byPriority[task.priority]++;
 
+    // Count overdue
     if (task.dueDate && task.dueDate < now && task.status !== "DONE" && task.status !== "ARCHIVED") {
       overdue++;
     }
   }
 
   return {
-    total: mockTasks.length,
+    total: tasks.length,
     byStatus,
     byPriority,
     overdue,
   };
-}
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
-
-/**
- * Log task activity
- */
-async function logActivity(
-  taskId: string,
-  action: string,
-  changes: Record<string, unknown> | null,
-  user: TaskUser
-): Promise<void> {
-  const activity: TaskActivity = {
-    id: `activity-${Date.now()}-${Math.random()}`,
-    taskId,
-    action,
-    changes,
-    createdAt: new Date(),
-    user,
-  };
-
-  mockActivities.unshift(activity);
 }

@@ -1,6 +1,6 @@
 # Enterprise Next.js Boilerplate
 
-A production-ready Next.js 15 boilerplate with authentication, RBAC, file uploads, and more.
+A production-ready Next.js 16 boilerplate with authentication, RBAC, file uploads, and more.
 
 ## Features
 
@@ -23,8 +23,8 @@ pnpm install
 pnpm dev
 
 # Applications:
-# - Backoffice: http://localhost:3000
-# - Landing: http://localhost:3001
+# - Backoffice: http://localhost:3001
+# - Landing: http://localhost:3002
 ```
 
 ## Documentation
@@ -54,18 +54,17 @@ For detailed documentation, see:
 │   ├── hooks/               # Shared React hooks
 │   ├── utils/               # Shared utilities
 │   └── ...
-├── prisma/                  # Database schema
 └── docs/                    # Documentation
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Database**: PostgreSQL with Prisma ORM
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript 5
+- **Database**: PostgreSQL with Prisma 6
 - **Auth**: NextAuth.js v5
-- **Styling**: Tailwind CSS + shadcn/ui
-- **Monorepo**: Turborepo
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Monorepo**: Turborepo + pnpm
 
 ## Environment Variables
 

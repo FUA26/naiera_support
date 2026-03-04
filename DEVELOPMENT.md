@@ -16,7 +16,7 @@ pnpm --filter landing dev &
 pnpm --filter backoffice dev &
 
 # Single app
-pnpm --filter landing dev    # http://localhost:3000
+pnpm --filter landing dev    # http://localhost:3002
 pnpm --filter backoffice dev # http://localhost:3001
 ```
 
@@ -108,9 +108,9 @@ import { Button } from "@workspace/ui"
 ## Project Structure
 
 ```
-bandanaiera/
+naiera-admin/
 ├── apps/
-│   ├── landing/          # Landing page app (port 3000)
+│   ├── landing/          # Landing page app (port 3002)
 │   │   ├── app/          # Next.js app directory
 │   │   ├── components/   # Landing-specific components
 │   │   └── public/       # Static assets

@@ -43,10 +43,10 @@ S3_ENDPOINT="https://s3.amazonaws.com"
 
 ```bash
 # Application URL (for redirects, callbacks)
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3001"
 
 # API URL (if using separate API server)
-NEXT_PUBLIC_API_URL="http://localhost:3000"
+NEXT_PUBLIC_API_URL="http://localhost:3001"
 ```
 
 ### NextAuth Configuration

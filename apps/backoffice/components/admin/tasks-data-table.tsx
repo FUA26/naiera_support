@@ -38,16 +38,14 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { Task } from "@/lib/services/task-service";
-import {
-  bulkDeleteTasks,
-  bulkUpdateStatus,
-  getTaskStats,
-} from "@/lib/services/task-service";
 import { DeleteConfirmDialog } from "./delete-confirm-dialog";
 
 interface TasksDataTableProps {
   tasks: Task[];
   onRefresh?: () => void;
+  onTaskCreated?: (task: Task) => void;
+  onTaskUpdated?: (task: Task) => void;
+  onTaskDeleted?: (taskId: string) => void;
 }
 
 // Status badge variants
@@ -84,7 +82,7 @@ const priorityOptions: FacetedFilterOption[] = [
   { label: "Urgent", value: "URGENT" },
 ];
 
-export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
+export function TasksDataTable({ tasks, onRefresh, onTaskCreated, onTaskUpdated, onTaskDeleted }: TasksDataTableProps) {
   const [editDialog, setEditDialog] = useState<{ open: boolean; taskId: string }>({
     open: false,
     taskId: "",
@@ -279,15 +277,19 @@ export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
   const handleBulkStatusUpdate = async (status: string) => {
     setIsLoading(true);
     try {
-      const success = await bulkUpdateStatus(
-        selectedTaskIds,
-        status as "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE" | "ARCHIVED"
-      );
+      const response = await fetch("/api/tasks/bulk/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskIds: selectedTaskIds, status }),
+      });
 
-      if (success) {
+      if (response.ok) {
         toast.success(`Updated ${selectedTaskIds.length} task(s) to ${status}`);
         setSelectedTaskIds([]);
         onRefresh?.();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || "Failed to update tasks");
       }
     } catch (error) {
       console.error("Failed to bulk update status:", error);
@@ -301,10 +303,22 @@ export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
   const handleBulkDelete = async () => {
     setIsLoading(true);
     try {
-      const count = await bulkDeleteTasks(selectedTaskIds);
-      toast.success(`Deleted ${count} task(s)`);
-      setSelectedTaskIds([]);
-      onRefresh?.();
+      const response = await fetch("/api/tasks/bulk/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskIds: selectedTaskIds }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(`Deleted ${result.count} task(s)`);
+        selectedTaskIds.forEach(id => onTaskDeleted?.(id));
+        setSelectedTaskIds([]);
+        onRefresh?.();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || "Failed to delete tasks");
+      }
     } catch (error) {
       console.error("Failed to bulk delete:", error);
       toast.error("Failed to delete tasks");
@@ -317,10 +331,18 @@ export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
   const handleDeleteTask = async () => {
     setIsLoading(true);
     try {
-      // Mock delete - in production this would call an API
-      toast.success("Task deleted successfully");
-      setDeleteDialog({ open: false, taskId: "" });
-      onRefresh?.();
+      const response = await fetch(`/api/tasks/${deleteDialog.taskId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        toast.success("Task deleted successfully");
+        onTaskDeleted?.(deleteDialog.taskId);
+        setDeleteDialog({ open: false, taskId: "" });
+      } else {
+        const error = await response.json();
+        toast.error(error.error || "Failed to delete task");
+      }
     } catch (error) {
       console.error("Failed to delete task:", error);
       toast.error("Failed to delete task");
@@ -424,7 +446,10 @@ export function TasksDataTable({ tasks, onRefresh }: TasksDataTableProps) {
         onOpenChange={(open) => setEditDialog({ open, taskId: "" })}
         mode="edit"
         taskId={editDialog.taskId}
-        onSuccess={onRefresh}
+        onSuccess={() => {
+          onRefresh?.();
+          onTaskUpdated?.(tasks.find(t => t.id === editDialog.taskId)!);
+        }}
       />
 
       {/* TODO: Create TaskDeleteConfirmDialog for task deletion */}

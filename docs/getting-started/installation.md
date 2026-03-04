@@ -6,7 +6,7 @@ Get the Enterprise Next.js Boilerplate up and running on your local machine.
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js** 18 or higher
+- **Node.js** 20 or higher
 - **pnpm** 8 or higher ([install pnpm](https://pnpm.io/installation))
 - **PostgreSQL** 14 or higher (or use Docker)
 - **AWS S3 bucket** or compatible storage (for file uploads)
@@ -99,8 +99,8 @@ pnpm dev
 
 The applications will be available at:
 
-- Backoffice: http://localhost:3000
-- Landing: http://localhost:3001
+- Backoffice: http://localhost:3001
+- Landing: http://localhost:3002
 
 ## Troubleshooting
 

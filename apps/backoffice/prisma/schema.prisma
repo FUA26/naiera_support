@@ -59,6 +59,12 @@ model User {
   avatar        File?   @relation("UserAvatar", fields: [avatarId], references: [id], onDelete: SetNull)
   avatarUrl     String? // Cache URL from File.cdnUrl
   uploadedFiles File[]
+
+  // Task Relations
+  createdTasks       Task[]             @relation("TaskCreator")
+  assignedTasks      Task[]             @relation("TaskAssignee")
+  taskComments       TaskComment[]
+  taskActivities     TaskActivity[]
 }
 
 model PermissionCache {
@@ -176,6 +182,7 @@ model File {
   avatars User[] @relation("UserAvatar")
   siteLogos SystemSettings[] @relation("SiteLogo")
   heroBackgrounds SystemSettings[] @relation("HeroBackground")
+  taskAttachments TaskAttachment[]
 
   @@index([uploadedById])
   @@index([category])
@@ -191,4 +198,153 @@ enum FileCategory {
   AUDIO
   ARCHIVE
   OTHER
+}
+
+// ============================================================================
+// Task Management Models
+// ============================================================================
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  ARCHIVED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  title     String
+  description String?
+  status    TaskStatus @default(TODO)
+  priority  TaskPriority @default(MEDIUM)
+  dueDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  assigneeId String?
+  assignee   User? @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+
+  createdById String
+  createdBy   User @relation("TaskCreator", fields: [createdById], references: [id])
+
+  tags      TaskTaskTag[]
+  comments  TaskComment[]
+  attachments TaskAttachment[]
+  activities TaskActivity[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([assigneeId])
+  @@index([createdAt])
+  @@index([dueDate])
+}
+
+model TaskTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tasks TaskTaskTag[]
+
+  @@index([name])
+}
+
+model TaskTaskTag {
+  taskId String
+  tagId  String
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  tag  TaskTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, tagId])
+  @@index([taskId])
+  @@index([tagId])
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  taskId String
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User @relation(fields: [authorId], references: [id])
+
+  attachmentId String?
+  attachment   TaskAttachment? @relation("CommentAttachment", fields: [attachmentId], references: [id], onDelete: SetNull)
+
+  @@index([taskId])
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([attachmentId])
+}
+
+model TaskAttachment {
+  id          String   @id @default(cuid())
+  fileName    String
+  description String?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  taskId String
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  fileId String
+  file   File @relation(fields: [fileId], references: [id])
+
+  comments TaskComment[] @relation("CommentAttachment")
+
+  @@index([taskId])
+  @@index([fileId])
+}
+
+enum TaskActivityAction {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  PRIORITY_CHANGED
+  ASSIGNED
+  UNASSIGNED
+  COMMENT_ADDED
+  ATTACHMENT_ADDED
+  TAG_ADDED
+  TAG_REMOVED
+  DELETED
+  DUE_DATE_CHANGED
+}
+
+model TaskActivity {
+  id        String   @id @default(cuid())
+  action    TaskActivityAction
+  changes   Json?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  // Relations
+  taskId String
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
 }
