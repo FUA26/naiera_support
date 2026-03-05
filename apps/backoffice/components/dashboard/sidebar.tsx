@@ -25,6 +25,7 @@ import {
   Shield,
   Key,
   Settings,
+  LifeBuoy,
 } from "lucide-react";
 
 const navItems = [
@@ -36,6 +37,8 @@ const navItems = [
   // Work Management Group
   { heading: "Work" },
   { href: "/tasks", label: "Tasks", icon: CheckSquare, permission: null },
+  { href: "/tickets", label: "Tickets", icon: LifeBuoy, permission: "TICKET_VIEW_ALL" },
+  { href: "/apps", label: "Apps", icon: FolderKanban, permission: "TICKET_APP_VIEW" },
 
   // User & Access Management Group
   { heading: "Users & Access" },
