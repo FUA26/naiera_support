@@ -3,9 +3,13 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "build:email"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "build:email": {
+      "dependsOn": ["^build:email"],
+      "outputs": ["lib/email/templates/**", "lib/email/types.ts"]
     },
     "lint": {
       "dependsOn": ["^lint"]
