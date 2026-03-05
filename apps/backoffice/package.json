@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
+    "build:email": "ts-node lib/email/compiler.ts",
+    "dev:email": "ts-node lib/email/compiler.ts --watch",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed-admin.ts && tsx prisma/seed-roles.ts && tsx prisma/seed-permissions.ts && tsx prisma/seed-system-settings.ts",
