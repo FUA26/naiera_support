@@ -112,6 +112,9 @@
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "mjml": "^4.15.0",
+    "@types/mjml": "^4.7.0",
+    "ts-node": "^10.9.2"
   }
 }
