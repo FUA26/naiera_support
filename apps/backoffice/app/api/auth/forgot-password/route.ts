@@ -5,7 +5,7 @@
  */
 
 import { prisma } from "@/lib/db/prisma";
-import { sendPasswordResetEmail } from "@/lib/email";
+import { sendTemplate } from "@/lib/email";
 import { env } from "@/lib/env";
 import { createSecureToken } from "@/lib/tokens";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
@@ -59,14 +59,22 @@ export async function POST(req: Request) {
     });
 
     // Generate reset link
-    const resetLink = `${env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
+    const resetUrl = `${env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
 
-    // Send reset email
-    await sendPasswordResetEmail({
+    // Send reset email using MJML template
+    const result = await sendTemplate("password-reset", {
       to: user.email,
-      userName: user.name ?? user.email?.split("@")[0] ?? "User",
-      resetLink,
+      subject: "Reset Your Password",
+      data: {
+        userName: user.name ?? user.email?.split("@")[0] ?? "User",
+        resetUrl,
+        expiryHours: 1,
+      },
     });
+
+    if (!result.success) {
+      console.error("Failed to send password reset email:", result.error);
+    }
 
     return NextResponse.json(
       {

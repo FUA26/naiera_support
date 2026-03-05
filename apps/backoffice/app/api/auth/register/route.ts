@@ -5,7 +5,7 @@
  */
 
 import { prisma } from "@/lib/db/prisma";
-import { sendVerificationEmail } from "@/lib/email";
+import { sendTemplate } from "@/lib/email";
 import { createSecureToken } from "@/lib/tokens";
 import { registerSchema } from "@/lib/validations/auth";
 import { hash } from "bcryptjs";
@@ -107,17 +107,25 @@ export const POST = async (req: Request) => {
         },
       });
 
-      // Send verification email
-      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
+      // Send verification email using MJML template
+      const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
 
       try {
-        await sendVerificationEmail({
+        const result = await sendTemplate("email-verification", {
           to: user.email,
-          userName: user.name || user.email,
-          verificationLink: verificationUrl,
+          subject: "Verify Your Email Address",
+          data: {
+            userName: user.name ?? user.email,
+            verifyUrl,
+            expiryHours: settings.emailVerificationExpiryHours,
+          },
         });
 
-        console.log(`[Auth] Verification email sent to: ${user.email}`);
+        if (!result.success) {
+          console.error("[Auth] Failed to send verification email:", result.error);
+        } else {
+          console.log(`[Auth] Verification email sent to: ${user.email}`);
+        }
       } catch (emailError) {
         console.error("[Auth] Failed to send verification email:", emailError);
 
