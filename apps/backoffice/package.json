@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev --port 3100",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
@@ -13,7 +13,8 @@
     "dev:email": "ts-node lib/email/compiler.ts --watch",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed-admin.ts && tsx prisma/seed-roles.ts && tsx prisma/seed-permissions.ts && tsx prisma/seed-system-settings.ts",
+    "db:seed": "tsx prisma/seed-permissions.ts && tsx prisma/seed-roles.ts && tsx prisma/seed-system-settings.ts && tsx prisma/seed-admin.ts",
+    "db:seed:ticketing": "tsx prisma/seed-ticketing.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset"
   },

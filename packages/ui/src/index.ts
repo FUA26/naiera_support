@@ -10,6 +10,9 @@ export * from "./checkbox"
 export * from "./table"
 export * from "./dialog"
 export * from "./form"
+export * from "./badge"
+export * from "./avatar"
+export * from "./textarea"
 
 // Custom components
 export * from "./components/forms/form-field"
