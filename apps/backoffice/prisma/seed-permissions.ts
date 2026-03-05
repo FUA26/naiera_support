@@ -74,6 +74,56 @@ const permissions = [
     category: "ADMIN",
     description: "Manage system settings",
   },
+
+  // Services
+  { name: "SERVICES_VIEW", category: "SERVICES", description: "View services" },
+  { name: "SERVICES_CREATE", category: "SERVICES", description: "Create services" },
+  { name: "SERVICES_EDIT", category: "SERVICES", description: "Edit services" },
+  { name: "SERVICES_PUBLISH", category: "SERVICES", description: "Publish services" },
+  { name: "SERVICES_DELETE", category: "SERVICES", description: "Delete services" },
+  { name: "SERVICES_REORDER", category: "SERVICES", description: "Reorder services" },
+  { name: "CATEGORIES_MANAGE", category: "SERVICES", description: "Manage service categories" },
+
+  // News
+  { name: "NEWS_VIEW", category: "NEWS", description: "View news" },
+  { name: "NEWS_CREATE", category: "NEWS", description: "Create news" },
+  { name: "NEWS_EDIT", category: "NEWS", description: "Edit news" },
+  { name: "NEWS_PUBLISH", category: "NEWS", description: "Publish news" },
+  { name: "NEWS_DELETE", category: "NEWS", description: "Delete news" },
+  { name: "NEWS_REORDER", category: "NEWS", description: "Reorder news" },
+  { name: "NEWS_CATEGORIES_MANAGE", category: "NEWS", description: "Manage news categories" },
+
+  // Events
+  { name: "EVENTS_VIEW", category: "EVENTS", description: "View events" },
+  { name: "EVENTS_CREATE", category: "EVENTS", description: "Create events" },
+  { name: "EVENTS_EDIT", category: "EVENTS", description: "Edit events" },
+  { name: "EVENTS_DELETE", category: "EVENTS", description: "Delete events" },
+  { name: "EVENTS_REORDER", category: "EVENTS", description: "Reorder events" },
+  { name: "EVENT_CATEGORIES_MANAGE", category: "EVENTS", description: "Manage event categories" },
+
+  // Ticket Management
+  { name: "TICKET_VIEW_OWN", category: "TICKET", description: "View own assigned tickets" },
+  { name: "TICKET_VIEW_ALL", category: "TICKET", description: "View all tickets" },
+  { name: "TICKET_CREATE", category: "TICKET", description: "Create new tickets" },
+  { name: "TICKET_UPDATE_OWN", category: "TICKET", description: "Update own assigned tickets" },
+  { name: "TICKET_UPDATE_ALL", category: "TICKET", description: "Update any ticket" },
+  { name: "TICKET_DELETE", category: "TICKET", description: "Delete tickets" },
+  { name: "TICKET_ASSIGN", category: "TICKET", description: "Assign tickets to agents" },
+  { name: "TICKET_CLOSE", category: "TICKET", description: "Close tickets" },
+  { name: "TICKET_REOPEN", category: "TICKET", description: "Reopen closed tickets" },
+
+  // Ticket Messages
+  { name: "TICKET_MESSAGE_VIEW", category: "TICKET", description: "View ticket messages" },
+  { name: "TICKET_MESSAGE_SEND", category: "TICKET", description: "Send messages to tickets" },
+  { name: "TICKET_MESSAGE_INTERNAL", category: "TICKET", description: "Add internal notes" },
+
+  // App/Channel Management
+  { name: "TICKET_APP_VIEW", category: "TICKET", description: "View apps and channels" },
+  { name: "TICKET_APP_MANAGE", category: "TICKET", description: "Create and manage apps/channels" },
+
+  // Ticket Reports
+  { name: "TICKET_REPORT_VIEW", category: "TICKET", description: "View ticket reports/analytics" },
+  { name: "TICKET_EXPORT", category: "TICKET", description: "Export ticket data" },
 ];
 
 async function seedPermissions() {
