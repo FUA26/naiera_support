@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db/prisma";
 import { sendTemplate } from "@/lib/email";
 import { createSecureToken } from "@/lib/tokens";
 import { registerSchema } from "@/lib/validations/auth";
+import { env } from "@/lib/env";
 import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -132,6 +133,19 @@ export const POST = async (req: Request) => {
         // Continue anyway - user is created, they can request a new email
       }
     }
+
+    // Send welcome email
+    await sendTemplate('welcome', {
+      to: user.email,
+      subject: `Welcome to ${env.NEXT_PUBLIC_APP_NAME}!`,
+      data: {
+        userName: user.name || 'there',
+        loginUrl: `${env.NEXT_PUBLIC_APP_URL}/login`,
+      },
+    }).catch((error) => {
+      // Log but don't fail registration
+      console.error('[Auth] Failed to send welcome email:', error);
+    });
 
     console.log(`[Auth] New user registered: ${user.email} (${user.id})`);
 
