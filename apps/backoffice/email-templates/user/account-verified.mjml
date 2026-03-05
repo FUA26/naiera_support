@@ -1,0 +1,59 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, -apple-system, sans-serif" />
+      <mj-button background-color="#5468ff" color="#ffffff" border-radius="4px" font-weight="bold" padding="12px 24px" />
+      <mj-text color="#333333" font-size="16px" line-height="1.5" />
+      <mj-container background-color="#ffffff" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f6f9fc">
+    <mj-container width="600px" padding="40px 20px">
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text align="center" font-size="24px" font-weight="bold" color="#333333">
+            {{appName}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text font-size="20px" font-weight="bold" align="center">
+            Email Verified Successfully!
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text>
+            Hi {{userName}},
+          </mj-text>
+          <mj-text>
+            Your email address has been verified. You now have full access to all features.
+          </mj-text>
+          <mj-text>
+            Click the button below to go to your dashboard:
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-button href="{{dashboardUrl}}">
+            Go to Dashboard
+          </mj-button>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="40px 0 0">
+        <mj-column>
+          <mj-text align="center" color="#888888" font-size="14px">
+            {{footerText}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-container>
+  </mj-body>
+</mjml>
