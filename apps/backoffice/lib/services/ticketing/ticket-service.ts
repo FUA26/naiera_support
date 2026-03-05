@@ -18,62 +18,8 @@ import {
   PaginatedTickets,
 } from "./types";
 import { TicketStatus, ActivityAction, WebhookEvent, SenderType } from "@prisma/client";
-
-// ============================================================================
-// Placeholder Functions (To be implemented in later tasks)
-// ============================================================================
-
-/**
- * Placeholder for adding ticket activity
- * Will be fully implemented in Task 4
- */
-async function addTicketActivity(
-  ticketId: string,
-  action: ActivityAction,
-  userId?: string,
-  changes?: Record<string, unknown>
-): Promise<void> {
-  await prisma.ticketActivity.create({
-    data: {
-      ticketId,
-      action,
-      userId,
-      changes: changes as Prisma.InputJsonValue,
-    },
-  });
-}
-
-/**
- * Placeholder for triggering webhooks
- * Will be fully implemented in Task 7
- */
-async function triggerWebhook(
-  ticketId: string,
-  event: WebhookEvent,
-  data: Record<string, unknown>
-): Promise<void> {
-  // Webhook delivery will be implemented in Task 7
-  // For now, just log the event
-  if (process.env.NODE_ENV === "development") {
-    console.log(`[Webhook] ${event} for ticket ${ticketId}`);
-  }
-}
-
-/**
- * Placeholder for notifying agents about new tickets
- * Will be fully implemented in Task 6
- */
-async function notifyAgentsTicketCreated(ticketId: string): Promise<void> {
-  // Agent notifications will be implemented in Task 6
-}
-
-/**
- * Placeholder for notifying customers about ticket updates
- * Will be fully implemented in Task 6
- */
-async function notifyCustomerTicketUpdate(ticketId: string, type: string): Promise<void> {
-  // Customer notifications will be implemented in Task 6
-}
+import { triggerWebhook } from "./webhook-service";
+import { notifyAgentTicketCreated, notifyCustomerTicketUpdate, notifyCustomerTicketCreated } from "./notification-service";
 
 // ============================================================================
 // Helper Functions
@@ -210,7 +156,7 @@ export async function createTicket(data: CreateTicketInput): Promise<any> {
   await triggerWebhook(ticket.id, WebhookEvent.TICKET_CREATED, { ticket });
 
   // Notify agents about new ticket
-  await notifyAgentsTicketCreated(ticket.id);
+  await notifyAgentTicketCreated(ticket.id);
 
   return ticket;
 }
