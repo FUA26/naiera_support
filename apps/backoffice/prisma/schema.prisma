@@ -71,6 +71,10 @@ model User {
   assignedTickets    Ticket[]              @relation("AssignedTickets")
   ticketMessages     TicketMessage[]       @relation("TicketMessages")
   ticketActivities   TicketActivity[]      @relation("TicketActivities")
+
+  // Multi-tenant App Switcher relations
+  assignedApps       UserApp[]
+  accessRequests     AppAccessRequest[]
 }
 
 model PermissionCache {
@@ -79,6 +83,37 @@ model PermissionCache {
   updatedAt   DateTime @updatedAt
   permissions String[]
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserApp {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appId     String
+  app       App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, appId])
+  @@index([userId])
+  @@index([appId])
+}
+
+model AppAccessRequest {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  appId       String
+  app         App      @relation(fields: [appId], references: [id])
+  reason      String?  @db.Text
+  status      String   @default("PENDING")
+
+  requestedAt DateTime @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+
+  @@index([userId])
+  @@index([status])
 }
 
 model Account {
@@ -417,6 +452,11 @@ model App {
   channels    Channel[]
   tickets     Ticket[]
   webhooks    Webhook[]
+
+  // Multi-tenant App Switcher relations
+  userAssignments UserApp[]
+  accessRequests  AppAccessRequest[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -430,6 +470,7 @@ model Channel {
   app       App        @relation(fields: [appId], references: [id], onDelete: Cascade)
   type      ChannelType
   name      String
+  apiKey    String?    @unique // For INTEGRATED_APP authentication
   config    Json       // { welcomeMessage, color, widgetPosition, etc }
   isActive  Boolean    @default(true)
   tickets   Ticket[]
@@ -439,6 +480,7 @@ model Channel {
 
   @@index([appId])
   @@index([isActive])
+  @@index([apiKey])
 }
 
 model Ticket {
@@ -449,12 +491,13 @@ model Ticket {
   channelId   String
   channel     Channel       @relation(fields: [channelId], references: [id])
 
-  // Customer (guest OR user)
-  userId      String?
-  user        User?         @relation("TicketCustomer", fields: [userId], references: [id])
-  guestEmail  String?       @db.VarChar(255)
-  guestName   String?       @db.VarChar(255)
-  guestPhone  String?       @db.VarChar(50)
+  // Customer (guest OR user OR external)
+  userId         String?
+  user           User?         @relation("TicketCustomer", fields: [userId], references: [id])
+  externalUserId String?       @db.VarChar(255) // For integrated app customers
+  guestEmail     String?       @db.VarChar(255)
+  guestName      String?       @db.VarChar(255)
+  guestPhone     String?       @db.VarChar(50)
 
   // Ticket details
   subject     String        @db.VarChar(500)
@@ -480,6 +523,7 @@ model Ticket {
   @@index([appId])
   @@index([channelId])
   @@index([userId])
+  @@index([externalUserId])
   @@index([assignedTo])
   @@index([status])
   @@index([priority])
