@@ -65,6 +65,12 @@ model User {
   assignedTasks      Task[]             @relation("TaskAssignee")
   taskComments       TaskComment[]
   taskActivities     TaskActivity[]
+
+  // Ticket relations
+  customerTickets    Ticket[]              @relation("TicketCustomer")
+  assignedTickets    Ticket[]              @relation("AssignedTickets")
+  ticketMessages     TicketMessage[]       @relation("TicketMessages")
+  ticketActivities   TicketActivity[]      @relation("TicketActivities")
 }
 
 model PermissionCache {
@@ -347,4 +353,211 @@ model TaskActivity {
   @@index([userId])
   @@index([createdAt])
   @@index([action])
+}
+
+// =============================================================================
+// TICKETING MODULE
+// =============================================================================
+
+enum ChannelType {
+  WEB_FORM
+  PUBLIC_LINK
+  WIDGET
+  INTEGRATED_APP
+  WHATSAPP
+  TELEGRAM
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SenderType {
+  CUSTOMER
+  AGENT
+  SYSTEM
+}
+
+enum ActivityAction {
+  CREATED
+  STATUS_CHANGED
+  ASSIGNED
+  PRIORITY_CHANGED
+  NOTE_ADDED
+  CUSTOMER_REPLIED
+  AGENT_REPLIED
+  CLOSED
+  REOPENED
+}
+
+enum WebhookEvent {
+  TICKET_CREATED
+  TICKET_UPDATED
+  MESSAGE_ADDED
+  STATUS_CHANGED
+  ASSIGNED
+}
+
+model App {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  channels    Channel[]
+  tickets     Ticket[]
+  webhooks    Webhook[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Channel {
+  id        String     @id @default(cuid())
+  appId     String
+  app       App        @relation(fields: [appId], references: [id], onDelete: Cascade)
+  type      ChannelType
+  name      String
+  config    Json       // { welcomeMessage, color, widgetPosition, etc }
+  isActive  Boolean    @default(true)
+  tickets   Ticket[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([appId])
+  @@index([isActive])
+}
+
+model Ticket {
+  id          String        @id @default(cuid())
+  ticketNumber String       @unique // Format: APP-XXXXX
+  appId       String
+  app         App           @relation(fields: [appId], references: [id])
+  channelId   String
+  channel     Channel       @relation(fields: [channelId], references: [id])
+
+  // Customer (guest OR user)
+  userId      String?
+  user        User?         @relation("TicketCustomer", fields: [userId], references: [id])
+  guestEmail  String?       @db.VarChar(255)
+  guestName   String?       @db.VarChar(255)
+  guestPhone  String?       @db.VarChar(50)
+
+  // Ticket details
+  subject     String        @db.VarChar(500)
+  description String?       @db.Text
+  status      TicketStatus  @default(OPEN)
+  priority    Priority      @default(NORMAL)
+
+  // Agent handling
+  assignedTo  String?
+  assignedToUser   User?    @relation("AssignedTickets", fields: [assignedTo], references: [id])
+  assignedAt  DateTime?
+
+  // Timestamps
+  resolvedAt  DateTime?
+  closedAt    DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  messages    TicketMessage[]
+  activities  TicketActivity[]
+  webhookLogs WebhookLog[]
+
+  @@index([appId])
+  @@index([channelId])
+  @@index([userId])
+  @@index([assignedTo])
+  @@index([status])
+  @@index([createdAt])
+  @@index([ticketNumber])
+}
+
+model TicketMessage {
+  id          String   @id @default(cuid())
+  ticketId    String
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  sender      SenderType
+  userId      String?
+  user        User?    @relation("TicketMessages", fields: [userId], references: [id])
+
+  message     String   @db.Text
+  attachments Json?    // [{ url, name, type, size }]
+  isInternal  Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+
+  @@index([ticketId])
+  @@index([createdAt])
+}
+
+model TicketActivity {
+  id          String        @id @default(cuid())
+  ticketId    String
+  ticket      Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  action      ActivityAction
+  userId      String?
+  user        User?         @relation("TicketActivities", fields: [userId], references: [id])
+  changes     Json?         // { from: "OPEN", to: "IN_PROGRESS" }
+  metadata    Json?         // Additional context
+
+  createdAt   DateTime      @default(now())
+
+  @@index([ticketId])
+  @@index([createdAt])
+}
+
+model Webhook {
+  id          String   @id @default(cuid())
+  appId       String
+  app         App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  url         String   @db.Text
+  events      WebhookEvent[]
+  secret      String?  @db.VarChar(255)
+  isActive    Boolean  @default(true)
+
+  logs        WebhookLog[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([appId])
+  @@index([isActive])
+}
+
+model WebhookLog {
+  id          String   @id @default(cuid())
+  webhookId   String?
+  webhook     Webhook? @relation(fields: [webhookId], references: [id])
+  ticketId    String
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  url         String   @db.Text
+  event       WebhookEvent
+  payload     Json
+  statusCode  Int?
+  response    String?  @db.Text
+  attempts    Int      @default(0)
+
+  success     Boolean
+  sentAt      DateTime @default(now())
+
+  @@index([ticketId])
+  @@index([webhookId])
+  @@index([sentAt])
 }
