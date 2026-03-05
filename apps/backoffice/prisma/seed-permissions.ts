@@ -121,6 +121,23 @@ const permissions = [
   { name: "TICKET_APP_VIEW", category: "TICKET", description: "View apps and channels" },
   { name: "TICKET_APP_MANAGE", category: "TICKET", description: "Create and manage apps/channels" },
 
+  // App Assignment & Access
+  {
+    name: "TICKET_APP_ASSIGN",
+    category: "TICKETING",
+    description: "Assign/remove apps to users",
+  },
+  {
+    name: "TICKET_APP_REQUEST",
+    category: "TICKETING",
+    description: "Request access to apps",
+  },
+  {
+    name: "TICKET_APP_APPROVE",
+    category: "TICKETING",
+    description: "Approve or reject app access requests",
+  },
+
   // Ticket Reports
   { name: "TICKET_REPORT_VIEW", category: "TICKET", description: "View ticket reports/analytics" },
   { name: "TICKET_EXPORT", category: "TICKET", description: "Export ticket data" },
