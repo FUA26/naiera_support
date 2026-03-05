@@ -16,6 +16,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { usePermissions } from "@/lib/rbac-client/provider";
+import { useApp } from "@/lib/contexts/app-context";
+import { AppSwitcher } from "@/components/dashboard/app-switcher";
 import {
   LayoutDashboard,
   BarChart3,
@@ -129,6 +131,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <AppSwitcher />
       <SidebarContent>
         {groupedItems.map((group, idx) => (
           <SidebarGroup key={idx}>

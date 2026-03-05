@@ -3,6 +3,7 @@ import { Providers } from "@/components/shared/providers";
 import { auth } from "@/lib/auth/config";
 import { PermissionProvider } from "@/lib/rbac-client/provider";
 import { loadUserPermissions } from "@/lib/rbac-server/loader";
+import { AppProvider } from "@/lib/contexts/app-context";
 // Import NextAuth type extensions
 import "@/lib/auth/types";
 
@@ -40,9 +41,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <PermissionProvider initialPermissions={permissions}>
-      <Providers>
-        <DashboardLayout user={user ?? session.user}>{children}</DashboardLayout>
-      </Providers>
+      <AppProvider>
+        <Providers>
+          <DashboardLayout user={user ?? session.user}>{children}</DashboardLayout>
+        </Providers>
+      </AppProvider>
     </PermissionProvider>
   );
 }
