@@ -20,6 +20,7 @@ pnpm dev
 - **Authentication** - NextAuth.js with OAuth and credential providers
 - **RBAC** - Role-based access control with dynamic permissions
 - **Task Management** - Full CRUD tasks with tags, comments, and activity logging
+- **Email Templates** - MJML-based transactional emails with Resend
 - **File Uploads** - S3-compatible storage with image optimization
 - **Activity Logging** - Comprehensive audit trail for all actions
 - **Type Safety** - Full TypeScript coverage with Zod validation
@@ -32,6 +33,7 @@ pnpm dev
 - [Getting Started](/docs/getting-started) - Installation and setup
 - [Features](/docs/features) - Feature documentation
   - [Task Management](/docs/features/task-management) - Task CRUD, tags, comments
+  - [Email Templates](/docs/features/email-templates) - MJML transactional emails
 - [Architecture](/docs/architecture) - System architecture and structure
 - [Patterns](/docs/patterns) - Development patterns and best practices
 - [Customization](/docs/customization) - Tailoring to your needs
