@@ -5,7 +5,7 @@
  */
 
 import { prisma } from "@/lib/db/prisma";
-import { sendPasswordResetSuccessEmail } from "@/lib/email";
+import { sendTemplate } from "@/lib/email";
 import { hashToken, isTokenExpired } from "@/lib/tokens";
 import { resetPasswordSchema } from "@/lib/validations/auth";
 import bcrypt from "bcryptjs";
@@ -89,9 +89,16 @@ export async function POST(req: Request) {
     });
 
     // Send confirmation email
-    await sendPasswordResetSuccessEmail({
+    await sendTemplate("account-verified", {
       to: user.email,
-      userName: user.name ?? user.email?.split("@")[0] ?? "User",
+      subject: "Password Successfully Reset",
+      data: {
+        userName: user.name ?? user.email?.split("@")[0] ?? "User",
+        title: "Password Successfully Reset",
+        message: "Your password has been successfully reset. You can now log in with your new password.",
+        actionUrl: `${process.env.NEXT_PUBLIC_APP_URL}/login`,
+        actionText: "Log In",
+      },
     });
 
     return NextResponse.json(
