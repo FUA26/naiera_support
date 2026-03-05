@@ -482,6 +482,8 @@ model Ticket {
   @@index([userId])
   @@index([assignedTo])
   @@index([status])
+  @@index([priority])
+  @@index([status, assignedTo])
   @@index([createdAt])
   @@index([ticketNumber])
 }
@@ -543,7 +545,7 @@ model Webhook {
 model WebhookLog {
   id          String   @id @default(cuid())
   webhookId   String?
-  webhook     Webhook? @relation(fields: [webhookId], references: [id])
+  webhook     Webhook? @relation(fields: [webhookId], references: [id], onDelete: SetNull)
   ticketId    String
   ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
