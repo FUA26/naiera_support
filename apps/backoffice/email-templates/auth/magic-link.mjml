@@ -1,0 +1,68 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, -apple-system, sans-serif" />
+      <mj-button background-color="#5468ff" color="#ffffff" border-radius="4px" font-weight="bold" padding="12px 24px" />
+      <mj-text color="#333333" font-size="16px" line-height="1.5" />
+      <mj-container background-color="#ffffff" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f6f9fc">
+    <mj-container width="600px" padding="40px 20px">
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text align="center" font-size="24px" font-weight="bold" color="#333333">
+            {{appName}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text font-size="20px" font-weight="bold" align="center">
+            Sign In to {{appName}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text>
+            {{#if userName}}Hi {{userName}},{{/if}}
+            {{#ifNot userName}}Hello,{{/ifNot}}
+          </mj-text>
+          <mj-text>
+            Click the button below to sign in to your account:
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-button href="{{magicLink}}">
+            Sign In
+          </mj-button>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="0 0 20px">
+        <mj-column>
+          <mj-text color="#666666" font-size="14px">
+            This link will expire in {{expiryHours}} hours.
+          </mj-text>
+          <mj-text color="#666666" font-size="14px" padding="10px 0 0">
+            If you didn't request this, please ignore this email.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="40px 0 0">
+        <mj-column>
+          <mj-text align="center" color="#888888" font-size="14px">
+            {{footerText}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-container>
+  </mj-body>
+</mjml>
