@@ -44,7 +44,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 rounded-full hover:bg-accent px-2 py-1 transition-colors">
+        <button type="button" className="flex items-center gap-2 rounded-full hover:bg-accent px-2 py-1 transition-colors">
           <Avatar className="h-8 w-8">
             {avatarUrl && <AvatarImage src={avatarUrl} alt={user.email ?? "User"} />}
             <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">

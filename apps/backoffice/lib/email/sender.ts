@@ -151,6 +151,11 @@ export async function sendTemplate(
   templateName: EmailTemplate,
   options: SendOptions
 ): Promise<SendResult> {
+  console.log(`📧 [sendTemplate] Called with template: ${templateName}, to: ${options.to}`);
+  console.log(`📧 [sendTemplate] RESEND_API_KEY exists:`, !!env.RESEND_API_KEY);
+  console.log(`📧 [sendTemplate] RESEND_API_KEY value:`, env.RESEND_API_KEY ? `${env.RESEND_API_KEY.substring(0, 8)}...` : 'undefined/empty');
+  console.log(`📧 [sendTemplate] NODE_ENV:`, env.NODE_ENV);
+
   // Handle missing RESEND_API_KEY in development
   if (!env.RESEND_API_KEY) {
     if (env.NODE_ENV === "development") {
@@ -171,14 +176,19 @@ export async function sendTemplate(
   }
 
   try {
+    console.log(`📧 [sendTemplate] Loading template...`);
     // Load the template
     const templateHtml = await loadTemplate(templateName);
+    console.log(`📧 [sendTemplate] Template loaded, size: ${templateHtml.length} chars`);
 
     // Render with data
     const renderedHtml = renderTemplate(templateHtml, options.data);
+    console.log(`📧 [sendTemplate] Rendered HTML size: ${renderedHtml.length} chars`);
 
     // Send via Resend
+    console.log(`📧 [sendTemplate] Creating Resend service...`);
     const service = createEmailService();
+    console.log(`📧 [sendTemplate] Sending email...`);
     const result = await service.send({
       to: options.to,
       subject: options.subject,
@@ -187,20 +197,25 @@ export async function sendTemplate(
       replyTo: options.replyTo,
     });
 
+    console.log(`📧 [sendTemplate] Resend result:`, result);
+
     if (result.success) {
       // Extract message ID from Resend response
       const messageId = extractMessageId(result.data);
+      console.log(`📧 [sendTemplate] Email sent! Message ID: ${messageId}`);
       return {
         success: true,
         messageId,
       };
     }
 
+    console.log(`📧 [sendTemplate] Resend failed:`, result.error);
     return {
       success: false,
       error: result.error || "Failed to send email",
     };
   } catch (error) {
+    console.error(`📧 [sendTemplate] Exception:`, error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

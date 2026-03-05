@@ -194,7 +194,7 @@ export function TasksDataTable({ tasks, onRefresh, onTaskCreated, onTaskUpdated,
       accessorKey: "dueDate",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Due Date" />,
       cell: ({ row }) => {
-        const dueDate = row.original.dueDate;
+        const dueDate = row.original.dueDate ? new Date(row.original.dueDate) : null;
         if (!dueDate) return <span className="text-muted-foreground text-sm">—</span>;
 
         const isOverdue =
