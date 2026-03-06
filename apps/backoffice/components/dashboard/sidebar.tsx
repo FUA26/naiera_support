@@ -28,6 +28,7 @@ import {
   Key,
   Settings,
   LifeBuoy,
+  Bell,
 } from "lucide-react";
 
 const navItems = [
@@ -44,6 +45,7 @@ const navItems = [
 
   // User & Access Management Group
   { heading: "Users & Access" },
+  { href: "/access-requests", label: "Access Requests", icon: Bell, permission: "TICKET_APP_APPROVE" },
   { href: "/manage/users", label: "Users", icon: Users, permission: "ADMIN_USERS_MANAGE" },
   { href: "/manage/roles", label: "Roles", icon: Shield, permission: "ADMIN_ROLES_MANAGE" },
   {
