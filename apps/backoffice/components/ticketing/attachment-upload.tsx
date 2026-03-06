@@ -23,6 +23,7 @@ type AttachmentFile = {
 type AttachmentUploadProps = {
   maxFiles?: number;
   onFilesChange: (files: AttachmentFile[]) => void;
+  onClose?: () => void;
   disabled?: boolean;
   value?: AttachmentFile[];
   uploadEndpoint?: "ticket-attachment" | "message-attachment";
@@ -31,6 +32,7 @@ type AttachmentUploadProps = {
 export function AttachmentUpload({
   maxFiles = MAX_ATTACHMENTS_PER_TICKET,
   onFilesChange,
+  onClose,
   disabled = false,
   value = [],
   uploadEndpoint = "ticket-attachment",
@@ -78,26 +80,23 @@ export function AttachmentUpload({
 
         if (!response.ok) {
           const errorData = await response.json();
+          console.error("Upload failed:", errorData);
           throw new Error(errorData.error || "Upload failed");
         }
 
         const result = await response.json();
+        console.log("Upload success:", result.files[0]);
 
         // Update file with uploaded data
-        setFiles((prev) =>
-          prev.map((f, idx) =>
-            idx === files.length + i
-              ? { ...f, uploadedUrl: result.files[0].url, uploadProgress: 100 }
-              : f
-          )
-        );
+        const updatedWithUrl = [...updatedFiles];
+        updatedWithUrl[files.length + i] = {
+          ...updatedWithUrl[files.length + i],
+          uploadedUrl: result.files[0].url,
+          uploadProgress: 100,
+        };
 
-        const updatedWithUpload = files.map((f, idx) =>
-          idx === files.length + i
-            ? { ...f, uploadedUrl: result.files[0].url, uploadProgress: 100 }
-            : f
-        );
-        onFilesChange(updatedWithUpload);
+        setFiles(updatedWithUrl);
+        onFilesChange(updatedWithUrl);
       } catch (error: any) {
         setFiles((prev) =>
           prev.map((f, idx) =>
@@ -107,7 +106,12 @@ export function AttachmentUpload({
       }
     }
     setUploading(false);
-  }, [files, maxFiles, onFilesChange, uploadEndpoint]);
+
+    // Call onClose callback if all files uploaded successfully
+    if (onClose && updatedFiles.every(f => f.uploadedUrl)) {
+      onClose();
+    }
+  }, [files, maxFiles, onFilesChange, uploadEndpoint, onClose]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
