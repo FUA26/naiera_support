@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, MoreHorizontal, Edit, Trash2, MessageSquare, Code, Copy, Check } from "lucide-react";
+import { Plus, MoreHorizontal, Edit, Trash2, MessageSquare, Code, Copy, Check, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -39,6 +39,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { usePermissions } from "@/lib/rbac-client/provider";
 import { cn } from "@/lib/utils";
@@ -112,6 +118,12 @@ export function AppsClient() {
     channel: Channel | null;
   }>({ open: false, app: null, channel: null });
 
+  const [manageChannelDialog, setManageChannelDialog] = useState<{
+    open: boolean;
+    app: App | null;
+    channel: Channel | null;
+  }>({ open: false, app: null, channel: null });
+
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Form state
@@ -142,7 +154,7 @@ export function AppsClient() {
 
   // Mutations
   const createAppMutation = useMutation({
-    mutationFn: async (data: { name: string; slug: string; description?: string; isActive?: boolean }) => {
+    mutationFn: async (data: { name: string; slug?: string; description?: string; isActive?: boolean }) => {
       const res = await fetch("/api/apps", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -230,6 +242,7 @@ export function AppsClient() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["apps"] });
       setChannelDialog({ open: false, mode: "create", app: null, channel: null });
+      setManageChannelDialog({ open: false, app: null, channel: null });
       toast.success("Channel updated successfully");
     },
     onError: (error: Error) => {
@@ -290,6 +303,14 @@ export function AppsClient() {
 
   const openIntegrationDialog = (app: App, channel: Channel) => {
     setIntegrationDialog({ open: true, app, channel });
+  };
+
+  const openManageChannelDialog = (app: App, channel: Channel) => {
+    // Pre-fill the channel form data
+    setChannelName(channel.name);
+    setChannelType(channel.type);
+    setChannelIsActive(channel.isActive);
+    setManageChannelDialog({ open: true, app, channel });
   };
 
   const copyToClipboard = (text: string, key: string) => {
@@ -649,7 +670,7 @@ function SupportPage({ user }) {
     if (appDialog.mode === "create") {
       createAppMutation.mutate({
         name: appName,
-        slug: appSlug,
+        slug: appSlug || undefined,
         description: appDescription || undefined,
         isActive: appIsActive,
       });
@@ -658,7 +679,7 @@ function SupportPage({ user }) {
         id: appDialog.app.id,
         data: {
           name: appName,
-          slug: appSlug,
+          ...(appSlug.trim() && { slug: appSlug }),
           description: appDescription || undefined,
           isActive: appIsActive,
         },
@@ -667,28 +688,24 @@ function SupportPage({ user }) {
   };
 
   const handleSaveChannel = () => {
-    if (!channelName.trim() || !channelDialog.app) {
+    if (!channelName.trim()) {
       toast.error("Channel name is required");
       return;
     }
 
-    if (channelDialog.mode === "create") {
-      createChannelMutation.mutate({
-        appId: channelDialog.app.id,
+    // Use manage channel dialog if open, otherwise use channel dialog
+    const targetDialog = manageChannelDialog.open ? manageChannelDialog : channelDialog;
+
+    if (!targetDialog.channel) return;
+
+    updateChannelMutation.mutate({
+      id: targetDialog.channel.id,
+      data: {
         name: channelName,
         type: channelType,
         isActive: channelIsActive,
-      });
-    } else if (channelDialog.channel) {
-      updateChannelMutation.mutate({
-        id: channelDialog.channel.id,
-        data: {
-          name: channelName,
-          type: channelType,
-          isActive: channelIsActive,
-        },
-      });
-    }
+      },
+    });
   };
 
   const handleDelete = () => {
@@ -818,19 +835,10 @@ function SupportPage({ user }) {
                             {app.channels.map((channel) => (
                               <DropdownMenuItem
                                 key={channel.id}
-                                onClick={() => openEditChannelDialog(app, channel)}
+                                onClick={() => openManageChannelDialog(app, channel)}
                               >
-                                <Edit className="mr-2 h-3 w-3 opacity-50" />
-                                {channel.name} ({channelTypeLabels[channel.type] || channel.type})
-                              </DropdownMenuItem>
-                            ))}
-                            {app.channels.map((channel) => (
-                              <DropdownMenuItem
-                                key={`guide-${channel.id}`}
-                                onClick={() => openIntegrationDialog(app, channel)}
-                              >
-                                <Code className="mr-2 h-3 w-3 opacity-50" />
-                                Integration Guide: {channel.name}
+                                <Settings className="mr-2 h-3 w-3 opacity-50" />
+                                Manage: {channel.name}
                               </DropdownMenuItem>
                             ))}
                             {app.channels.length > 0 && <DropdownMenuSeparator />}
@@ -1094,6 +1102,113 @@ function SupportPage({ user }) {
               Close
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Channel Dialog with Tabs */}
+      <Dialog open={manageChannelDialog.open} onOpenChange={(open) => setManageChannelDialog({ ...manageChannelDialog, open })}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Manage Channel: {manageChannelDialog.channel?.name}
+            </DialogTitle>
+            <DialogDescription>
+              Edit channel settings or view integration documentation
+            </DialogDescription>
+          </DialogHeader>
+          {manageChannelDialog.app && manageChannelDialog.channel && (
+            <Tabs defaultValue="edit" className="w-full">
+              <TabsList variant="line" className="w-full justify-start">
+                <TabsTrigger value="edit">
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit Channel
+                </TabsTrigger>
+                <TabsTrigger value="integration">
+                  <Code className="mr-2 h-4 w-4" />
+                  Integration Guide
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="edit" className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="manageChannelName">Name *</Label>
+                  <Input
+                    id="manageChannelName"
+                    value={channelName}
+                    onChange={(e) => setChannelName(e.target.value)}
+                    placeholder="e.g., Website Form"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="manageChannelType">Type *</Label>
+                  <Select value={channelType} onValueChange={setChannelType}>
+                    <SelectTrigger id="manageChannelType">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="WEB_FORM">Web Form</SelectItem>
+                      <SelectItem value="PUBLIC_LINK">Public Link</SelectItem>
+                      <SelectItem value="WIDGET">Widget</SelectItem>
+                      <SelectItem value="INTEGRATED_APP">Integrated App</SelectItem>
+                      <SelectItem value="WHATSAPP">WhatsApp</SelectItem>
+                      <SelectItem value="TELEGRAM">Telegram</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Active</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Enable this channel for ticket creation
+                    </p>
+                  </div>
+                  <Switch checked={channelIsActive} onCheckedChange={setChannelIsActive} />
+                </div>
+                <div className="flex justify-end pt-4">
+                  <Button
+                    onClick={handleSaveChannel}
+                    disabled={updateChannelMutation.isPending}
+                  >
+                    {updateChannelMutation.isPending ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
+              </TabsContent>
+              <TabsContent value="integration" className="py-4">
+                {(() => {
+                  const guide = getIntegrationGuide(manageChannelDialog.app, manageChannelDialog.channel);
+                  return (
+                    <div className="space-y-6">
+                      {guide.sections.map((section, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <h3 className="font-semibold text-lg">{section.title}</h3>
+                          {section.content && <p className="text-sm text-muted-foreground">{section.content}</p>}
+                          {section.code && (
+                            <div className="relative group">
+                              <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto">
+                                <code>{section.code}</code>
+                              </pre>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => copyToClipboard(section.code!, `manage-code-${idx}`)}
+                              >
+                                {copiedCode === `manage-code-${idx}` ? (
+                                  <Check className="h-4 w-4 text-green-500" />
+                                ) : (
+                                  <Copy className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </TabsContent>
+            </Tabs>
+          )}
         </DialogContent>
       </Dialog>
     </div>
