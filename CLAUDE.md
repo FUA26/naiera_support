@@ -271,3 +271,38 @@ Files use S3-compatible storage via presigned URLs. See `lib/storage/` and `lib/
 pnpm --filter backoffice db:seed:ticketing
 ```
 Creates a default "Support" app with Web Form and In-App Support channels.
+
+## Multi-Tenant App Switcher
+
+### Overview
+The ticketing system supports multi-tenancy with app-based access control:
+- Admin users have access to all apps via "All Apps" selection
+- Regular users are assigned specific apps
+- Tickets are filtered by selected app
+- Users can request access to apps they don't have
+
+### App Selection
+- Located in sidebar below brand logo
+- Shows current app with dropdown to switch
+- Displays ticket count per app
+- "All Apps" option for admins
+
+### Access Request Flow
+1. Users without app access see "No Access" page
+2. Users can request access to any app
+3. Admins approve/reject via Access Requests page
+4. Approved assignments grant immediate access
+
+### API Endpoints
+- GET /api/apps/accessible - Get user's accessible apps
+- POST /api/apps/[id]/assign - Assign app to user (admin)
+- DELETE /api/apps/[id]/assign?userId=xxx - Remove assignment
+- GET /api/apps/[id]/users - Get users assigned to app
+- POST /api/app-access-requests - Create access request
+- GET /api/app-access-requests - List requests (admin)
+- PATCH /api/app-access-requests/[id] - Approve/reject
+
+### Permissions
+- TICKET_APP_ASSIGN - Assign/remove apps to users
+- TICKET_APP_REQUEST - Request app access
+- TICKET_APP_APPROVE - Approve/reject requests
