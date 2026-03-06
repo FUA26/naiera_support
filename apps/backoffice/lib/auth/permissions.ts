@@ -32,6 +32,8 @@
 import { auth } from "@/lib/auth/config";
 import { hasPermission } from "@/lib/rbac/checker";
 import { loadUserPermissions } from "@/lib/rbac-server/loader";
+import { prisma } from "@/lib/prisma";
+import { hasAnyAppAccess, hasUserAppAccess } from "@/lib/services/ticketing/app-assignment-service";
 
 /**
  * Check if a user has a specific permission.
@@ -143,4 +145,74 @@ export async function requireAuth() {
   }
 
   return session;
+}
+
+/**
+ * Check if a user has access to a specific app or any app at all.
+ * Throws an error if the user doesn't have the required app access.
+ *
+ * Use this to protect routes or actions that require app access.
+ * Users with TICKET_APP_MANAGE permission bypass app access checks.
+ *
+ * @param appId - Optional app ID to check. If "all", checks if user has access to any app.
+ *                If undefined, only validates authentication (admin users pass, others require no check).
+ * @throws {Error} With message "USER_NOT_FOUND" if user cannot be found in database
+ * @throws {Error} With message "NO_APP_ACCESS" if user doesn't have access to the requested app
+ * @returns Promise that resolves if user has app access, rejects otherwise
+ *
+ * @example
+ * ```ts
+ * // Require access to a specific app
+ * await requireAppAccess("app_123");
+ *
+ * // Require access to any app
+ * await requireAppAccess("all");
+ *
+ * // Just verify authentication with admin bypass
+ * await requireAppAccess();
+ * ```
+ */
+export async function requireAppAccess(appId?: string): Promise<void> {
+  const session = await requireAuth();
+
+  // Admin check - users with TICKET_APP_MANAGE have full access
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: {
+      role: {
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new Error("USER_NOT_FOUND");
+  }
+
+  const hasManagePermission = user.role.permissions.some(
+    (rp) => rp.permission.name === "TICKET_APP_MANAGE"
+  );
+
+  if (hasManagePermission) {
+    return;
+  }
+
+  // Check app access
+  if (appId === "all") {
+    const hasAny = await hasAnyAppAccess(session.user.id);
+    if (!hasAny) {
+      throw new Error("NO_APP_ACCESS");
+    }
+  } else if (appId) {
+    const hasAccess = await hasUserAppAccess(session.user.id, appId);
+    if (!hasAccess) {
+      throw new Error("NO_APP_ACCESS");
+    }
+  }
 }
