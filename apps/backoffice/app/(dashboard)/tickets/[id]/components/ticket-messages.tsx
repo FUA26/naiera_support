@@ -59,16 +59,13 @@ export function TicketMessages({
         }),
       });
 
-      console.log('Sending message with attachments:', attachmentMetadata);
-      const responseData = await res.json();
-      console.log('Response:', responseData);
-      return responseData;
       if (!res.ok) throw new Error("Failed to send");
-      return res.json();
+      return await res.json();
     },
     onSuccess: () => {
       setMessage("");
       setMessageAttachments([]);
+      setShowAttachmentUpload(false); // Also hide upload zone
       queryClient.invalidateQueries({ queryKey: ["ticket-messages", ticketId] });
       onUpdate();
     },
@@ -171,7 +168,10 @@ export function TicketMessages({
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => setShowAttachmentUpload(false)}
+              onClick={() => {
+                setShowAttachmentUpload(false);
+                setMessageAttachments([]); // Clear uploaded files
+              }}
             >
               Cancel
             </Button>
