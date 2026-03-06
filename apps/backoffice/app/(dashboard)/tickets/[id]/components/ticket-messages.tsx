@@ -8,6 +8,8 @@ import {
   Avatar,
   AvatarFallback,
 } from "@/components/ui/avatar";
+import { AttachmentUpload, type AttachmentFile } from "@/components/ticketing/attachment-upload";
+import { AttachmentPreview } from "@/components/ticketing/attachment-preview";
 import { formatDistanceToNow } from "date-fns";
 
 export function TicketMessages({
@@ -20,6 +22,7 @@ export function TicketMessages({
   const queryClient = useQueryClient();
   const [message, setMessage] = useState("");
   const [isInternal, setIsInternal] = useState(false);
+  const [messageAttachments, setMessageAttachments] = useState<AttachmentFile[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -34,16 +37,31 @@ export function TicketMessages({
 
   const sendMessage = useMutation({
     mutationFn: async () => {
+      // Prepare attachment metadata
+      const attachmentMetadata = messageAttachments
+        .filter((a) => a.uploadedUrl)
+        .map((a) => ({
+          url: a.uploadedUrl!,
+          name: a.file.name,
+          type: a.file.type,
+          size: a.file.size,
+        }));
+
       const res = await fetch(`/api/tickets/${ticketId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, isInternal }),
+        body: JSON.stringify({
+          message,
+          isInternal,
+          attachments: attachmentMetadata.length > 0 ? attachmentMetadata : undefined,
+        }),
       });
       if (!res.ok) throw new Error("Failed to send");
       return res.json();
     },
     onSuccess: () => {
       setMessage("");
+      setMessageAttachments([]);
       queryClient.invalidateQueries({ queryKey: ["ticket-messages", ticketId] });
       onUpdate();
     },
@@ -59,8 +77,6 @@ export function TicketMessages({
       const dateB = new Date(b.createdAt).getTime();
       return dateA - dateB;
     });
-    // Debug: log sorted order
-    console.log("Messages order:", sorted.map((m, i) => `${i + 1}. [${m.sender}] ${m.createdAt}`));
     return sorted;
   }, [messages]);
 
@@ -75,7 +91,7 @@ export function TicketMessages({
         <h2 className="font-semibold">Conversation</h2>
       </div>
       <div className="p-4 space-y-4 max-h-96 overflow-y-auto" ref={messagesContainerRef}>
-        {sortedMessages.map((msg: { id: string; sender: string; isInternal?: boolean; message: string; createdAt: string }) => (
+        {sortedMessages.map((msg: any) => (
           <div
             key={msg.id}
             className={`flex gap-3 ${msg.sender === "AGENT" ? "justify-end" : ""}`}
@@ -98,6 +114,15 @@ export function TicketMessages({
                 <p className="text-xs font-semibold mb-1">Internal Note</p>
               )}
               <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+              {/* Show attachments if present */}
+              {msg.attachments && msg.attachments.length > 0 && (
+                <div className="mt-2">
+                  <AttachmentPreview
+                    attachments={msg.attachments}
+                    className="flex-wrap"
+                  />
+                </div>
+              )}
               <p className="text-xs opacity-70 mt-1">
                 {formatDistanceToNow(new Date(msg.createdAt), {
                   addSuffix: true,
@@ -114,6 +139,26 @@ export function TicketMessages({
         <div ref={messagesEndRef} />
       </div>
       <div className="p-4 border-t space-y-3">
+        {/* Attachment preview for pending uploads */}
+        {messageAttachments.length > 0 && (
+          <AttachmentPreview
+            attachments={messageAttachments.map((a) => ({
+              url: a.uploadedUrl || a.preview!,
+              name: a.file.name,
+              type: a.file.type,
+              size: a.file.size,
+            }))}
+          />
+        )}
+
+        {/* Attachment upload */}
+        <AttachmentUpload
+          maxFiles={3}
+          value={messageAttachments}
+          onFilesChange={setMessageAttachments}
+          uploadEndpoint="message-attachment"
+        />
+
         <div className="flex items-center gap-2">
           <input
             type="checkbox"

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TicketMessages } from "./ticket-messages";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AttachmentPreview } from "@/components/ticketing/attachment-preview";
 import {
   Select,
   SelectContent,
@@ -80,6 +81,19 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
             {ticket.channel.type} • Created{" "}
             {new Date(ticket.createdAt).toLocaleString()}
           </p>
+          {/* Show ticket attachments */}
+          {ticket.attachments && ticket.attachments.length > 0 && (
+            <div className="mt-3">
+              <AttachmentPreview
+                attachments={ticket.attachments.map((a: any) => ({
+                  url: a.file.serveUrl || a.file.cdnUrl || a.file.storagePath,
+                  name: a.file.originalFilename,
+                  type: a.file.mimeType,
+                  size: a.file.size,
+                }))}
+              />
+            </div>
+          )}
         </div>
         <div className="flex gap-2">
           <Select
