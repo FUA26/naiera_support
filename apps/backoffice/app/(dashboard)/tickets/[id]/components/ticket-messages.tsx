@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +20,8 @@ export function TicketMessages({
   const queryClient = useQueryClient();
   const [message, setMessage] = useState("");
   const [isInternal, setIsInternal] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const { data } = useQuery({
     queryKey: ["ticket-messages", ticketId],
@@ -50,13 +52,30 @@ export function TicketMessages({
   const ticket = data?.ticket;
   const messages = ticket?.messages || [];
 
+  // Sort messages by createdAt ascending for proper timeline (oldest first)
+  const sortedMessages = useMemo(() => {
+    const sorted = [...messages].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateA - dateB;
+    });
+    // Debug: log sorted order
+    console.log("Messages order:", sorted.map((m, i) => `${i + 1}. [${m.sender}] ${m.createdAt}`));
+    return sorted;
+  }, [messages]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [sortedMessages]);
+
   return (
     <div className="border rounded-lg">
       <div className="p-4 border-b">
         <h2 className="font-semibold">Conversation</h2>
       </div>
-      <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
-        {messages.map((msg: { id: string; sender: string; isInternal?: boolean; message: string; createdAt: string }) => (
+      <div className="p-4 space-y-4 max-h-96 overflow-y-auto" ref={messagesContainerRef}>
+        {sortedMessages.map((msg: { id: string; sender: string; isInternal?: boolean; message: string; createdAt: string }) => (
           <div
             key={msg.id}
             className={`flex gap-3 ${msg.sender === "AGENT" ? "justify-end" : ""}`}
@@ -92,6 +111,7 @@ export function TicketMessages({
             )}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="p-4 border-t space-y-3">
         <div className="flex items-center gap-2">

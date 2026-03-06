@@ -4,9 +4,10 @@ import { TicketDetail } from "./components/ticket-detail";
 export default async function TicketDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await requireAuth();
   await requirePermission(session.user.id, "TICKET_VIEW_ALL");
-  return <TicketDetail ticketId={params.id} />;
+  const { id } = await params;
+  return <TicketDetail ticketId={id} />;
 }

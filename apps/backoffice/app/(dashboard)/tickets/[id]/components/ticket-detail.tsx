@@ -55,7 +55,18 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
 
   if (isLoading) return <div className="p-6">Loading...</div>;
 
-  const ticket = data?.ticket;
+  if (!data?.ticket) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <h2 className="text-xl font-semibold mb-2">Ticket Not Found</h2>
+          <p className="text-muted-foreground">The ticket you're looking for doesn't exist.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const ticket = data.ticket;
   return (
     <div className="p-6">
       <div className="mb-6 flex items-start justify-between">

@@ -188,6 +188,38 @@ export const listTicketsQuerySchema = z.object({
 });
 
 // ============================================================================
+// Integrated App API Schemas
+// ============================================================================
+
+/**
+ * Schema for creating tickets from integrated apps using API Key
+ * - Uses X-API-Key header for authentication (no session required)
+ * - externalUserId identifies the customer in your system
+ * - externalUserName and externalUserEmail are optional for context
+ */
+export const integratedTicketSchema = z.object({
+  externalUserId: z.string().min(1, "External user ID is required"),
+  externalUserName: z.string().max(100).optional(),
+  externalUserEmail: z.string().email().optional(),
+  subject: z
+    .string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(200, "Subject must be less than 200 characters"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(5000, "Message must be less than 5000 characters"),
+  priority: priorityEnum.optional(),
+});
+
+/**
+ * Schema for listing tickets for an external user
+ */
+export const integratedListTicketsSchema = z.object({
+  externalUserId: z.string().min(1, "External user ID is required"),
+});
+
+// ============================================================================
 // Public API Schemas
 // ============================================================================
 
