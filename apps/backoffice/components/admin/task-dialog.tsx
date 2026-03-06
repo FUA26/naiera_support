@@ -148,7 +148,7 @@ export function TaskDialog({ open, onOpenChange, mode, taskId, onSuccess }: Task
           description: task.description || "",
           status: task.status as TaskStatus,
           priority: task.priority as TaskPriority,
-          dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : undefined,
+          dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
           assigneeId: task.assignee?.id || "unassigned",
           tagIds: task.tags.map((t) => t.id),
         });

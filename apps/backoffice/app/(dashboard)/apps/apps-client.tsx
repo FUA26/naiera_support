@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, MoreHorizontal, Edit, Trash2, MessageSquare } from "lucide-react";
+import { Plus, MoreHorizontal, Edit, Trash2, MessageSquare, Code, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -59,6 +59,7 @@ type Channel = {
   name: string;
   type: string;
   isActive: boolean;
+  apiKey?: string | null;
 };
 
 const channelTypeLabels: Record<string, string> = {
@@ -104,6 +105,14 @@ export function AppsClient() {
     item: App | Channel | null;
     app: App | null;
   }>({ open: false, type: "app", item: null, app: null });
+
+  const [integrationDialog, setIntegrationDialog] = useState<{
+    open: boolean;
+    app: App | null;
+    channel: Channel | null;
+  }>({ open: false, app: null, channel: null });
+
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Form state
   const [appName, setAppName] = useState("");
@@ -277,6 +286,358 @@ export function AppsClient() {
 
   const openDeleteDialog = (type: "app" | "channel", item: App | Channel, app: App) => {
     setDeleteDialog({ open: true, type, item, app });
+  };
+
+  const openIntegrationDialog = (app: App, channel: Channel) => {
+    setIntegrationDialog({ open: true, app, channel });
+  };
+
+  const copyToClipboard = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCode(key);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
+
+  // Generate integration guide based on channel type
+  const getIntegrationGuide = (app: App, channel: Channel) => {
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3100";
+    const apiUrl = `${baseUrl}/api/integrated/tickets`;
+    const apiKey = channel.apiKey || "YOUR_API_KEY";
+
+    switch (channel.type) {
+      case "INTEGRATED_APP":
+        return {
+          title: "Integrated App API (API Key)",
+          description: "Gunakan API Key untuk integrasi dengan aplikasi Anda. Tidak perlu session/auth dari user.",
+          sections: [
+            {
+              title: "🔑 API Key",
+              content: "API Key ini digunakan untuk autentikasi. Jaga kerahasiaannya!",
+              code: apiKey,
+            },
+            {
+              title: "API Endpoint",
+              content: "Base URL untuk semua operasi ticket",
+              code: apiUrl,
+            },
+            {
+              title: "1. Create Ticket (POST)",
+              content: "Buat ticket baru atas nama user Anda. Kirim externalUserId untuk identifikasi.",
+              code: `POST ${apiUrl}
+X-API-Key: ${apiKey}
+Content-Type: application/json
+
+{
+  "externalUserId": "user_123",
+  "externalUserName": "Budi Santoso",
+  "externalUserEmail": "budi@example.com",
+  "subject": "Laporan masalah",
+  "message": "Saya mengalami masalah dengan...",
+  "priority": "NORMAL"
+}`,
+            },
+            {
+              title: "2. List Tickets (GET)",
+              content: "Ambil semua ticket untuk user tertentu berdasarkan externalUserId.",
+              code: `GET ${apiUrl}?externalUserId=user_123
+X-API-Key: ${apiKey}
+
+// Response:
+{
+  "tickets": [
+    {
+      "id": "ticket_id",
+      "ticketNumber": "APP-00001",
+      "subject": "Laporan masalah",
+      "status": "OPEN",
+      "priority": "NORMAL",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "messageCount": 3,
+      "lastMessage": "Terima kasih laporannya..."
+    }
+  ]
+}`,
+            },
+            {
+              title: "Example: JavaScript/Fetch",
+              content: "Contoh implementasi di aplikasi JavaScript Anda:",
+              code: `// Service untuk komunikasi dengan ticketing API
+class TicketService {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.baseUrl = '${apiUrl}';
+  }
+
+  // Buat ticket untuk user
+  async createTicket(externalUserId, data) {
+    const response = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': this.apiKey,
+      },
+      body: JSON.stringify({
+        externalUserId,
+        externalUserName: data.userName,
+        externalUserEmail: data.userEmail,
+        subject: data.subject,
+        message: data.message,
+        priority: data.priority || 'NORMAL',
+      }),
+    });
+    return response.json();
+  }
+
+  // Ambil semua ticket user
+  async getUserTickets(externalUserId) {
+    const response = await fetch(\`\${this.baseUrl}?externalUserId=\${externalUserId}\`, {
+      method: 'GET',
+      headers: {
+        'X-API-Key': this.apiKey,
+      },
+    });
+    return response.json();
+  }
+}
+
+// Usage di aplikasi Anda
+const ticketService = new TicketService('${apiKey}');
+
+// Saat user submit ticket:
+await ticketService.createTicket('user_123', {
+  userName: 'Budi Santoso',
+  userEmail: 'budi@example.com',
+  subject: 'Masalah login',
+  message: 'Saya tidak bisa login...',
+});
+
+// Saat user lihat ticket mereka:
+const tickets = await ticketService.getUserTickets('user_123');
+console.log(tickets);`,
+            },
+            {
+              title: "Example: React Hook",
+              content: "Custom React hook untuk manajemen ticket di aplikasi Anda:",
+              code: `"use client";
+
+import { useState, useCallback } from 'react';
+
+const TICKET_API = '${apiUrl}';
+const API_KEY = '${apiKey}';
+
+export function useTickets(externalUserId) {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchTickets = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(\`\${TICKET_API}?externalUserId=\${externalUserId}\`, {
+        headers: { 'X-API-Key': API_KEY },
+      });
+      const data = await res.json();
+      setTickets(data.tickets);
+    } catch (error) {
+      console.error('Failed to fetch tickets:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [externalUserId]);
+
+  const createTicket = useCallback(async (ticketData) => {
+    setLoading(true);
+    try {
+      const res = await fetch(TICKET_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': API_KEY,
+        },
+        body: JSON.stringify({
+          externalUserId,
+          ...ticketData,
+        }),
+      });
+      const data = await res.json();
+      await fetchTickets(); // Refresh list
+      return data;
+    } catch (error) {
+      console.error('Failed to create ticket:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, [externalUserId, fetchTickets]);
+
+  return { tickets, loading, fetchTickets, createTicket };
+}
+
+// Usage di component:
+function SupportPage({ user }) {
+  const { tickets, loading, createTicket } = useTickets(user.id);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    await createTicket({
+      externalUserName: user.name,
+      externalUserEmail: user.email,
+      subject: formData.get('subject'),
+      message: formData.get('message'),
+    });
+  };
+
+  return (
+    <div>
+      <h1>Support Tickets</h1>
+      <form onSubmit={handleSubmit}>
+        <input name="subject" placeholder="Subject" required />
+        <textarea name="message" placeholder="Describe your issue..." required />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit Ticket'}
+        </button>
+      </form>
+      <h2>Your Tickets</h2>
+      <ul>
+        {tickets.map(t => (
+          <li key={t.id}>
+            {t.ticketNumber}: {t.subject} ({t.status})
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
+            },
+          ],
+        };
+
+      case "WEB_FORM":
+        return {
+          title: "Web Form Integration",
+          description: "Embed form ini di website Anda untuk collect tickets.",
+          sections: [
+            {
+              title: "Public Form URL",
+              content: `${baseUrl}/support/tickets/new?app=${app.slug}`,
+              code: `${baseUrl}/support/tickets/new?app=${app.slug}`,
+            },
+            {
+              title: "Embed HTML",
+              content: "Copy kode berikut dan paste ke halaman website Anda:",
+              code: `<iframe
+  src="${baseUrl}/support/tickets/new?app=${app.slug}&embed=true"
+  width="100%"
+  height="600"
+  frameborder="0"
+  style="border: 1px solid #e5e7eb; border-radius: 8px;">
+</iframe>`,
+            },
+            {
+              title: "Styling Options",
+              content: "Anda bisa menambahkan parameter berikut untuk custom tampilan:",
+              code: `?app=${app.slug}&embed=true&theme=dark&primaryColor=3b82f6`,
+            },
+          ],
+        };
+
+      case "PUBLIC_LINK":
+        return {
+          title: "Public Link",
+          description: "Share link ini untuk collect tickets dari user tanpa login.",
+          sections: [
+            {
+              title: "Public Form URL",
+              content: `${baseUrl}/support/tickets/new?app=${app.slug}&channel=${channel.id}`,
+              code: `${baseUrl}/support/tickets/new?app=${app.slug}&channel=${channel.id}`,
+            },
+            {
+              title: "QR Code",
+              content: "Generate QR code untuk form ini:",
+              code: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${baseUrl}/support/tickets/new?app=${app.slug}`)}`,
+            },
+          ],
+        };
+
+      case "WIDGET":
+        return {
+          title: "Widget Embed",
+          description: "Tambahkan floating widget support di website Anda.",
+          sections: [
+            {
+              title: "Embed Script",
+              content: "Paste kode ini sebelum closing </body> tag:",
+              code: `<script src="${baseUrl}/widget/support.js"></script>
+<script>
+  SupportWidget.init({
+    appSlug: '${app.slug}',
+    channel: '${channel.id}',
+    position: 'bottom-right',
+    primaryColor: '#3b82f6',
+  });
+</script>`,
+            },
+            {
+              title: "Floating Button",
+              content: "Widget akan menampilkan tombol floating di pojok halaman:",
+              code: `<button class="support-widget-btn">
+  💬 Support
+</button>`,
+            },
+          ],
+        };
+
+      case "WHATSAPP":
+        return {
+          title: "WhatsApp Integration",
+          description: "Connect WhatsApp Business API untuk ticket via WhatsApp.",
+          sections: [
+            {
+              title: "Setup Required",
+              content: "Hubungi admin untuk setup WhatsApp Business API integration.",
+              code: null,
+            },
+            {
+              title: "Configuration",
+              content: "Parameter yang diperlukan:",
+              code: `{
+  "phoneNumber": "+628123456789",
+  "businessAccountId": "your_business_id",
+  "webhookUrl": "${baseUrl}/api/webhooks/whatsapp"
+}`,
+            },
+          ],
+        };
+
+      case "TELEGRAM":
+        return {
+          title: "Telegram Integration",
+          description: "Connect Telegram Bot untuk ticket via Telegram.",
+          sections: [
+            {
+              title: "Setup Required",
+              content: "Hubungi admin untuk setup Telegram Bot integration.",
+              code: null,
+            },
+            {
+              title: "Configuration",
+              content: "Parameter yang diperlukan:",
+              code: `{
+  "botToken": "your_bot_token",
+  "webhookUrl": "${baseUrl}/api/webhooks/telegram"
+}`,
+            },
+          ],
+        };
+
+      default:
+        return {
+          title: "Integration Guide",
+          description: "Panduan integrasi channel ini.",
+          sections: [],
+        };
+    }
   };
 
   const handleSaveApp = () => {
@@ -461,6 +822,15 @@ export function AppsClient() {
                               >
                                 <Edit className="mr-2 h-3 w-3 opacity-50" />
                                 {channel.name} ({channelTypeLabels[channel.type] || channel.type})
+                              </DropdownMenuItem>
+                            ))}
+                            {app.channels.map((channel) => (
+                              <DropdownMenuItem
+                                key={`guide-${channel.id}`}
+                                onClick={() => openIntegrationDialog(app, channel)}
+                              >
+                                <Code className="mr-2 h-3 w-3 opacity-50" />
+                                Integration Guide: {channel.name}
                               </DropdownMenuItem>
                             ))}
                             {app.channels.length > 0 && <DropdownMenuSeparator />}
@@ -670,6 +1040,58 @@ export function AppsClient() {
               disabled={deleteAppMutation.isPending || deleteChannelMutation.isPending}
             >
               Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Integration Guide Dialog */}
+      <Dialog open={integrationDialog.open} onOpenChange={(open) => setIntegrationDialog({ ...integrationDialog, open })}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Code className="h-5 w-5" />
+              {integrationDialog.channel && getIntegrationGuide(integrationDialog.app!, integrationDialog.channel).title}
+            </DialogTitle>
+            <DialogDescription>
+              {integrationDialog.channel && getIntegrationGuide(integrationDialog.app!, integrationDialog.channel).description}
+            </DialogDescription>
+          </DialogHeader>
+          {integrationDialog.app && integrationDialog.channel && (() => {
+            const guide = getIntegrationGuide(integrationDialog.app, integrationDialog.channel);
+            return (
+              <div className="space-y-6 py-4">
+                {guide.sections.map((section, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <h3 className="font-semibold text-lg">{section.title}</h3>
+                    {section.content && <p className="text-sm text-muted-foreground">{section.content}</p>}
+                    {section.code && (
+                      <div className="relative group">
+                        <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto">
+                          <code>{section.code}</code>
+                        </pre>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => copyToClipboard(section.code!, `code-${idx}`)}
+                        >
+                          {copiedCode === `code-${idx}` ? (
+                            <Check className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIntegrationDialog({ ...integrationDialog, open: false })}>
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>

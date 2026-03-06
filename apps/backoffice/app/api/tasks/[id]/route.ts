@@ -181,18 +181,20 @@ export async function PATCH(
 
     // Log activities
     for (const action of activities) {
+      const changes = action === "STATUS_CHANGED"
+        ? { from: existing.status, to: validatedData.status }
+        : action === "PRIORITY_CHANGED"
+        ? { from: existing.priority, to: validatedData.priority }
+        : action === "ASSIGNED"
+        ? { from: existing.assigneeId ?? null, to: validatedData.assigneeId ?? null }
+        : null;
+
       await prisma.taskActivity.create({
         data: {
           taskId: id,
           action,
           userId: session.user.id,
-          changes: action === "STATUS_CHANGED"
-            ? { from: existing.status, to: validatedData.status }
-            : action === "PRIORITY_CHANGED"
-            ? { from: existing.priority, to: validatedData.priority }
-            : action === "ASSIGNED"
-            ? { from: existing.assigneeId, to: validatedData.assigneeId }
-            : null,
+          changes: changes as any,
         },
       });
     }

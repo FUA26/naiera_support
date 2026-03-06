@@ -9,7 +9,7 @@
  */
 
 import { prisma } from "@/lib/prisma";
-import type { TaskStatus, TaskPriority, TaskActivityAction } from "@prisma/client";
+import type { TaskActivityAction } from "@prisma/client";
 
 // ============================================================================
 // Type Definitions
@@ -58,7 +58,7 @@ export interface TaskComment {
 
 export interface TaskAttachment {
   id: string;
-  taskId: string;
+  taskId?: string;
   fileName: string;
   fileUrl: string | null;
   description: string | null;
@@ -389,18 +389,20 @@ export async function updateTask(
   // Log activities
   const userId = data.userId || existing.createdById;
   for (const action of activities) {
+    const changes = action === "STATUS_CHANGED"
+      ? { from: existing.status, to: data.status }
+      : action === "PRIORITY_CHANGED"
+      ? { from: existing.priority, to: data.priority }
+      : action === "ASSIGNED" || action === "UNASSIGNED"
+      ? { from: existing.assigneeId ?? null, to: data.assigneeId ?? null }
+      : null;
+
     await prisma.taskActivity.create({
       data: {
         taskId: id,
         action,
         userId,
-        changes: action === "STATUS_CHANGED"
-          ? { from: existing.status, to: data.status }
-          : action === "PRIORITY_CHANGED"
-          ? { from: existing.priority, to: data.priority }
-          : action === "ASSIGNED" || action === "UNASSIGNED"
-          ? { from: existing.assigneeId, to: data.assigneeId }
-          : null,
+        changes: changes as any,
       },
     });
   }

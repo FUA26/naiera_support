@@ -85,6 +85,19 @@ export async function generateAppSlug(baseSlug: string): Promise<string> {
 }
 
 /**
+ * Generate a secure API key for integrated app channels
+ */
+export function generateApiKey(): string {
+  const prefix = "tk_";
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = prefix;
+  for (let i = 0; i < 32; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+/**
  * List all apps with pagination
  */
 export async function listApps(
@@ -287,12 +300,16 @@ export async function createChannel(
     throw new Error(`App with ID "${data.appId}" not found`);
   }
 
+  // Generate API key for INTEGRATED_APP channels
+  const apiKey = data.type === "INTEGRATED_APP" ? generateApiKey() : null;
+
   const channel = await prisma.channel.create({
     data: {
       appId: data.appId,
       name: data.name,
       type: data.type,
-      config: data.config ?? {},
+      apiKey,
+      config: (data.config ?? {}) as any,
       isActive: data.isActive ?? true,
     },
   });
@@ -322,7 +339,7 @@ export async function updateChannel(
     data: {
       ...(data.name !== undefined && { name: data.name }),
       ...(data.type !== undefined && { type: data.type }),
-      ...(data.config !== undefined && { config: data.config }),
+      ...(data.config !== undefined && { config: data.config as any }),
       ...(data.isActive !== undefined && { isActive: data.isActive }),
     },
   });
