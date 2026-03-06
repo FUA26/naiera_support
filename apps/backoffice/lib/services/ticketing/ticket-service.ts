@@ -223,6 +223,11 @@ export async function getTicketById(ticketId: string): Promise<any> {
           },
         },
       },
+      attachments: {
+        include: {
+          file: true,
+        },
+      },
     },
   });
 
