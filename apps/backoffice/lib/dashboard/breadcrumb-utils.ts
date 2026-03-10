@@ -98,6 +98,22 @@ export function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
       continue;
     }
 
+    // Tickets section
+    if (segment === "tickets") {
+      const nextSegment = segments[i + 1];
+
+      // Ticket detail page (dynamic ID)
+      if (nextSegment && nextSegment !== "new") {
+        breadcrumbs.push({ label: "Tickets", href: "/tickets" });
+        breadcrumbs.push({ label: "Ticket Detail", href: null });
+        i++; // Skip the ID segment
+        continue;
+      }
+
+      breadcrumbs.push({ label: "Tickets", href: "/tickets" });
+      continue;
+    }
+
     // Dynamic segments (user IDs, etc.)
     if (i === segments.length - 1) {
       breadcrumbs.push({ label: segment || "", href: null });

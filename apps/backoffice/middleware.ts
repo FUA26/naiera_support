@@ -25,7 +25,8 @@ export default auth((req) => {
     !pathname.startsWith("/register") &&
     !pathname.startsWith("/api") &&
     !pathname.startsWith("/unauthorized") &&
-    !pathname.startsWith("/forgot-password");
+    !pathname.startsWith("/forgot-password") &&
+    !pathname.startsWith("/support"); // Allow public support ticket forms
   const isOnManageRoute = MANAGE_ROUTES.some((route) => pathname.startsWith(route));
   const isOnAuthPage =
     pathname.startsWith("/login") ||

@@ -57,8 +57,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For non-integrated channels, guest email is required if not authenticated
-    if (!userId && !validated.guestEmail) {
+    // For WEB_FORM, always use guest info from form (not logged-in user)
+    // For INTEGRATED_APP, use the authenticated user
+    const isIntegratedApp = validated.channelType === "INTEGRATED_APP";
+
+    // For non-integrated channels (WEB_FORM), guest email is required
+    if (!isIntegratedApp && !validated.guestEmail) {
       return NextResponse.json(
         {
           error: "GUEST_INFO_REQUIRED",
@@ -77,8 +81,8 @@ export async function POST(request: NextRequest) {
       message: validated.message,
       attachments: validated.attachments,
       priority: validated.priority,
-      userId,
-      guestInfo: userId
+      userId: isIntegratedApp ? userId : undefined,
+      guestInfo: isIntegratedApp
         ? undefined
         : {
             email: validated.guestEmail!,

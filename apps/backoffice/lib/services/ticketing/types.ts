@@ -70,6 +70,11 @@ export interface TicketWithRelations {
     guestEmail?: string;
     guestName?: string;
     guestPhone?: string;
+    user?: {
+      id: string;
+      name: string | null;
+      email: string;
+    };
   };
   assignedTo?: {
     id: string;

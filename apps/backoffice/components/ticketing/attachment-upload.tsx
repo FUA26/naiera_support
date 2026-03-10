@@ -88,15 +88,18 @@ export function AttachmentUpload({
         console.log("Upload success:", result.files[0]);
 
         // Update file with uploaded data
-        const updatedWithUrl = [...updatedFiles];
-        updatedWithUrl[files.length + i] = {
-          ...updatedWithUrl[files.length + i],
-          uploadedUrl: result.files[0].url,
-          uploadProgress: 100,
-        };
-
-        setFiles(updatedWithUrl);
-        onFilesChange(updatedWithUrl);
+        const targetIndex = files.length + i;
+        const existingFile = updatedFiles[targetIndex];
+        if (existingFile) {
+          const updatedWithUrl = [...updatedFiles];
+          updatedWithUrl[targetIndex] = {
+            ...existingFile,
+            uploadedUrl: result.files[0].url,
+            uploadProgress: 100,
+          };
+          setFiles(updatedWithUrl);
+          onFilesChange(updatedWithUrl);
+        }
       } catch (error: any) {
         setFiles((prev) =>
           prev.map((f, idx) =>

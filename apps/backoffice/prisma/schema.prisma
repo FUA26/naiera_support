@@ -278,6 +278,10 @@ model Task {
   createdById String
   createdBy   User @relation("TaskCreator", fields: [createdById], references: [id])
 
+  // Ticket relation for claimed tickets
+  ticketId  String?
+  ticket    Ticket? @relation(fields: [ticketId], references: [id])
+
   tags      TaskTaskTag[]
   comments  TaskComment[]
   attachments TaskAttachment[]
@@ -288,6 +292,7 @@ model Task {
   @@index([assigneeId])
   @@index([createdAt])
   @@index([dueDate])
+  @@index([ticketId])
 }
 
 model TaskTag {
@@ -521,6 +526,7 @@ model Ticket {
   attachments TicketAttachment[]
   activities  TicketActivity[]
   webhookLogs WebhookLog[]
+  tasks       Task[]
 
   @@index([appId])
   @@index([channelId])

@@ -73,6 +73,30 @@ const roles = [
     ],
   },
   {
+    name: "OPERATOR",
+    description: "Support operator - tickets and tasks access only",
+    permissions: [
+      // User profile
+      "USER_READ_OWN",
+      "USER_UPDATE_OWN",
+      // Ticket access
+      "TICKET_VIEW_ALL",
+      "TICKET_CREATE",
+      "TICKET_UPDATE_ALL",
+      "TICKET_ASSIGN",
+      "TICKET_CLOSE",
+      "TICKET_REOPEN",
+      // Ticket messages
+      "TICKET_MESSAGE_VIEW",
+      "TICKET_MESSAGE_SEND",
+      "TICKET_MESSAGE_INTERNAL",
+      // Reports
+      "TICKET_REPORT_VIEW",
+      // Settings read-only
+      "SETTINGS_READ",
+    ],
+  },
+  {
     name: "ADMIN",
     description: "Full system access",
     permissions: [

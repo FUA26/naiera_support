@@ -32,6 +32,7 @@ import { useState } from "react";
 import { BulkActionsDialog } from "./bulk-actions-dialog";
 import { DeleteConfirmDialog } from "./delete-confirm-dialog";
 import { UserDialog } from "./user-dialog";
+import { UserAppsDialog } from "./user-apps-dialog";
 
 interface User {
   id: string;
@@ -54,6 +55,11 @@ export function UsersDataTable({ users, onRefresh }: UsersDataTableProps) {
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; userId: string }>({
     open: false,
     userId: "",
+  });
+  const [appsDialog, setAppsDialog] = useState<{ open: boolean; userId: string; userName: string }>({
+    open: false,
+    userId: "",
+    userName: "",
   });
   const [bulkDialog, setBulkDialog] = useState(false);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
@@ -144,6 +150,24 @@ export function UsersDataTable({ users, onRefresh }: UsersDataTableProps) {
                   Edit
                 </DropdownMenuItem>
               )}
+              <DropdownMenuItem onClick={() => setAppsDialog({
+                open: true,
+                userId: user.id,
+                userName: user.name || user.email,
+              })}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                  <rect width="8" height="4" x="8" y="2" rx="1" />
+                  <rect width="8" height="4" x="8" y="8" rx="1" />
+                  <rect width="8" height="4" x="8" y="14" rx="1" />
+                  <path d="M4 6h1" />
+                  <path d="M4 12h1" />
+                  <path d="M4 18h1" />
+                  <path d="M19 6h1" />
+                  <path d="M19 12h1" />
+                  <path d="M19 18h1" />
+                </svg>
+                Assign Apps
+              </DropdownMenuItem>
               {canDeleteAny && (
                 <DropdownMenuItem
                   onClick={() => setDeleteDialog({ open: true, userId: user.id })}
@@ -232,6 +256,14 @@ export function UsersDataTable({ users, onRefresh }: UsersDataTableProps) {
           setSelectedUserIds([]);
           onRefresh?.();
         }}
+      />
+
+      <UserAppsDialog
+        open={appsDialog.open}
+        onOpenChange={(open) => setAppsDialog({ ...appsDialog, open })}
+        userId={appsDialog.userId}
+        userName={appsDialog.userName}
+        onSuccess={onRefresh}
       />
     </>
   );

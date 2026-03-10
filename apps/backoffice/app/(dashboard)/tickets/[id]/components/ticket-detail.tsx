@@ -12,9 +12,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ArrowLeftIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function TicketDetail({ ticketId }: { ticketId: string }) {
+interface Props {
+  ticketId: string;
+  currentUserId: string;
+}
+
+export function TicketDetail({ ticketId, currentUserId }: Props) {
+  const router = useRouter();
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["ticket", ticketId],
     queryFn: async () => {
@@ -24,8 +43,10 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
     },
   });
   const [isUpdating, setIsUpdating] = useState(false);
+  const [unassignDialogOpen, setUnassignDialogOpen] = useState(false);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
 
-  const updateTicket = async (updates: { status?: string }) => {
+  const updateTicket = async (updates: { status?: string; assignedTo?: string | null }) => {
     setIsUpdating(true);
     try {
       const res = await fetch(`/api/tickets/${ticketId}`, {
@@ -40,8 +61,39 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
     }
   };
 
+  const claimTicket = async () => {
+    setIsUpdating(true);
+    try {
+      const res = await fetch(`/api/tickets/${ticketId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignedTo: currentUserId }),
+      });
+      if (!res.ok) throw new Error("Failed to claim");
+      refetch();
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const unassignTicket = async () => {
+    setUnassignDialogOpen(false);
+    setIsUpdating(true);
+    try {
+      const res = await fetch(`/api/tickets/${ticketId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignedTo: null }),
+      });
+      if (!res.ok) throw new Error("Failed to unassign");
+      refetch();
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   const closeTicket = async () => {
-    if (!confirm("Are you sure you want to close this ticket?")) return;
+    setCloseDialogOpen(false);
     setIsUpdating(true);
     try {
       const res = await fetch(`/api/tickets/${ticketId}/close`, {
@@ -68,8 +120,23 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
   }
 
   const ticket = data.ticket;
+  const assignedTo = ticket.assignedToUser || ticket.assignedTo; // Handle both API responses
+  const isAssignedToCurrentUser = assignedTo?.id === currentUserId;
+  const isUnassigned = !assignedTo;
+
   return (
     <div className="p-6">
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => router.back()}
+        className="mb-4 gap-1"
+      >
+        <HugeiconsIcon icon={ArrowLeftIcon} className="h-4 w-4" />
+        Back to Tickets
+      </Button>
+
       <div className="mb-6 flex items-start justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -95,7 +162,16 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
             </div>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          {!isAssignedToCurrentUser && (
+            <Button
+              onClick={claimTicket}
+              disabled={isUpdating}
+              variant="default"
+            >
+              {isUnassigned ? "Claim Ticket" : "Take Over"}
+            </Button>
+          )}
           <Select
             value={ticket.status}
             onValueChange={(value: string) => updateTicket({ status: value })}
@@ -111,9 +187,18 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
               <SelectItem value="CLOSED">Closed</SelectItem>
             </SelectContent>
           </Select>
+          {isAssignedToCurrentUser && (
+            <Button
+              variant="outline"
+              onClick={() => setUnassignDialogOpen(true)}
+              disabled={isUpdating}
+            >
+              Unassign
+            </Button>
+          )}
           <Button
             variant="outline"
-            onClick={closeTicket}
+            onClick={() => setCloseDialogOpen(true)}
             disabled={isUpdating || ticket.status === "CLOSED"}
           >
             Close
@@ -127,12 +212,22 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
         <div className="space-y-4">
           <div className="border rounded-lg p-4">
             <h3 className="font-semibold mb-3">Customer</h3>
-            <p className="text-sm">
-              {ticket.user?.name || ticket.guestName || "Unknown"}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {ticket.user?.email || ticket.guestEmail || "-"}
-            </p>
+            <div className="space-y-1 text-sm">
+              <p>
+                <span className="text-muted-foreground">Name: </span>
+                {ticket.user?.name || ticket.guestName || "Unknown"}
+              </p>
+              <p>
+                <span className="text-muted-foreground">Email: </span>
+                {ticket.user?.email || ticket.guestEmail || "-"}
+              </p>
+              {ticket.guestPhone && (
+                <p>
+                  <span className="text-muted-foreground">Phone: </span>
+                  {ticket.guestPhone}
+                </p>
+              )}
+            </div>
           </div>
           <div className="border rounded-lg p-4">
             <h3 className="font-semibold mb-3">Details</h3>
@@ -145,14 +240,61 @@ export function TicketDetail({ ticketId }: { ticketId: string }) {
                 <span>Priority</span>
                 <Badge>{ticket.priority}</Badge>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span>Assigned To</span>
-                <span>{ticket.assignedTo?.name || "Unassigned"}</span>
+                {assignedTo ? (
+                  <div className="flex items-center gap-2">
+                    {assignedTo.name && (
+                      <span>{assignedTo.name}</span>
+                    )}
+                    {isAssignedToCurrentUser && (
+                      <Badge variant="secondary">You</Badge>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground">Unassigned</span>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Unassign Confirmation Dialog */}
+      <AlertDialog open={unassignDialogOpen} onOpenChange={setUnassignDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unassign Ticket</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to unassign this ticket? It will be available for others to claim.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isUpdating}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={unassignTicket} disabled={isUpdating}>
+              Unassign
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Close Ticket Confirmation Dialog */}
+      <AlertDialog open={closeDialogOpen} onOpenChange={setCloseDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Close Ticket</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to close this ticket? You can reopen it later if needed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isUpdating}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={closeTicket} disabled={isUpdating}>
+              Close Ticket
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

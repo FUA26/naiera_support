@@ -1,36 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApp } from "@/lib/contexts/app-context";
-import { TicketTable } from "./ticket-table";
-import { TicketFilters } from "./ticket-filters";
+import { TicketsDataTable } from "@/components/admin/tickets-data-table";
 
-interface Filters {
-  page: number;
-  pageSize: number;
-  status?: string;
-  assignedTo?: string;
-  search?: string;
+interface Props {
+  currentUserId: string;
 }
 
-export function TicketList() {
+export function TicketList({ currentUserId }: Props) {
   const { selectedAppId, accessibleApps, hasAllAccess, isLoading: appLoading } = useApp();
 
-  const [filters, setFilters] = useState<Filters>({
-    page: 1,
-    pageSize: 20,
-  });
-
   const { data, isLoading } = useQuery({
-    queryKey: ["tickets", filters, selectedAppId],
+    queryKey: ["tickets", selectedAppId],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (filters.status) params.set("status", filters.status);
-      if (filters.assignedTo) params.set("assignedTo", filters.assignedTo);
-      if (filters.search) params.set("search", filters.search);
-      params.set("page", String(filters.page));
-      params.set("pageSize", String(filters.pageSize));
+      params.set("pageSize", "100"); // Get max for client-side filtering
 
       // Add app filter if an app is selected (and not "all" for admins)
       if (selectedAppId && selectedAppId !== "all") {
@@ -64,17 +49,5 @@ export function TicketList() {
     );
   }
 
-  return (
-    <div className="space-y-4">
-      <TicketFilters filters={filters} onFiltersChange={setFilters} />
-      <TicketTable
-        tickets={data?.items || []}
-        isLoading={isLoading}
-        total={data?.total || 0}
-        page={filters.page}
-        pageSize={filters.pageSize}
-        onPageChange={(page) => setFilters({ ...filters, page })}
-      />
-    </div>
-  );
+  return <TicketsDataTable tickets={data?.items || []} currentUserId={currentUserId} />;
 }

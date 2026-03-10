@@ -58,6 +58,11 @@ function formatTicketListItem(ticket: any): TicketWithRelations {
       guestEmail: ticket.guestEmail,
       guestName: ticket.guestName,
       guestPhone: ticket.guestPhone,
+      user: ticket.user ? {
+        id: ticket.user.id,
+        name: ticket.user.name,
+        email: ticket.user.email,
+      } : undefined,
     },
     assignedTo: ticket.assignedToUser
       ? {
@@ -404,6 +409,26 @@ export async function updateTicket(
       action: ActivityAction.ASSIGNED,
       changes: { from: ticket.assignedTo, to: data.assignedTo },
     });
+
+    // If assigning to a user (claiming), create a task linked to this ticket
+    if (data.assignedTo) {
+      try {
+        await prisma.task.create({
+          data: {
+            title: `${ticket.ticketNumber}: ${ticket.subject}`,
+            description: `Ticket claimed from ${ticket.app.name}`,
+            status: "TODO",
+            priority: ticket.priority === "URGENT" ? "HIGH" : ticket.priority === "HIGH" ? "MEDIUM" : "LOW",
+            assigneeId: data.assignedTo,
+            createdById: data.assignedTo,
+            ticketId: ticketId,
+          },
+        });
+      } catch (error) {
+        // Log error but don't fail the ticket update
+        console.error("Failed to create task for claimed ticket:", error);
+      }
+    }
   }
 
   // Handle priority change

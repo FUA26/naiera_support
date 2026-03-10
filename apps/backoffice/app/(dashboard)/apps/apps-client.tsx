@@ -696,16 +696,28 @@ function SupportPage({ user }) {
     // Use manage channel dialog if open, otherwise use channel dialog
     const targetDialog = manageChannelDialog.open ? manageChannelDialog : channelDialog;
 
-    if (!targetDialog.channel) return;
-
-    updateChannelMutation.mutate({
-      id: targetDialog.channel.id,
-      data: {
+    // Create new channel
+    if (channelDialog.mode === "create" && targetDialog.app) {
+      createChannelMutation.mutate({
+        appId: targetDialog.app.id,
         name: channelName,
         type: channelType,
         isActive: channelIsActive,
-      },
-    });
+      });
+      return;
+    }
+
+    // Update existing channel
+    if (targetDialog.channel) {
+      updateChannelMutation.mutate({
+        id: targetDialog.channel.id,
+        data: {
+          name: channelName,
+          type: channelType,
+          isActive: channelIsActive,
+        },
+      });
+    }
   };
 
   const handleDelete = () => {

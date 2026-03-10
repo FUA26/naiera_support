@@ -1,9 +1,14 @@
 "use client";
 
-import { FileImage, File, Download } from "lucide-react";
+import { useState } from "react";
+import { FileImage, File, Download, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { isImageAttachment } from "@/lib/file-upload/attachment-validation";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 type Attachment = {
   url: string;
@@ -21,18 +26,54 @@ export function AttachmentPreview({
   attachments,
   className,
 }: AttachmentPreviewProps) {
+  const [previewImage, setPreviewImage] = useState<Attachment | null>(null);
+
   if (attachments.length === 0) return null;
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      {attachments.map((attachment, index) => (
-        <AttachmentItem key={index} attachment={attachment} />
-      ))}
-    </div>
+    <>
+      <div className={cn("flex flex-wrap gap-2", className)}>
+        {attachments.map((attachment, index) => (
+          <AttachmentItem
+            key={index}
+            attachment={attachment}
+            onPreview={setPreviewImage}
+          />
+        ))}
+      </div>
+
+      {/* Image Preview Dialog */}
+      <Dialog
+        open={previewImage !== null}
+        onOpenChange={(open) => !open && setPreviewImage(null)}
+      >
+        <DialogContent
+          className="max-w-4xl w-full p-6 bg-background"
+          showCloseButton={true}
+        >
+          <div className="relative w-full h-full flex flex-col items-center">
+            <img
+              src={previewImage?.url}
+              alt={previewImage?.name || "Preview"}
+              className="w-full h-auto max-h-[75vh] object-contain rounded-lg"
+            />
+            <p className="text-center text-sm text-muted-foreground mt-4">
+              {previewImage?.name}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
-function AttachmentItem({ attachment }: { attachment: Attachment }) {
+function AttachmentItem({
+  attachment,
+  onPreview,
+}: {
+  attachment: Attachment;
+  onPreview: (attachment: Attachment) => void;
+}) {
   const isImage = isImageAttachment(attachment.type);
 
   const handleDownload = () => {
@@ -46,9 +87,15 @@ function AttachmentItem({ attachment }: { attachment: Attachment }) {
           src={attachment.url}
           alt={attachment.name}
           className="w-full h-full object-cover cursor-pointer"
-          onClick={() => window.open(attachment.url, "_blank")}
+          onClick={() => onPreview(attachment)}
         />
-        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors">
+        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center">
+          <div
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+            onClick={() => onPreview(attachment)}
+          >
+            <ZoomIn className="h-4 w-4" />
+          </div>
           <Button
             size="icon"
             variant="ghost"

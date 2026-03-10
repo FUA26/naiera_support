@@ -10,7 +10,7 @@ export default async function TicketsPage() {
         <h1 className="text-2xl font-bold">Tickets</h1>
         <p className="text-muted-foreground">Manage customer support tickets</p>
       </div>
-      <TicketList />
+      <TicketList currentUserId={session.user.id} />
     </div>
   );
 }
