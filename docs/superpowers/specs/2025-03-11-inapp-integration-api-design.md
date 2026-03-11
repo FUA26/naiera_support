@@ -11,7 +11,7 @@ API untuk aplikasi eksternal mengakses sistem ticketing menggunakan **API Key** 
 1. Membuat tiket support
 2. Melihat daftar tiket support user
 3. Melihat detail tiket
-4. Melihat pesan-pesa dalam tiket
+4. Melihat pesan-pesan dalam tiket
 5. Mengirim pesan balasan ke tiket
 
 ## Architecture
@@ -371,7 +371,7 @@ apps/backoffice/
 │   ├── services/
 │   │   └── ticketing/
 │   │       ├── ticket-message-service.ts     # Existing: addTicketMessage()
-│   │       └── integration-service.ts        # NEW: verifyApiKey(), validateOwnership()
+│   │       └── integration-service.ts        # NEW: verifyApiKey(), validateTicketOwnership()
 │   └── validations/
 │       └── ticket-validation.ts              # Update: Add new schemas
 ```
