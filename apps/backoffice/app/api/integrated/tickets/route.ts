@@ -34,7 +34,8 @@ async function verifyApiKey(apiKey: string) {
  *   X-API-Key: <your_channel_api_key>
  *
  * Query params:
- *   externalUserId: <user_id_from_your_app>
+ *   externalUserId: <user_id_from_your_app> (required if email not provided)
+ *   email: <user_email> (required if externalUserId not provided)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -55,32 +56,59 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get externalUserId from query
+    // Get query params
     const { searchParams } = new URL(request.url);
     const externalUserId = searchParams.get("externalUserId");
+    const email = searchParams.get("email");
 
-    if (!externalUserId) {
+    // Require exactly one of externalUserId or email
+    if (!externalUserId && !email) {
       return NextResponse.json(
-        { error: "externalUserId is required" },
+        { error: "Either externalUserId or email is required" },
         { status: 400 }
       );
     }
 
-    // Get tickets for this external user
+    if (externalUserId && email) {
+      return NextResponse.json(
+        { error: "Provide only one of externalUserId or email, not both" },
+        { status: 400 }
+      );
+    }
+
+    // Build where clause based on filter type
+    const whereClause: {
+      appId: string;
+      channelId: string;
+      externalUserId?: string;
+      guestEmail?: string;
+    } = {
+      appId: channel.appId,
+      channelId: channel.id,
+    };
+
+    if (externalUserId) {
+      whereClause.externalUserId = externalUserId;
+    } else if (email) {
+      whereClause.guestEmail = email;
+    }
+
+    // Get tickets for this external user or email
     const tickets = await prisma.ticket.findMany({
-      where: {
-        appId: channel.appId,
-        channelId: channel.id,
-        externalUserId: externalUserId,
-      },
+      where: whereClause,
       orderBy: { createdAt: "desc" },
       include: {
         messages: {
+          where: { isInternal: false },
           orderBy: { createdAt: "asc" },
           take: 1, // Only first message for preview
         },
         _count: {
-          select: { messages: true },
+          select: {
+            messages: {
+              where: { isInternal: false },
+            },
+          },
         },
       },
     });
@@ -90,10 +118,13 @@ export async function GET(request: NextRequest) {
         id: t.id,
         ticketNumber: t.ticketNumber,
         subject: t.subject,
+        description: t.description,
         status: t.status,
         priority: t.priority,
         createdAt: t.createdAt,
         updatedAt: t.updatedAt,
+        resolvedAt: t.resolvedAt,
+        closedAt: t.closedAt,
         messageCount: t._count.messages,
         lastMessage: t.messages[0]?.message,
       })),
