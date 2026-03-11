@@ -232,6 +232,57 @@ export const ticketStatusCheckSchema = z.object({
 });
 
 // ============================================================================
+// In-App Integration API Schemas
+// ============================================================================
+
+/**
+ * Token purpose enum for in-app integration
+ * - create_ticket: Generate token for creating new tickets
+ * - view_ticket: Generate token for viewing a specific ticket
+ * - list_tickets: Generate token for listing user's tickets
+ */
+export const tokenPurposeEnum = z.enum([
+  "create_ticket",
+  "view_ticket",
+  "list_tickets",
+]);
+
+/**
+ * Schema for requesting access tokens for in-app integration
+ * - channelSlug: Identifies the in-app channel
+ * - email: Guest email (required for unauthenticated users)
+ * - purpose: The intended use of the token
+ * - ticketId: Required when purpose is "view_ticket"
+ *
+ * @example Requesting token to create a ticket
+ * { channelSlug: "support-widget", email: "user@example.com", purpose: "create_ticket" }
+ *
+ * @example Requesting token to view a specific ticket
+ * { channelSlug: "support-widget", email: "user@example.com", purpose: "view_ticket", ticketId: "123" }
+ */
+export const tokenRequestSchema = z
+  .object({
+    channelSlug: z
+      .string()
+      .min(1, "Channel slug is required"),
+    email: z
+      .string()
+      .email("Invalid email address"),
+    purpose: tokenPurposeEnum,
+    ticketId: z
+      .string()
+      .optional(),
+  })
+  .refine(
+    (data) =>
+      data.purpose !== "view_ticket" || data.ticketId,
+    {
+      message: "ticketId is required when purpose is 'view_ticket'",
+      path: ["ticketId"],
+    }
+  );
+
+// ============================================================================
 // Export TypeScript Types
 // ============================================================================
 
@@ -241,3 +292,4 @@ export type BulkTicketUpdateInput = z.infer<typeof bulkTicketUpdateSchema>;
 export type AddMessageInput = z.infer<typeof addMessageSchema>;
 export type ListTicketsQueryInput = z.infer<typeof listTicketsQuerySchema>;
 export type TicketStatusCheckInput = z.infer<typeof ticketStatusCheckSchema>;
+export type TokenRequestInput = z.infer<typeof tokenRequestSchema>;
