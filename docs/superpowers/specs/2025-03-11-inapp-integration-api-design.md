@@ -1,7 +1,7 @@
 # In-App Integration API Design
 
 **Date:** 2025-03-11
-**Status:** Approved (v2 - Extended Existing API)
+**Status:** Approved (v3 - Aligned with Existing Services)
 **Author:** Claude
 
 ## Overview
@@ -11,8 +11,37 @@ API untuk aplikasi eksternal mengakses sistem ticketing menggunakan **API Key** 
 1. Membuat tiket support
 2. Melihat daftar tiket support user
 3. Melihat detail tiket
-4. Melihat pesan-pesan dalam tiket
+4. Melihat pesan-pesa dalam tiket
 5. Mengirim pesan balasan ke tiket
+
+## Architecture
+
+API ini **menggunakan service layer yang sudah ada**:
+- `addTicketMessage()` dari `ticket-message-service.ts` - handles activity logging, reopening, webhooks, notifications
+- API endpoints hanya menambahkan API key validation dan ownership check
+
+```
+┌─────────────────┐
+│  External App   │
+│  (your app)     │
+└────────┬────────┘
+         │ X-API-Key
+         ▼
+┌─────────────────────────────────┐
+│  API Route Layer                │
+│  - Validate API Key             │
+│  - Validate ownership           │
+└────────┬────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────┐
+│  Service Layer (existing)       │
+│  - addTicketMessage()           │
+│  - Activity logging             │
+│  - Webhooks                     │
+│  - Notifications                │
+└─────────────────────────────────┘
+```
 
 ## Authentication
 
@@ -36,6 +65,14 @@ Tickets diidentifikasi oleh `externalUserId` - ID user dari sistem aplikasi ekst
 Setiap request yang butuh user context harus menyertakan `externalUserId` sebagai:
 - Query parameter (untuk GET)
 - Request body (untuk POST)
+
+### Ownership Validation
+
+Untuk setiap request yang mengakses ticket tertentu, endpoint harus memvalidasi:
+- Ticket belongs to the channel dari API key
+- `externalUserId` matches ticket's `externalUserId`
+
+Jika tidak valid, return `403 FORBIDDEN`.
 
 ## API Endpoints
 
@@ -70,6 +107,8 @@ List semua tickets untuk external user tertentu
   ]
 }
 ```
+
+**Note:** `messageCount` excludes internal messages. `lastMessage` excludes internal messages.
 
 #### 2. POST /api/integrated/tickets
 Create new ticket dari external app
@@ -135,17 +174,19 @@ Get detail single ticket
 }
 ```
 
+**Note:** `lastMessage` excludes internal messages (`isInternal: true`).
+
 **Error Responses:**
 - `401` - Invalid or missing API key
-- `403` - Ticket doesn't belong to this external user
+- `403` - Ticket doesn't belong to this external user or channel
 - `404` - Ticket not found
 
 **Implementation Notes:**
 - Validate ticket belongs to the channel from API key
 - Validate `externalUserId` matches the ticket's `externalUserId`
 - Return `403 FORBIDDEN` if ownership validation fails
-- Fetch last message from `TicketMessage` ordered by `createdAt` DESC
-- Include agent info if last message is from agent
+- Fetch last message from `TicketMessage` where `isInternal: false` ordered by `createdAt` DESC
+- Include agent name/email if last message is from agent
 
 ---
 
@@ -197,25 +238,28 @@ Get semua messages untuk ticket tertentu
       }
     }
   ],
-  "total": 3,
+  "total": 2,
   "page": 1,
   "pageSize": 50,
   "totalPages": 1
 }
 ```
 
+**Note:** Only returns messages where `isInternal: false`. Internal agent notes are excluded.
+
 **Error Responses:**
 - `401` - Invalid or missing API key
-- `403` - Ticket doesn't belong to this external user
+- `403` - Ticket doesn't belong to this external user or channel
 - `404` - Ticket not found
 
 **Implementation Notes:**
 - Validate ticket belongs to the channel from API key
 - Validate `externalUserId` matches the ticket's `externalUserId`
-- Exclude internal messages (`isInternal: true`)
+- Filter `isInternal: false` to exclude internal messages
 - Sort by `createdAt` ASC (oldest first)
 - Include attachment metadata with `url`, `name`, `type`, `size`
-- Include `createdBy` info (name/email) for both customer and agent
+- For customer messages: include name/email from `guestName`/`guestEmail`
+- For agent messages: include user info from `userId` relation
 
 ---
 
@@ -243,7 +287,7 @@ Add message baru ke ticket (dari customer)
 **Validation:**
 - `externalUserId`: Required, string - User ID from external app
 - `message`: Required, string, 1-5000 characters
-- `attachments`: Optional, array, max 5 files
+- `attachments`: Optional, array, max 5 files, max 10MB each
 
 **Response:**
 ```json
@@ -258,20 +302,22 @@ Add message baru ke ticket (dari customer)
 ```
 
 **Error Responses:**
-- `400` - Validation error with `details` array for Zod errors
+- `400` - Validation error
 - `401` - Invalid or missing API key
-- `403` - Ticket doesn't belong to this external user
+- `403` - Ticket doesn't belong to this external user or channel
 - `404` - Ticket not found
 
 **Implementation Notes:**
 - Validate ticket belongs to the channel from API key
 - Validate `externalUserId` matches the ticket's `externalUserId`
-- Create message with `sender: CUSTOMER`, `userId: null`
-- Update ticket `updatedAt` timestamp
-- Update ticket status to `OPEN` if currently `RESOLVED` or `CLOSED` (re-open behavior)
-- Log activity in `TicketActivity` with action `CUSTOMER_REPLIED`
-- Trigger notification to agents via notification service
-- Trigger webhooks if configured
+- Call existing `addTicketMessage()` service with:
+  - `sender: CUSTOMER`
+  - `userId: null` (customer is external, not a backoffice user)
+- Service handles:
+  - Activity logging (`CUSTOMER_REPLIED`)
+  - Ticket reopening: CLOSED → IN_PROGRESS (not OPEN, not RESOLVED)
+  - Webhook trigger (`MESSAGE_ADDED` event)
+  - Agent notification (`notifyAgentTicketReply()`)
 
 ---
 
@@ -292,14 +338,11 @@ All endpoints return consistent error format:
 {
   "error": "VALIDATION_ERROR",
   "message": "Human readable message",
-  "details": [
-    {
-      "path": ["field"],
-      "message": "Specific validation error"
-    }
-  ]
+  "details": "Error details string"
 }
 ```
+
+**Note:** Existing implementation returns `details` as string (not array). Maintain this pattern for consistency.
 
 ### Error Codes
 
@@ -308,7 +351,7 @@ All endpoints return consistent error format:
 | `UNAUTHORIZED` | 401 | Missing or invalid API key |
 | `FORBIDDEN` | 403 | API key doesn't have access or ticket ownership mismatch |
 | `NOT_FOUND` | 404 | Ticket not found |
-| `VALIDATION_ERROR` | 400 | Invalid request data (with `details` array) |
+| `VALIDATION_ERROR` | 400 | Invalid request data |
 | `INTERNAL_ERROR` | 500 | Server error |
 
 ---
@@ -327,7 +370,8 @@ apps/backoffice/
 ├── lib/
 │   ├── services/
 │   │   └── ticketing/
-│   │       └── integration-service.ts        # NEW: Shared business logic
+│   │       ├── ticket-message-service.ts     # Existing: addTicketMessage()
+│   │       └── integration-service.ts        # NEW: verifyApiKey(), validateOwnership()
 │   └── validations/
 │       └── ticket-validation.ts              # Update: Add new schemas
 ```
@@ -336,10 +380,11 @@ apps/backoffice/
 
 ## Database Context
 
-Existing `Ticket` model already supports:
+Existing `Ticket` model:
 - `externalUserId` - User ID from external app
 - `channelId` - Links to INTEGRATED_APP channel
 - `appId` - Links to App
+- `status` - OPEN, IN_PROGRESS, RESOLVED, CLOSED
 
 Existing `TicketMessage` model:
 - `sender` - CUSTOMER or AGENT
@@ -351,20 +396,54 @@ Existing `TicketMessage` model:
 ## Security Considerations
 
 1. **API Key Validation**: Every request validates the API key
-2. **Channel Isolation**: Tickets are isolated by channel
+2. **Channel Isolation**: Tickets are isolated by channel (cross-channel access = 403)
 3. **User Ownership**: `externalUserId` must match ticket's `externalUserId`
 4. **Input Sanitization**: All user inputs validated with Zod
-5. **Attachment Validation**: File type and size validation (max 5MB per file)
-6. **Rate Limiting**: Consider adding rate limiting per API key (future enhancement)
+5. **Attachment Validation**: Max 5 files, 10MB per file
+6. **Internal Message Protection**: Internal messages never exposed to external API
+
+---
+
+## Test Cases
+
+Implementation should cover these test cases:
+
+### Positive Cases
+- Valid API key + valid externalUserId → success
+- Pagination works correctly (page, pageSize)
+- Attachments uploaded and linked correctly
+
+### Negative Cases
+- Missing API key → 401
+- Invalid API key → 401
+- Inactive channel → 401
+- Wrong channel → 403 (ticket belongs to different channel)
+- Wrong externalUserId → 403 (ticket belongs to different user)
+- Non-existent ticket → 404
+
+### Edge Cases
+- Empty messages list → returns `items: []`
+- Ticket with only internal messages → lastMessage excluded
+- Re-opening behavior: CLOSED → IN_PROGRESS after customer reply
+- Attachment size limit (10MB) enforced
+- Max 5 attachments enforced
 
 ---
 
 ## Implementation Order
 
-1. **integration-service.ts** - Create shared service with API key validation and ownership check
+1. **integration-service.ts** - Create shared helpers:
+   - `verifyApiKey()` - Validate and return channel
+   - `validateTicketOwnership()` - Check channel + externalUserId
+
 2. **GET /api/integrated/tickets/[id]/route.ts** - Ticket detail endpoint
-3. **GET/POST /api/integrated/tickets/[id]/messages/route.ts** - Messages endpoints
-4. **Update validations** - Add Zod schemas for new endpoints
+
+3. **GET/POST /api/integrated/tickets/[id]/messages/route.ts** - Messages endpoints:
+   - Uses existing `addTicketMessage()` service
+   - Only adds API key + ownership validation layer
+
+4. **Update validations** - Add Zod schemas if needed
+
 5. **Testing** - Test with sample API key and external user
 
 ---
@@ -375,41 +454,69 @@ Existing `TicketMessage` model:
 // Configuration
 const API_KEY = "your-channel-api-key";
 const BASE_URL = "http://localhost:3100/api/integrated";
+const EXTERNAL_USER_ID = "user_123"; // Your user's ID
 
 // List tickets for user
-async function listTickets(externalUserId) {
-  const response = await fetch(`${BASE_URL}/tickets?externalUserId=${externalUserId}`, {
+async function listTickets() {
+  const response = await fetch(`${BASE_URL}/tickets?externalUserId=${EXTERNAL_USER_ID}`, {
     headers: { "X-API-Key": API_KEY }
   });
-  return response.json();
+  return response.json(); // { tickets: [...] }
 }
 
 // Get ticket detail
-async function getTicket(ticketId, externalUserId) {
-  const response = await fetch(`${BASE_URL}/tickets/${ticketId}?externalUserId=${externalUserId}`, {
+async function getTicket(ticketId) {
+  const response = await fetch(`${BASE_URL}/tickets/${ticketId}?externalUserId=${EXTERNAL_USER_ID}`, {
     headers: { "X-API-Key": API_KEY }
   });
   return response.json();
 }
 
 // Get messages
-async function getMessages(ticketId, externalUserId) {
-  const response = await fetch(`${BASE_URL}/tickets/${ticketId}/messages?externalUserId=${externalUserId}`, {
+async function getMessages(ticketId, page = 1) {
+  const response = await fetch(`${BASE_URL}/tickets/${ticketId}/messages?externalUserId=${EXTERNAL_USER_ID}&page=${page}`, {
     headers: { "X-API-Key": API_KEY }
   });
-  return response.json();
+  return response.json(); // { items: [...], total, page, totalPages }
 }
 
 // Add message
-async function addMessage(ticketId, externalUserId, message, attachments = []) {
+async function addMessage(ticketId, message, attachments = []) {
   const response = await fetch(`${BASE_URL}/tickets/${ticketId}/messages`, {
     method: "POST",
     headers: {
       "X-API-Key": API_KEY,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ externalUserId, message, attachments })
+    body: JSON.stringify({
+      externalUserId: EXTERNAL_USER_ID,
+      message,
+      attachments
+    })
   });
   return response.json();
+}
+
+// Example: Full flow
+async function supportFlow() {
+  // 1. List all tickets
+  const { tickets } = await listTickets();
+  console.log(`Found ${tickets.length} tickets`);
+
+  if (tickets.length > 0) {
+    const ticket = tickets[0];
+
+    // 2. Get ticket detail
+    const detail = await getTicket(ticket.id);
+    console.log('Ticket:', detail.subject, '-', detail.status);
+
+    // 3. Get messages
+    const { items } = await getMessages(ticket.id);
+    console.log(`Messages: ${items.length}`);
+
+    // 4. Reply to ticket
+    const reply = await addMessage(ticket.id, "Terima kasih infonya");
+    console.log('Message sent:', reply.id);
+  }
 }
 ```
