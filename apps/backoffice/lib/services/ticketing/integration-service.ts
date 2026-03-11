@@ -72,10 +72,12 @@ export async function generateAccessToken(
   purpose: TokenPurpose,
   ticketId?: string
 ): Promise<GeneratedToken> {
-  // Validate channel exists and is active
-  // Note: Using apiKey as identifier until slug field is added to schema (Task 8)
-  const channel = await prisma.channel.findUnique({
-    where: { apiKey: channelSlug },
+  // Validate channel exists and is active via slug
+  const channel = await prisma.channel.findFirst({
+    where: {
+      slug: channelSlug,
+      isActive: true,
+    },
     include: { app: true },
   }) as ChannelWithApp | null;
 
@@ -83,7 +85,7 @@ export async function generateAccessToken(
     throw new Error("CHANNEL_NOT_FOUND");
   }
 
-  if (!channel.isActive || !channel.app.isActive) {
+  if (!channel.app.isActive) {
     throw new Error("CHANNEL_INACTIVE");
   }
 
@@ -121,11 +123,10 @@ export async function generateAccessToken(
   const expiresAt = Math.floor(Date.now() / 1000) + expiresInSeconds;
 
   // Build payload
-  // Using apiKey as channelSlug until Task 8 adds slug field to schema
   const payload: TokenPayload = {
     email,
     channelId: channel.id,
-    channelSlug: channelSlug, // Store the original apiKey/slug
+    channelSlug: channel.slug || channelSlug, // Store slug for reference
     appId: channel.appId,
     purpose,
   };
