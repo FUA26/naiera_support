@@ -476,6 +476,7 @@ model Channel {
   app       App        @relation(fields: [appId], references: [id], onDelete: Cascade)
   type      ChannelType
   name      String
+  slug      String?    @unique // URL-friendly identifier for API routes
   apiKey    String?    @unique // For INTEGRATED_APP authentication
   config    Json       // { welcomeMessage, color, widgetPosition, etc }
   isActive  Boolean    @default(true)
@@ -487,6 +488,7 @@ model Channel {
   @@index([appId])
   @@index([isActive])
   @@index([apiKey])
+  @@index([slug])
 }
 
 model Ticket {
