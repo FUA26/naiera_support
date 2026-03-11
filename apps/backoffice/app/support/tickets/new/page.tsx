@@ -23,6 +23,7 @@ function TicketForm() {
   const appSlug = searchParams.get("app");
   const channelParam = searchParams.get("channel");
   const embed = searchParams.get("embed") === "true";
+  const tokenParam = searchParams.get("token");
 
   const [submitted, setSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
@@ -30,6 +31,7 @@ function TicketForm() {
   const [error, setError] = useState<string | null>(null);
   const [appInfo, setAppInfo] = useState<any>(null);
   const [appLoading, setAppLoading] = useState(true);
+  const [tokenValid, setTokenValid] = useState(false);
 
   // Form state
   const [subject, setSubject] = useState("");
@@ -39,6 +41,35 @@ function TicketForm() {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
+
+  // Validate token and pre-fill email
+  useEffect(() => {
+    const validateTokenAndGetEmail = async () => {
+      if (!tokenParam) return;
+
+      try {
+        const res = await fetch("/api/integrated/validate-token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: tokenParam }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setGuestEmail(data.email);
+          setTokenValid(true);
+        } else {
+          const data = await res.json();
+          setError(data.message || "Invalid or expired access token");
+        }
+      } catch (err) {
+        console.error("Token validation error:", err);
+        setError("Failed to validate access token");
+      }
+    };
+
+    validateTokenAndGetEmail();
+  }, [tokenParam]);
 
   // Fetch app info
   useEffect(() => {
@@ -216,6 +247,11 @@ function TicketForm() {
                 <Label htmlFor="guestEmail">
                   <Mail className="h-4 w-4 inline mr-1" />
                   Email *
+                  {tokenValid && (
+                    <span className="ml-2 text-xs text-green-600 dark:text-green-400 font-normal">
+                      (Pre-filled from secure access)
+                    </span>
+                  )}
                 </Label>
                 <Input
                   id="guestEmail"
@@ -224,7 +260,14 @@ function TicketForm() {
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   required
+                  readOnly={tokenValid}
+                  className={tokenValid ? "bg-muted cursor-not-allowed" : ""}
                 />
+                {tokenValid && (
+                  <p className="text-xs text-muted-foreground">
+                    Email is verified and locked for security
+                  </p>
+                )}
               </div>
             </div>
 
