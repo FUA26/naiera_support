@@ -3,32 +3,32 @@
 
 :root {
   /* Primary Colors - Crimson */
-  --crimson-50: #FFF5F5;
-  --crimson-100: #FEE2E2;
-  --crimson-200: #FECACA;
-  --crimson-300: #FCA5A5;
-  --crimson-400: #F87171;
-  --crimson-500: #EF4444;
-  --crimson-600: #DC143C;
-  --crimson-700: #B91C1C;
-  --crimson-800: #991B1B;
-  --crimson-900: #7F1D1D;
-  --crimson-hover: #E53E3E;
-  --crimson-active: #B91C1C;
-  --crimson-light: #F87171;
-  --crimson-focus: #FCA5A5;
+  --pisky-blue-50: #FFF5F5;
+  --pisky-blue-100: #FEE2E2;
+  --pisky-blue-200: #FECACA;
+  --pisky-blue-300: #FCA5A5;
+  --pisky-blue-400: #F87171;
+  --pisky-blue-500: #EF4444;
+  --pisky-blue-600: #DC143C;
+  --pisky-blue-700: #B91C1C;
+  --pisky-blue-800: #991B1B;
+  --pisky-blue-900: #7F1D1D;
+  --pisky-blue-hover: #C41E3A;
+  --pisky-blue-active: #9B1C1C;
+  --pisky-blue-light: #F87171;
+  --pisky-blue-focus: #FCA5A5;
 
   /* Secondary - Orange */
-  --orange-50: #FFFBEB;
-  --orange-100: #FEF3C7;
-  --orange-200: #FDE68A;
-  --orange-300: #FCD34D;
-  --orange-400: #FBBF24;
-  --orange-500: #F97316;
-  --orange-600: #D97706;
-  --orange-700: #B45309;
-  --orange-800: #92400E;
-  --orange-900: #78350F;
+  --coral-50: #FFFBEB;
+  --coral-100: #FEF3C7;
+  --coral-200: #FDE68A;
+  --coral-300: #FCD34D;
+  --coral-400: #FBBF24;
+  --coral-500: #F97316;
+  --coral-600: #D97706;
+  --coral-700: #B45309;
+  --coral-800: #92400E;
+  --coral-900: #78350F;
 
   /* Semantic Colors */
   --success-50: #ECFDF5;
@@ -94,7 +94,7 @@
   /* Channel Colors */
   --channel-web-form: #DC143C;
   --channel-in-app: #EF4444;
-  --channel-integrated: #FCA5A5;
+  --channel-integrated: #F87171;
   --channel-email: #F97316;
 
   /* Border System */
@@ -122,8 +122,8 @@
   --sidebar-border: #7F1D1D;
   --sidebar-text-primary: #FFFFFF;
   --sidebar-text-secondary: #FCA5A5;
-  --sidebar-item-hover: #E53E3E;
-  --sidebar-item-active: #B91C1C;
+  --sidebar-item-hover: #B91C1C;
+  --sidebar-item-active: #991B1B;
 
   /* Dark Mode Colors */
   --dark-bg: #111827;
@@ -136,78 +136,47 @@
 /* Tailwind Theme Mapping */
 @layer base {
   /* Primary Colors */
-  .text-crimson-50 { color: var(--crimson-50); }
-  .text-crimson-100 { color: var(--crimson-100); }
-  .text-crimson-200 { color: var(--crimson-200); }
-  .text-crimson-300 { color: var(--crimson-300); }
-  .text-crimson-400 { color: var(--crimson-400); }
-  .text-crimson-500 { color: var(--crimson-500); }
-  .text-crimson-600 { color: var(--crimson-600); }
-  .text-crimson-700 { color: var(--crimson-700); }
-  .text-crimson-800 { color: var(--crimson-800); }
-  .text-crimson-900 { color: var(--crimson-900); }
-  .text-crimson-hover { color: var(--crimson-hover); }
-  .text-crimson-active { color: var(--crimson-active); }
-  .text-crimson-light { color: var(--crimson-light); }
-  .text-crimson-focus { color: var(--crimson-focus); }
+  .text-pisky-blue-50 { color: var(--pisky-blue-50); }
+  .text-pisky-blue-100 { color: var(--pisky-blue-100); }
+  .text-pisky-blue-200 { color: var(--pisky-blue-200); }
+  .text-pisky-blue-300 { color: var(--pisky-blue-300); }
+  .text-pisky-blue-400 { color: var(--pisky-blue-400); }
+  .text-pisky-blue-500 { color: var(--pisky-blue-500); }
+  .text-pisky-blue-600 { color: var(--pisky-blue-600); }
+  .text-pisky-blue-700 { color: var(--pisky-blue-700); }
+  .text-pisky-blue-800 { color: var(--pisky-blue-800); }
+  .text-pisky-blue-900 { color: var(--pisky-blue-900); }
+  .text-pisky-hover { color: var(--pisky-blue-hover); }
+  .text-pisky-active { color: var(--pisky-blue-active); }
+  .text-pisky-light { color: var(--pisky-blue-light); }
+  .text-pisky-focus { color: var(--pisky-blue-focus); }
 
   /* Background Colors */
-  .bg-crimson-50 { background-color: var(--crimson-50); }
-  .bg-crimson-100 { background-color: var(--crimson-100); }
-  .bg-crimson-200 { background-color: var(--crimson-200); }
-  .bg-crimson-300 { background-color: var(--crimson-300); }
-  .bg-crimson-400 { background-color: var(--crimson-400); }
-  .bg-crimson-500 { background-color: var(--crimson-500); }
-  .bg-crimson-600 { background-color: var(--crimson-600); }
-  .bg-crimson-700 { background-color: var(--crimson-700); }
-  .bg-crimson-800 { background-color: var(--crimson-800); }
-  .bg-crimson-900 { background-color: var(--crimson-900); }
-  .bg-crimson-hover { background-color: var(--crimson-hover); }
-  .bg-crimson-active { background-color: var(--crimson-active); }
-  .bg-crimson-light { background-color: var(--crimson-light); }
-  .bg-crimson-focus { background-color: var(--crimson-focus); }
+  .bg-pisky-blue-50 { background-color: var(--pisky-blue-50); }
+  .bg-pisky-blue-100 { background-color: var(--pisky-blue-100); }
+  .bg-pisky-blue-200 { background-color: var(--pisky-blue-200); }
+  .bg-pisky-blue-300 { background-color: var(--pisky-blue-300); }
+  .bg-pisky-blue-400 { background-color: var(--pisky-blue-400); }
+  .bg-pisky-blue-500 { background-color: var(--pisky-blue-500); }
+  .bg-pisky-blue-600 { background-color: var(--pisky-blue-600); }
+  .bg-pisky-blue-700 { background-color: var(--pisky-blue-700); }
+  .bg-pisky-blue-800 { background-color: var(--pisky-blue-800); }
+  .bg-pisky-blue-900 { background-color: var(--pisky-blue-900); }
+  .bg-pisky-hover { background-color: var(--pisky-blue-hover); }
+  .bg-pisky-active { background-color: var(--pisky-blue-active); }
+  .bg-pisky-light { background-color: var(--pisky-blue-light); }
+  .bg-pisky-focus { background-color: var(--pisky-blue-focus); }
 
   /* Border Colors */
-  .border-crimson-500 { border-color: var(--crimson-500); }
-  .border-crimson-600 { border-color: var(--crimson-600); }
-  .border-crimson-700 { border-color: var(--crimson-700); }
-  .border-crimson-800 { border-color: var(--crimson-800); }
-  .border-crimson-900 { border-color: var(--crimson-900); }
+  .border-pisky-blue-500 { border-color: var(--pisky-blue-500); }
+  .border-pisky-blue-600 { border-color: var(--pisky-blue-600); }
+  .border-pisky-blue-700 { border-color: var(--pisky-blue-700); }
+  .border-pisky-blue-800 { border-color: var(--pisky-blue-800); }
+  .border-pisky-blue-900 { border-color: var(--pisky-blue-900); }
 
   /* Shadow Colors */
-  .shadow-crimson-500 { box-shadow: 0 4px 6px -1px var(--crimson-500), 0 2px 4px -2px var(--crimson-500); }
-  .shadow-crimson-600 { box-shadow: 0 10px 15px -3px var(--crimson-600), 0 4px 6px -4px var(--crimson-600); }
-
-  /* Secondary Colors - Orange */
-  .text-orange-50 { color: var(--orange-50); }
-  .text-orange-100 { color: var(--orange-100); }
-  .text-orange-200 { color: var(--orange-200); }
-  .text-orange-300 { color: var(--orange-300); }
-  .text-orange-400 { color: var(--orange-400); }
-  .text-orange-500 { color: var(--orange-500); }
-  .text-orange-600 { color: var(--orange-600); }
-  .text-orange-700 { color: var(--orange-700); }
-  .text-orange-800 { color: var(--orange-800); }
-  .text-orange-900 { color: var(--orange-900); }
-
-  /* Background Colors */
-  .bg-orange-50 { background-color: var(--orange-50); }
-  .bg-orange-100 { background-color: var(--orange-100); }
-  .bg-orange-200 { background-color: var(--orange-200); }
-  .bg-orange-300 { background-color: var(--orange-300); }
-  .bg-orange-400 { background-color: var(--orange-400); }
-  .bg-orange-500 { background-color: var(--orange-500); }
-  .bg-orange-600 { background-color: var(--orange-600); }
-  .bg-orange-700 { background-color: var(--orange-700); }
-  .bg-orange-800 { background-color: var(--orange-800); }
-  .bg-orange-900 { background-color: var(--orange-900); }
-
-  /* Border Colors */
-  .border-orange-500 { border-color: var(--orange-500); }
-  .border-orange-600 { border-color: var(--orange-600); }
-  .border-orange-700 { border-color: var(--orange-700); }
-  .border-orange-800 { border-color: var(--orange-800); }
-  .border-orange-900 { border-color: var(--orange-900); }
+  .shadow-pisky-blue-500 { box-shadow: 0 4px 6px -1px var(--pisky-blue-500), 0 2px 4px -2px var(--pisky-blue-500); }
+  .shadow-pisky-blue-600 { box-shadow: 0 10px 15px -3px var(--pisky-blue-600), 0 4px 6px -4px var(--pisky-blue-600); }
 
   /* Semantic Colors */
   .text-success { color: var(--success-500); }
@@ -246,7 +215,7 @@
 
   .card-pisky:hover {
     box-shadow: var(--shadow-lg);
-    border-color: var(--crimson-300);
+    border-color: var(--pisky-blue-300);
   }
 
   .card-pisky-interactive {
@@ -260,7 +229,7 @@
 
   .card-pisky-interactive:hover {
     box-shadow: var(--shadow-lg);
-    border-color: var(--crimson-400);
+    border-color: var(--pisky-blue-400);
     transform: translateY(-1px);
   }
 
@@ -270,8 +239,8 @@
   }
 
   /* Button Components */
-  .btn-crimson-primary {
-    background: var(--crimson-600);
+  .btn-pisky-primary {
+    background: var(--pisky-blue-600);
     color: white;
     border: none;
     border-radius: var(--radius-md);
@@ -280,65 +249,42 @@
     transition: all 0.2s ease;
   }
 
-  .btn-crimson-primary:hover {
-    background: var(--crimson-hover);
+  .btn-pisky-primary:hover {
+    background: var(--pisky-blue-hover);
   }
 
-  .btn-crimson-primary:focus {
-    outline: 2px solid var(--crimson-focus);
+  .btn-pisky-primary:focus {
+    outline: 2px solid var(--pisky-blue-focus);
     outline-offset: 2px;
   }
 
-  .btn-crimson-primary:active {
-    background: var(--crimson-active);
+  .btn-pisky-primary:active {
+    background: var(--pisky-blue-active);
   }
 
-  .btn-crimson-secondary {
+  .btn-pisky-secondary {
     background: white;
-    color: var(--crimson-600);
-    border: 1px solid var(--crimson-300);
+    color: var(--pisky-blue-600);
+    border: 1px solid var(--pisky-blue-300);
     border-radius: var(--radius-md);
     padding: 0.5rem 1rem;
     font-weight: 500;
     transition: all 0.2s ease;
   }
 
-  .btn-crimson-secondary:hover {
-    background: var(--crimson-50);
-    border-color: var(--crimson-400);
+  .btn-pisky-secondary:hover {
+    background: var(--pisky-blue-50);
+    border-color: var(--pisky-blue-400);
   }
 
-  .btn-crimson-secondary:focus {
-    outline: 2px solid var(--crimson-focus);
+  .btn-pisky-secondary:focus {
+    outline: 2px solid var(--pisky-blue-focus);
     outline-offset: 2px;
   }
 
-  .btn-crimson-secondary:active {
-    background: var(--crimson-100);
-    border-color: var(--crimson-500);
-  }
-
-  .btn-orange-primary {
-    background: var(--orange-600);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .btn-orange-primary:hover {
-    background: var(--orange-500);
-  }
-
-  .btn-orange-primary:focus {
-    outline: 2px solid var(--orange-300);
-    outline-offset: 2px;
-  }
-
-  .btn-orange-primary:active {
-    background: var(--orange-700);
+  .btn-pisky-secondary:active {
+    background: var(--pisky-blue-100);
+    border-color: var(--pisky-blue-500);
   }
 
   /* Badge Components */
@@ -422,17 +368,6 @@
     box-shadow: var(--shadow);
   }
 
-  .sidebar-heading-pisky {
-    color: var(--sidebar-text-secondary);
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.5rem 1rem;
-    margin: 1rem 0 0.5rem 0;
-    border-radius: var(--radius-md);
-  }
-
   .sidebar-item-pisky {
     color: var(--sidebar-text-secondary);
     padding: 0.75rem 1rem;
@@ -472,9 +407,9 @@
   }
 
   .input-pisky:focus {
-    outline: 2px solid var(--crimson-focus);
+    outline: 2px solid var(--pisky-blue-focus);
     outline-offset: 2px;
-    border-color: var(--crimson-400);
+    border-color: var(--pisky-blue-400);
   }
 
   .input-pisky:hover {
@@ -538,23 +473,9 @@
   .alert-pisky {
     padding: 1rem;
     border-radius: var(--radius-md);
-    border-left: 4px solid var(--crimson-500);
-    background: var(--crimson-50);
+    border-left: 4px solid var(--pisky-blue-500);
+    background: var(--pisky-blue-50);
     margin-bottom: 1rem;
-  }
-
-  /* Header Components */
-  .header-pisky {
-    background: white;
-    border-bottom: var(--border);
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* Divider Components */
-  .divider-pisky {
-    height: 1px;
-    background: var(--border-200);
-    margin: 1rem 0;
   }
 
   .alert-pisky.success {
@@ -575,7 +496,7 @@
   /* Loading Spinner */
   .spinner-pisky {
     border: 3px solid var(--gray-200);
-    border-top: 3px solid var(--crimson-600);
+    border-top: 3px solid var(--pisky-blue-600);
     border-radius: 50%;
     width: 1.5rem;
     height: 1.5rem;
