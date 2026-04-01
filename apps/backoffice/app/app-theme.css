@@ -1,596 +1,554 @@
-/* ========================================
-   NAIEARA SUPPORT APP THEME - STARTUP STYLE
-   ========================================
-
-   Design Philosophy: Fresh, Modern, Professional
-   - Soft but visible borders (not harsh)
-   - Clean whitespace
-   - Subtle depth with shadows
-   - Smooth transitions
-   - Professional color palette
-   - SIDEBAR with dominant app identity color
-
-   APP IDENTITY:
-   - Primary: Teal/Turquoise (friendly, modern, calming)
-   - Personality: Professional yet approachable
-   - Use Case: Support ticketing system
-
-   ======================================== */
-
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
+/* Pisky Design System Theme */
+/* Primary Colors: Pisky Blue #1B53D9 */
 
 :root {
-  /* ========================================
-     NAIEARA SUPPORT BRAND COLORS
-     ======================================== */
+  /* Primary Colors - Pisky Blue */
+  --pisky-blue-50: #EBF4FF;
+  --pisky-blue-100: #DBE9FF;
+  --pisky-blue-200: #B8D7FF;
+  --pisky-blue-300: #96C5FF;
+  --pisky-blue-400: #7BB3FF;
+  --pisky-blue-500: #5FA1FF;
+  --pisky-blue-600: #1B53D9;
+  --pisky-blue-700: #1640A8;
+  --pisky-blue-800: #112E77;
+  --pisky-blue-900: #0C2057;
+  --pisky-blue-hover: #1750E1;
+  --pisky-blue-active: #0F39C3;
+  --pisky-blue-light: #7BB3FF;
+  --pisky-blue-focus: #96C5FF;
 
-  /* Primary - Teal/Turquoise (Friendly & Modern) */
-  --primary: oklch(0.58 0.16 190);
-  --primary-hover: oklch(0.52 0.15 190);
-  --primary-active: oklch(0.46 0.14 190);
-  --primary-light: oklch(0.94 0.04 190);
-  --primary-lighter: oklch(0.97 0.02 190);
-  --primary-foreground: oklch(0.985 0 0);
+  /* Secondary - Coral */
+  --coral-50: #FFFBFA;
+  --coral-100: #FFF1ED;
+  --coral-200: #FFD6CE;
+  --coral-300: #FFBAAA;
+  --coral-400: #FF8F8D;
+  --coral-500: #E07A5F;
+  --coral-600: #C35E40;
+  --coral-700: #A54524;
+  --coral-800: #872E0F;
+  --coral-900: #681701;
 
-  /* Accent - Soft for hover states */
-  --accent: oklch(0.97 0.02 190);
-  --accent-hover: oklch(0.94 0.04 190);
-  --accent-active: oklch(0.90 0.06 190);
-  --accent-light: oklch(0.985 0.01 190);
-  --accent-lighter: oklch(0.99 0.005 190);
-  --accent-foreground: oklch(0.58 0.16 190);
+  /* Semantic Colors */
+  --success-50: #ECFDF5;
+  --success-100: #D1FAE5;
+  --success-200: #A7F3D0;
+  --success-300: #6EE7B7;
+  --success-400: #34D399;
+  --success-500: #10B981;
+  --success-600: #059669;
+  --success-700: #047857;
+  --success-800: #065F46;
+  --success-900: #064E3B;
 
-  /* ========================================
-     SOFT BORDER SYSTEM (Visible but Soft)
-     ======================================== */
+  --warning-50: #FFFBEB;
+  --warning-100: #FEF3C7;
+  --warning-200: #FDE68A;
+  --warning-300: #FCD34D;
+  --warning-400: #FBBF24;
+  --warning-500: #F59E0B;
+  --warning-600: #D97706;
+  --warning-700: #B45309;
+  --warning-800: #92400E;
+  --warning-900: #78350F;
 
-  /* Main border - visible but soft, not harsh */
-  --border: oklch(0.92 0.006 264); /* Soft gray, visible */
-  --border-subtle: oklch(0.94 0.005 264); /* More subtle */
-  --border-strong: oklch(0.88 0.008 264); /* Slightly stronger */
+  --error-50: #FEF2F2;
+  --error-100: #FEE2E2;
+  --error-200: #FECACA;
+  --error-300: #FCA5A5;
+  --error-400: #F87171;
+  --error-500: #EF4444;
+  --error-600: #DC2626;
+  --error-700: #B91C1C;
+  --error-800: #991B1B;
+  --error-900: #7F1D1D;
 
-  /* Border variants */
-  --border-light: oklch(0.95 0.005 264);
-  --border-medium: oklch(0.90 0.006 264);
-  --border-dark: oklch(0.85 0.01 264);
+  /* Neutral Gray Scale */
+  --gray-50: #FAFAFA;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
 
-  /* ========================================
-     APP-SPECIFIC COLORS
-     ======================================== */
+  /* Border Colors */
+  --border-100: #E5E7EB;
+  --border-200: #D1D5DB;
+  --border-300: #9CA3AF;
+  --border-400: #6B7280;
+  --border-500: #4B5563;
+  --border-600: #374151;
+  --border-700: #1F2937;
 
   /* Ticket Status Colors */
-  --ticket-open: oklch(0.58 0.16 190);
-  --ticket-pending: oklch(0.70 0.15 75);
-  --ticket-resolved: oklch(0.586 0.15 130);
-  --ticket-closed: oklch(0.55 0.02 264);
+  --ticket-open: #1B53D9;
+  --ticket-pending: #F59E0B;
+  --ticket-resolved: #10B981;
+  --ticket-closed: #6B7280;
 
   /* Channel Colors */
-  --channel-webform: oklch(0.58 0.16 190);
-  --channel-widget: oklch(0.55 0.18 300);
-  --channel-integrated: oklch(0.6 0.18 15);
+  --channel-web-form: #1B53D9;
+  --channel-in-app: #5FA1FF;
+  --channel-integrated: #96C5FF;
+  --channel-email: #E07A5F;
 
-  /* ========================================
-     GRADIENT PRESETS
-     ======================================== */
+  /* Border System */
+  --border-sm: 1px solid var(--border-100);
+  --border: 1px solid var(--border-200);
+  --border-lg: 1px solid var(--border-300);
+  --border-xl: 1px solid var(--border-400);
 
-  --gradient-primary: linear-gradient(135deg,
-    oklch(0.58 0.16 190),
-    oklch(0.62 0.14 200)
-  );
+  /* Shadow System (Neutral Only) */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 
-  --gradient-surface: linear-gradient(180deg,
-    oklch(1 0 0),
-    oklch(0.99 0.002 264)
-  );
+  /* Radius System */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
-  /* SIDEBAR GRADIENT - Dominant app identity */
-  --gradient-sidebar: linear-gradient(180deg,
-    oklch(0.94 0.06 190) 0%,
-    oklch(0.97 0.04 190) 50%,
-    oklch(0.995 0.002 264) 100%
-  );
+  /* Sidebar Colors - Solid Pisky Blue */
+  --sidebar-bg: #1B53D9;
+  --sidebar-border: #0C2057;
+  --sidebar-text-primary: #FFFFFF;
+  --sidebar-text-secondary: #B8D7FF;
+  --sidebar-item-hover: #174EA6;
+  --sidebar-item-active: #0F3A7A;
 
-  /* ========================================
-     SHADOW SYSTEM
-     ======================================== */
-
-  --shadow-xs: 0 1px 2px oklch(0.5 0.02 264 / 0.06);
-  --shadow-sm: 0 1px 3px oklch(0.5 0.02 264 / 0.08),
-               0 2px 6px oklch(0.5 0.02 264 / 0.05);
-  --shadow-md: 0 2px 8px oklch(0.5 0.02 264 / 0.1),
-               0 4px 16px oklch(0.5 0.02 264 / 0.05);
-  --shadow-lg: 0 4px 12px oklch(0.5 0.02 264 / 0.12),
-               0 8px 32px oklch(0.5 0.02 264 / 0.07);
-  --shadow-xl: 0 8px 24px oklch(0.5 0.02 264 / 0.15),
-               0 16px 48px oklch(0.5 0.02 264 / 0.1);
-
-  /* Colored shadows */
-  --shadow-primary: 0 4px 16px oklch(0.58 0.16 190 / 0.18);
-  --shadow-primary-lg: 0 8px 32px oklch(0.58 0.16 190 / 0.22);
-
-  /* ========================================
-     RADIUS (Rounded but Professional)
-     ======================================== */
-
-  --radius: 0.75rem;
-  --radius-sm: 0.5rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
-
-  /* ========================================
-     SIDEBAR SPECIFIC - Colorful Identity
-     ======================================== */
-
-  --sidebar-bg: oklch(0.96 0.04 190);
-  --sidebar-bg-top: oklch(0.93 0.06 190);
-  --sidebar-border: oklch(0.90 0.06 190);
-  --sidebar-item-hover: oklch(0.98 0.01 190 / 0.5);
-  --sidebar-item-active: oklch(0.58 0.16 190);
-  --sidebar-item-active-bg: oklch(1 0 0);
-  --sidebar-text: oklch(0.35 0.02 264);
-  --sidebar-text-muted: oklch(0.50 0.02 264);
-  --sidebar-divider: oklch(0.88 0.06 190);
+  /* Dark Mode Colors */
+  --dark-bg: #111827;
+  --dark-bg-secondary: #1F2937;
+  --dark-text-primary: #F9FAFB;
+  --dark-text-secondary: #D1D5DB;
+  --dark-border: #374151;
 }
 
-/* ========================================
-   DARK MODE COLORS
-   ======================================== */
-
-.dark {
-  /* Primary - Teal (Brighter for dark mode) */
-  --primary: oklch(0.68 0.14 190);
-  --primary-hover: oklch(0.62 0.15 190);
-  --primary-active: oklch(0.56 0.14 190);
-  --primary-light: oklch(0.26 0.04 190);
-  --primary-lighter: oklch(0.20 0.03 190);
-  --primary-foreground: oklch(0.145 0 0);
-
-  /* Accent */
-  --accent: var(--primary-lighter);
-  --accent-hover: var(--primary-light);
-  --accent-light: var(--primary-lighter);
-  --accent-lighter: var(--primary-lighter);
-  --accent-foreground: var(--primary);
-
-  /* Dark mode borders - visible but soft */
-  --border: oklch(0.32 0.012 264 / 0.6);
-  --border-subtle: oklch(0.30 0.01 264 / 0.4);
-  --border-strong: oklch(0.35 0.015 264 / 0.7);
-
-  --border-light: oklch(0.28 0.01 264 / 0.3);
-  --border-medium: oklch(0.32 0.012 264 / 0.5);
-  --border-dark: oklch(0.38 0.015 264 / 0.7);
-
-  /* Dark mode shadows */
-  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.4);
-  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.5),
-               0 2px 6px oklch(0 0 0 / 0.3);
-  --shadow-md: 0 2px 8px oklch(0 0 0 / 0.6),
-               0 4px 16px oklch(0 0 0 / 0.4);
-  --shadow-lg: 0 4px 12px oklch(0 0 0 / 0.7),
-               0 8px 32px oklch(0 0 0 / 0.5);
-
-  --shadow-primary: 0 4px 16px oklch(0.68 0.14 190 / 0.25);
-  --shadow-primary-lg: 0 8px 32px oklch(0.68 0.14 190 / 0.3);
-
-  /* Gradients - Dark Mode */
-  --gradient-surface: linear-gradient(180deg,
-    oklch(0.18 0.005 264),
-    oklch(0.16 0.005 264)
-  );
-
-  /* SIDEBAR GRADIENT - Dominant app identity in dark mode */
-  --gradient-sidebar: linear-gradient(180deg,
-    oklch(0.28 0.08 190) 0%,
-    oklch(0.24 0.06 190) 50%,
-    oklch(0.16 0.005 264) 100%
-  );
-
-  /* Sidebar - Dark Mode */
-  --sidebar-bg: oklch(0.22 0.06 190);
-  --sidebar-bg-top: oklch(0.26 0.08 190);
-  --sidebar-border: oklch(0.30 0.08 190);
-  --sidebar-item-hover: oklch(0.35 0.08 190 / 0.3);
-  --sidebar-item-active: oklch(0.68 0.14 190);
-  --sidebar-item-active-bg: oklch(0.18 0.02 264);
-  --sidebar-text: oklch(0.90 0.01 190);
-  --sidebar-text-muted: oklch(0.75 0.02 190);
-  --sidebar-divider: oklch(0.35 0.08 190);
-}
-
-/* ========================================
-   TAILWIND THEME MAPPING
-   ======================================== */
-
-@theme inline {
-  /* Override Primary Colors */
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-active: var(--primary-active);
-  --color-primary-light: var(--primary-light);
-  --color-primary-lighter: var(--primary-lighter);
-  --color-primary-foreground: var(--primary-foreground);
-
-  /* Override Accent Colors */
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-active: var(--accent-active);
-  --color-accent-light: var(--accent-light);
-  --color-accent-lighter: var(--accent-lighter);
-  --color-accent-foreground: var(--accent-foreground);
-
-  /* Override Borders */
-  --color-border: var(--border);
-  --color-border-subtle: var(--border-subtle);
-  --color-border-strong: var(--border-strong);
-  --color-border-light: var(--border-light);
-  --color-border-medium: var(--border-medium);
-  --color-border-dark: var(--border-dark);
-
-  /* Ticket & Channel Colors */
-  --color-ticket-open: var(--ticket-open);
-  --color-ticket-pending: var(--ticket-pending);
-  --color-ticket-resolved: var(--ticket-resolved);
-  --color-ticket-closed: var(--ticket-closed);
-  --color-channel-webform: var(--channel-webform);
-  --color-channel-widget: var(--channel-widget);
-  --color-channel-integrated: var(--channel-integrated);
-
-  /* Radius */
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius);
-  --radius-lg: var(--radius-lg);
-  --radius-xl: var(--radius-xl);
-  --radius-2xl: var(--radius-2xl);
-
-  /* Sidebar colors */
-  --color-sidebar-bg: var(--sidebar-bg);
-  --color-sidebar-text: var(--sidebar-text);
-  --color-sidebar-text-muted: var(--sidebar-text-muted);
-  --color-sidebar-divider: var(--sidebar-divider);
-}
-
-/* ========================================
-   BASE OVERRIDES
-   ======================================== */
-
+/* Tailwind Theme Mapping */
 @layer base {
-  /* Soft borders for all elements */
-  * {
-    border-color: var(--border);
-  }
+  /* Primary Colors */
+  .text-pisky-blue-50 { color: var(--pisky-blue-50); }
+  .text-pisky-blue-100 { color: var(--pisky-blue-100); }
+  .text-pisky-blue-200 { color: var(--pisky-blue-200); }
+  .text-pisky-blue-300 { color: var(--pisky-blue-300); }
+  .text-pisky-blue-400 { color: var(--pisky-blue-400); }
+  .text-pisky-blue-500 { color: var(--pisky-blue-500); }
+  .text-pisky-blue-600 { color: var(--pisky-blue-600); }
+  .text-pisky-blue-700 { color: var(--pisky-blue-700); }
+  .text-pisky-blue-800 { color: var(--pisky-blue-800); }
+  .text-pisky-blue-900 { color: var(--pisky-blue-900); }
+  .text-pisky-hover { color: var(--pisky-blue-hover); }
+  .text-pisky-active { color: var(--pisky-blue-active); }
+  .text-pisky-light { color: var(--pisky-blue-light); }
+  .text-pisky-focus { color: var(--pisky-blue-focus); }
 
-  /* Inputs - soft border, subtle shadow */
-  input:not([type="radio"]):not([type="checkbox"]),
-  textarea,
-  select {
-    border: 1px solid var(--border-light);
-    background: oklch(0.99 0.002 264);
-    transition: all 0.15s ease;
-  }
+  /* Background Colors */
+  .bg-pisky-blue-50 { background-color: var(--pisky-blue-50); }
+  .bg-pisky-blue-100 { background-color: var(--pisky-blue-100); }
+  .bg-pisky-blue-200 { background-color: var(--pisky-blue-200); }
+  .bg-pisky-blue-300 { background-color: var(--pisky-blue-300); }
+  .bg-pisky-blue-400 { background-color: var(--pisky-blue-400); }
+  .bg-pisky-blue-500 { background-color: var(--pisky-blue-500); }
+  .bg-pisky-blue-600 { background-color: var(--pisky-blue-600); }
+  .bg-pisky-blue-700 { background-color: var(--pisky-blue-700); }
+  .bg-pisky-blue-800 { background-color: var(--pisky-blue-800); }
+  .bg-pisky-blue-900 { background-color: var(--pisky-blue-900); }
+  .bg-pisky-hover { background-color: var(--pisky-blue-hover); }
+  .bg-pisky-active { background-color: var(--pisky-blue-active); }
+  .bg-pisky-light { background-color: var(--pisky-blue-light); }
+  .bg-pisky-focus { background-color: var(--pisky-blue-focus); }
 
-  input:not([type="radio"]):not([type="checkbox"]):focus,
-  textarea:focus,
-  select:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: oklch(1 0 0);
-    box-shadow: 0 0 0 3px oklch(0.58 0.16 190 / 0.1);
-  }
+  /* Border Colors */
+  .border-pisky-blue-500 { border-color: var(--pisky-blue-500); }
+  .border-pisky-blue-600 { border-color: var(--pisky-blue-600); }
+  .border-pisky-blue-700 { border-color: var(--pisky-blue-700); }
+  .border-pisky-blue-800 { border-color: var(--pisky-blue-800); }
+  .border-pisky-blue-900 { border-color: var(--pisky-blue-900); }
 
-  .dark input:not([type="radio"]):not([type="checkbox"]),
-  .dark textarea,
-  .dark select {
-    background: oklch(0.20 0.005 264);
-    border-color: var(--border-light);
-  }
+  /* Shadow Colors */
+  .shadow-pisky-blue-500 { box-shadow: 0 4px 6px -1px var(--pisky-blue-500), 0 2px 4px -2px var(--pisky-blue-500); }
+  .shadow-pisky-blue-600 { box-shadow: 0 10px 15px -3px var(--pisky-blue-600), 0 4px 6px -4px var(--pisky-blue-600); }
 
-  .dark input:not([type="radio"]):not([type="checkbox"]):focus,
-  .dark textarea:focus,
-  .dark select:focus {
-    background: oklch(0.22 0.005 264);
-    border-color: var(--primary);
-  }
-}
+  /* Semantic Colors */
+  .text-success { color: var(--success-500); }
+  .text-warning { color: var(--warning-500); }
+  .text-error { color: var(--error-500); }
+  .bg-success { background-color: var(--success-500); }
+  .bg-warning { background-color: var(--warning-500); }
+  .bg-error { background-color: var(--error-500); }
 
-/* ========================================
-   UTILITY CLASSES
-   ======================================== */
+  /* Background Colors */
+  .bg-gray-50 { background-color: var(--gray-50); }
+  .bg-gray-100 { background-color: var(--gray-100); }
+  .bg-gray-200 { background-color: var(--gray-200); }
+  .bg-gray-300 { background-color: var(--gray-300); }
+  .bg-gray-400 { background-color: var(--gray-400); }
+  .bg-gray-500 { background-color: var(--gray-500); }
+  .bg-gray-600 { background-color: var(--gray-600); }
+  .bg-gray-700 { background-color: var(--gray-700); }
+  .bg-gray-800 { background-color: var(--gray-800); }
+  .bg-gray-900 { background-color: var(--gray-900); }
 
-@layer utilities {
-  /* Gradients */
-  .bg-app-gradient {
-    background: var(--gradient-primary);
-  }
+  /* Dark Mode */
+  .dark { background-color: var(--dark-bg); color: var(--dark-text-primary); }
+  .dark .bg-dark { background-color: var(--dark-bg-secondary); }
+  .dark .text-dark-secondary { color: var(--dark-text-secondary); }
+  .dark .border-dark { border-color: var(--dark-border); }
 
-  .bg-surface-gradient {
-    background: var(--gradient-surface);
-  }
-
-  .bg-sidebar-gradient {
-    background: var(--gradient-sidebar);
-  }
-
-  /* ========================================
-     CARD STYLES (Soft Borders)
-     ======================================== */
-
-  .card-soft {
-    @apply bg-background rounded-lg;
-    border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-xs);
+  /* Card Components */
+  .card-pisky {
+    background: white;
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     transition: all 0.2s ease;
   }
 
-  .card-soft:hover {
-    border-color: var(--border-medium);
-    box-shadow: var(--shadow-sm);
+  .card-pisky:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--pisky-blue-300);
   }
 
-  .card-interactive {
-    @apply bg-background rounded-lg cursor-pointer;
-    border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-xs);
+  .card-pisky-interactive {
+    background: white;
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     transition: all 0.2s ease;
+    cursor: pointer;
   }
 
-  .card-interactive:hover {
-    border-color: var(--border);
-    box-shadow: var(--shadow-md);
+  .card-pisky-interactive:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--pisky-blue-400);
     transform: translateY(-1px);
   }
 
-  /* ========================================
-     BUTTON STYLES
-     ======================================== */
+  .card-pisky-interactive:active {
+    box-shadow: var(--shadow);
+    transform: translateY(0);
+  }
 
-  .btn-primary {
-    @apply text-white font-medium rounded-lg;
-    background: var(--gradient-primary);
-    box-shadow: var(--shadow-primary);
+  /* Button Components */
+  .btn-pisky-primary {
+    background: var(--pisky-blue-600);
+    color: white;
     border: none;
-    transition: all 0.15s ease;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
   }
 
-  .btn-primary:hover {
-    box-shadow: var(--shadow-primary-lg);
-    transform: translateY(-1px);
+  .btn-pisky-primary:hover {
+    background: var(--pisky-blue-hover);
   }
 
-  .btn-secondary {
-    @apply bg-background text-foreground rounded-lg;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-xs);
-    transition: all 0.15s ease;
+  .btn-pisky-primary:focus {
+    outline: 2px solid var(--pisky-blue-focus);
+    outline-offset: 2px;
   }
 
-  .btn-secondary:hover {
-    border-color: var(--border-medium);
-    background: oklch(0.985 0.002 264);
-    box-shadow: var(--shadow-sm);
+  .btn-pisky-primary:active {
+    background: var(--pisky-blue-active);
   }
 
-  .btn-ghost {
-    @apply bg-transparent text-foreground rounded-lg;
-    transition: all 0.15s ease;
+  .btn-pisky-secondary {
+    background: white;
+    color: var(--pisky-blue-600);
+    border: 1px solid var(--pisky-blue-300);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
   }
 
-  .btn-ghost:hover {
-    background: oklch(0.95 0.005 264);
+  .btn-pisky-secondary:hover {
+    background: var(--pisky-blue-50);
+    border-color: var(--pisky-blue-400);
   }
 
-  /* ========================================
-     BADGE STYLES (Soft Backgrounds)
-     ======================================== */
+  .btn-pisky-secondary:focus {
+    outline: 2px solid var(--pisky-blue-focus);
+    outline-offset: 2px;
+  }
 
+  .btn-pisky-secondary:active {
+    background: var(--pisky-blue-100);
+    border-color: var(--pisky-blue-500);
+  }
+
+  /* Badge Components */
   .badge-ticket-open {
-    @apply text-[color:var(--ticket-open)];
-    background: oklch(0.58 0.16 190 / 0.1);
-    border: 1px solid oklch(0.58 0.16 190 / 0.15);
+    background: var(--ticket-open);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
   .badge-ticket-pending {
-    @apply text-[color:var(--ticket-pending)];
-    background: oklch(0.70 0.15 75 / 0.1);
-    border: 1px solid oklch(0.70 0.15 75 / 0.15);
+    background: var(--ticket-pending);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
   .badge-ticket-resolved {
-    @apply text-[color:var(--ticket-resolved)];
-    background: oklch(0.586 0.15 130 / 0.1);
-    border: 1px solid oklch(0.586 0.15 130 / 0.15);
+    background: var(--ticket-resolved);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
   .badge-ticket-closed {
-    @apply text-[color:var(--ticket-closed)];
-    background: oklch(0.55 0.02 264 / 0.08);
-    border: 1px solid oklch(0.55 0.02 264 / 0.1);
+    background: var(--ticket-closed);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
-  /* Channel badges */
-  .badge-channel-webform {
-    @apply text-[color:var(--channel-webform)];
-    background: oklch(0.58 0.16 190 / 0.1);
-    border: 1px solid oklch(0.58 0.16 190 / 0.15);
+  .badge-channel-web-form {
+    background: var(--channel-web-form);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
-  .badge-channel-widget {
-    @apply text-[color:var(--channel-widget)];
-    background: oklch(0.55 0.18 300 / 0.1);
-    border: 1px solid oklch(0.55 0.18 300 / 0.15);
+  .badge-channel-in-app {
+    background: var(--channel-in-app);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
   .badge-channel-integrated {
-    @apply text-[color:var(--channel-integrated)];
-    background: oklch(0.6 0.18 15 / 0.1);
-    border: 1px solid oklch(0.6 0.18 15 / 0.15);
+    background: var(--channel-integrated);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
-  /* ========================================
-     SIDEBAR STYLES - Colorful Identity
-     ======================================== */
-
-  .sidebar-startup {
-    background: var(--gradient-sidebar);
-    border-right: 1px solid var(--sidebar-border);
-    color: var(--sidebar-text);
+  .badge-channel-email {
+    background: var(--channel-email);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 
-  .sidebar-item-startup {
-    @apply rounded-lg transition-all;
-    color: var(--sidebar-text-muted);
-    border: 1px solid transparent;
+  /* Sidebar Components */
+  .sidebar-pisky {
+    background: var(--sidebar-bg);
+    border: var(--border-lg);
+    border-radius: 0;
+    box-shadow: var(--shadow);
   }
 
-  .sidebar-item-startup:hover {
+  .sidebar-item-pisky {
+    color: var(--sidebar-text-secondary);
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+
+  .sidebar-item-pisky:hover {
     background: var(--sidebar-item-hover);
-    border-color: oklch(1 0 0 / 0.2);
-    box-shadow: var(--shadow-xs);
-    color: var(--sidebar-text);
+    color: var(--sidebar-text-primary);
   }
 
-  .sidebar-item-startup-active {
-    background: var(--sidebar-item-active-bg);
-    color: var(--sidebar-item-active);
+  .sidebar-item-pisky.active {
+    background: var(--sidebar-item-active);
+    color: var(--sidebar-text-primary);
+  }
+
+  .sidebar-item-pisky .sidebar-text-primary {
+    color: var(--sidebar-text-primary);
+  }
+
+  .sidebar-item-pisky .sidebar-text-secondary {
+    color: var(--sidebar-text-secondary);
+  }
+
+  /* Input Components */
+  .input-pisky {
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.75rem;
+    background: white;
+    transition: all 0.2s ease;
+  }
+
+  .input-pisky:focus {
+    outline: 2px solid var(--pisky-blue-focus);
+    outline-offset: 2px;
+    border-color: var(--pisky-blue-400);
+  }
+
+  .input-pisky:hover {
+    border-color: var(--gray-400);
+  }
+
+  /* Table Components */
+  .table-pisky {
+    border-collapse: collapse;
+    width: 100%;
+    border: var(--border);
+  }
+
+  .table-pisky th {
+    background: var(--gray-50);
+    padding: 0.75rem 1rem;
+    text-align: left;
     font-weight: 600;
-    border-color: var(--sidebar-item-active);
-    box-shadow: 0 0 0 1px var(--sidebar-item-active),
-                var(--shadow-xs);
+    border-bottom: var(--border);
   }
 
-  .sidebar-heading {
-    color: var(--sidebar-text);
-    font-weight: 600;
-    opacity: 0.9;
+  .table-pisky td {
+    padding: 0.75rem 1rem;
+    border-bottom: var(--border);
   }
 
-  .sidebar-divider {
-    background: var(--sidebar-divider);
+  .table-pisky tr:hover {
+    background: var(--gray-50);
   }
 
-  /* ========================================
-     HEADER STYLES
-     ======================================== */
-
-  .header-startup {
-    @apply bg-background/80 backdrop-blur-md;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .header-startup-scrolled {
-    @apply bg-background/95 backdrop-blur-lg;
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* ========================================
-     TABLE STYLES
-     ======================================== */
-
-  .table-row-startup {
-    @apply transition-colors;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .table-row-startup:hover {
-    background: oklch(0.98 0.004 264);
-  }
-
-  .dark .table-row-startup:hover {
-    background: oklch(0.22 0.005 264);
-  }
-
-  /* ========================================
-     DIVIDER STYLES
-     ======================================== */
-
-  .divider-soft {
-    height: 1px;
-    background: var(--border-subtle);
-  }
-
-  .divider-gradient {
-    height: 1px;
-    background: linear-gradient(90deg,
-      transparent,
-      var(--border),
-      transparent
-    );
-  }
-
-  /* ========================================
-     INPUT STYLES
-     ======================================== */
-
-  .input-soft {
-    @apply rounded-lg;
-    border: 1px solid var(--border-light);
-    background: oklch(0.99 0.002 264);
-    transition: all 0.15s ease;
-  }
-
-  .input-soft:focus {
-    border-color: var(--primary);
-    background: oklch(1 0 0);
-    box-shadow: 0 0 0 3px oklch(0.58 0.16 190 / 0.1);
-  }
-
-  /* ========================================
-     POPOVER/DIALOG STYLES
-     ======================================== */
-
-  .popover-soft {
-    @apply bg-background rounded-lg p-1;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .dialog-soft {
-    @apply bg-background rounded-xl;
-    border: 1px solid var(--border);
+  /* Modal Components */
+  .modal-pisky {
+    background: white;
+    border: var(--border);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
   }
-}
 
-/* ========================================
-   APP IDENTITY INDICATORS
-   ======================================== */
+  .modal-pisky .modal-header {
+    padding: 1.5rem;
+    border-bottom: var(--border);
+  }
 
-/* Sidebar brand indicator */
-.app-brand-indicator {
-  background: var(--gradient-primary);
-  box-shadow: var(--shadow-primary);
-}
+  .modal-pisky .modal-body {
+    padding: 1.5rem;
+  }
 
-/* Active nav indicator */
-.nav-active-indicator {
-  background: oklch(0.58 0.16 190 / 0.1);
-  color: oklch(0.58 0.16 190);
-}
+  .modal-pisky .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
 
-/* Page header */
-.page-header-soft {
-  @apply pb-4;
-  border-bottom: 1px solid var(--border-subtle);
-}
+  /* Alert Components */
+  .alert-pisky {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--pisky-blue-500);
+    background: var(--pisky-blue-50);
+    margin-bottom: 1rem;
+  }
 
-/* Floating card */
-.float-card {
-  @apply bg-background rounded-xl p-6;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-lg);
-}
+  .alert-pisky.success {
+    border-left-color: var(--success-500);
+    background: var(--success-50);
+  }
 
-/* Stat card */
-.stat-card {
-  @apply bg-background rounded-xl p-5;
-  border: 1px solid var(--border-light);
-  transition: all 0.2s ease;
-}
+  .alert-pisky.warning {
+    border-left-color: var(--warning-500);
+    background: var(--warning-50);
+  }
 
-.stat-card:hover {
-  border-color: var(--border);
-  box-shadow: var(--shadow-md);
+  .alert-pisky.error {
+    border-left-color: var(--error-500);
+    background: var(--error-50);
+  }
+
+  /* Loading Spinner */
+  .spinner-pisky {
+    border: 3px solid var(--gray-200);
+    border-top: 3px solid var(--pisky-blue-600);
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Tooltip */
+  .tooltip-pisky {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip-pisky .tooltip-text {
+    visibility: hidden;
+    background: var(--gray-800);
+    color: white;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 0.875rem;
+  }
+
+  .tooltip-pisky:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Responsive Sidebar */
+  @media (max-width: 768px) {
+    .sidebar-pisky {
+      position: fixed;
+      z-index: 50;
+      height: 100vh;
+      width: 250px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-pisky.open {
+      transform: translateX(0);
+    }
+  }
 }
