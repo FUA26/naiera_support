@@ -27,6 +27,7 @@ type AttachmentUploadProps = {
   disabled?: boolean;
   value?: AttachmentFile[];
   uploadEndpoint?: "ticket-attachment" | "message-attachment";
+  token?: string; // Optional JWT token for authenticated uploads
 };
 
 export function AttachmentUpload({
@@ -36,6 +37,7 @@ export function AttachmentUpload({
   disabled = false,
   value = [],
   uploadEndpoint = "ticket-attachment",
+  token,
 }: AttachmentUploadProps) {
   const [files, setFiles] = useState<AttachmentFile[]>(value);
   const [uploading, setUploading] = useState(false);
@@ -63,6 +65,12 @@ export function AttachmentUpload({
     setFiles(updatedFiles);
     onFilesChange(updatedFiles);
 
+    // Prepare headers for upload
+    const headers: HeadersInit = {};
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     // Upload files
     setUploading(true);
     for (let i = 0; i < newFiles.length; i++) {
@@ -75,6 +83,7 @@ export function AttachmentUpload({
       try {
         const response = await fetch(`/api/upload/${uploadEndpoint}`, {
           method: "POST",
+          headers: Object.keys(headers).length > 0 ? headers : undefined,
           body: formData,
         });
 
@@ -114,7 +123,7 @@ export function AttachmentUpload({
     if (onClose && updatedFiles.every(f => f.uploadedUrl)) {
       onClose();
     }
-  }, [files, maxFiles, onFilesChange, uploadEndpoint, onClose]);
+  }, [files, maxFiles, onFilesChange, uploadEndpoint, onClose, token]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

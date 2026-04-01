@@ -1,7 +1,12 @@
 /* Custom fonts for editorial aesthetic - must be first */
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
+/* Base theme (shared across all apps) */
 @import "../../../packages/ui/styles/globals.css";
+
+/* App-specific theme (Naiera Support identity) */
+/* This overrides the base theme with app-specific colors */
+@import "./app-theme.css";
 
 /* Backoffice-specific font overrides */
 @theme inline {

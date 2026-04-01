@@ -26,6 +26,7 @@ export interface CreateTicketInput {
   };
   attachments?: Array<{ url: string; name: string; type: string; size: number }>;
   createdBy?: string;
+  externalUserId?: string; // For integrated app customers
 }
 
 export interface UpdateTicketInput {

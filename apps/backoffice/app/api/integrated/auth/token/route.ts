@@ -7,10 +7,18 @@
  *
  * Rate limiting: 10 requests per minute per channel slug
  *
- * Request body:
+ * Request body (email-based):
  * {
  *   "channelSlug": "support",
  *   "email": "user@example.com",
+ *   "purpose": "create_ticket" | "view_ticket" | "list_tickets",
+ *   "ticketId": "xxx" (required for view_ticket)
+ * }
+ *
+ * Request body (externalUserId-based):
+ * {
+ *   "channelSlug": "support",
+ *   "externalUserId": "user_123",
  *   "purpose": "create_ticket" | "view_ticket" | "list_tickets",
  *   "ticketId": "xxx" (required for view_ticket)
  * }
@@ -35,8 +43,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = tokenRequestSchema.parse(body);
 
-    // Rate limiting by channel slug
-    const rateLimitKey = `${validated.channelSlug}:${validated.email}`;
+    // Determine identifier and type
+    const identifier = validated.externalUserId || validated.email!;
+    const identifierType = validated.externalUserId ? "externalUserId" : "email";
+
+    // Rate limiting by channel slug + identifier
+    const rateLimitKey = `${validated.channelSlug}:${identifier}`;
     const rateLimit = checkRateLimit(rateLimitKey);
 
     if (!rateLimit.success) {
@@ -57,12 +69,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate token
+    // Generate token with identifier type
     const result = await generateAccessToken(
       validated.channelSlug,
-      validated.email,
+      identifier,
       validated.purpose,
-      validated.ticketId
+      validated.ticketId,
+      identifierType
     );
 
     return NextResponse.json(

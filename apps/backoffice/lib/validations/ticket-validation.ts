@@ -55,6 +55,42 @@ export const ticketAttachmentSchema = z.object({
 // ============================================================================
 
 /**
+ * Base schema for ticket creation (without refinement)
+ * Used when you need to call .pick() on the schema
+ */
+export const baseCreateTicketSchema = z.object({
+  appSlug: z.string().min(1, "App slug is required"),
+  channelType: channelTypeEnum,
+  subject: z
+    .string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(200, "Subject must be less than 200 characters"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(5000, "Message must be less than 5000 characters"),
+  description: z
+    .string()
+    .max(2000, "Description must be less than 2000 characters")
+    .optional(),
+  attachments: z
+    .array(ticketAttachmentSchema)
+    .max(5, "Maximum 5 attachments allowed")
+    .optional(),
+  priority: priorityEnum.optional(),
+  guestEmail: z.string().email("Invalid email address").optional(),
+  guestName: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be less than 100 characters")
+    .optional(),
+  guestPhone: z
+    .string()
+    .regex(/^[+]?[\d\s-]+$/, "Invalid phone number format")
+    .optional(),
+});
+
+/**
  * Schema for creating a new ticket via public API
  * - Requires appSlug and channelType to identify the app/channel
  * - Subject must be 5-200 characters
@@ -63,49 +99,17 @@ export const ticketAttachmentSchema = z.object({
  * - For guests: requires email, optionally name and phone
  * - For authenticated users: userId is derived from session
  */
-export const createTicketSchema = z
-  .object({
-    appSlug: z.string().min(1, "App slug is required"),
-    channelType: channelTypeEnum,
-    subject: z
-      .string()
-      .min(5, "Subject must be at least 5 characters")
-      .max(200, "Subject must be less than 200 characters"),
-    message: z
-      .string()
-      .min(10, "Message must be at least 10 characters")
-      .max(5000, "Message must be less than 5000 characters"),
-    description: z
-      .string()
-      .max(2000, "Description must be less than 2000 characters")
-      .optional(),
-    attachments: z
-      .array(ticketAttachmentSchema)
-      .max(5, "Maximum 5 attachments allowed")
-      .optional(),
-    priority: priorityEnum.optional(),
-    guestEmail: z.string().email("Invalid email address").optional(),
-    guestName: z
-      .string()
-      .min(2, "Name must be at least 2 characters")
-      .max(100, "Name must be less than 100 characters")
-      .optional(),
-    guestPhone: z
-      .string()
-      .regex(/^[+]?[\d\s-]+$/, "Invalid phone number format")
-      .optional(),
-  })
-  .refine(
-    (data) =>
-      // For INTEGRATED_APP channel, authentication is required (no guest info)
-      data.channelType === "INTEGRATED_APP" ||
-      // For other channels, guest email is required if not authenticated
-      data.guestEmail,
-    {
-      message: "Email is required for this channel type",
-      path: ["guestEmail"],
-    }
-  );
+export const createTicketSchema = baseCreateTicketSchema.refine(
+  (data) =>
+    // For INTEGRATED_APP channel, authentication is required (no guest info)
+    data.channelType === "INTEGRATED_APP" ||
+    // For other channels, guest email is required if not authenticated
+    data.guestEmail,
+  {
+    message: "Email is required for this channel type",
+    path: ["guestEmail"],
+  }
+);
 
 /**
  * Schema for updating an existing ticket
@@ -250,15 +254,19 @@ export const tokenPurposeEnum = z.enum([
 /**
  * Schema for requesting access tokens for in-app integration
  * - channelSlug: Identifies the in-app channel
- * - email: Guest email (required for unauthenticated users)
+ * - email: Guest email (optional, use either email or externalUserId)
+ * - externalUserId: External user ID from your app (optional, use either email or externalUserId)
  * - purpose: The intended use of the token
  * - ticketId: Required when purpose is "view_ticket"
  *
- * @example Requesting token to create a ticket
- * { channelSlug: "support-widget", email: "user@example.com", purpose: "create_ticket" }
+ * @example Requesting token with email
+ * { channelSlug: "support-widget", email: "user@example.com", purpose: "list_tickets" }
+ *
+ * @example Requesting token with externalUserId
+ * { channelSlug: "support-widget", externalUserId: "user_123", purpose: "list_tickets" }
  *
  * @example Requesting token to view a specific ticket
- * { channelSlug: "support-widget", email: "user@example.com", purpose: "view_ticket", ticketId: "123" }
+ * { channelSlug: "support-widget", externalUserId: "user_123", purpose: "view_ticket", ticketId: "123" }
  */
 export const tokenRequestSchema = z
   .object({
@@ -267,12 +275,31 @@ export const tokenRequestSchema = z
       .min(1, "Channel slug is required"),
     email: z
       .string()
-      .email("Invalid email address"),
+      .email("Invalid email address")
+      .optional(),
+    externalUserId: z
+      .string()
+      .min(1, "External user ID is required")
+      .optional(),
     purpose: tokenPurposeEnum,
     ticketId: z
       .string()
       .optional(),
   })
+  .refine(
+    (data) => data.email || data.externalUserId,
+    {
+      message: "Either email or externalUserId is required",
+      path: ["externalUserId"],
+    }
+  )
+  .refine(
+    (data) => !(data.email && data.externalUserId),
+    {
+      message: "Provide only one of email or externalUserId, not both",
+      path: ["externalUserId"],
+    }
+  )
   .refine(
     (data) =>
       data.purpose !== "view_ticket" || data.ticketId,

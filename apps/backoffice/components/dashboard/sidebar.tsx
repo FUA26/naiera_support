@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -14,13 +13,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { usePermissions } from "@/lib/rbac-client/provider";
 import { useApp } from "@/lib/contexts/app-context";
 import { AppSwitcher } from "@/components/dashboard/app-switcher";
+import { getAppIdentity } from "@/lib/config/app-identity";
 import {
   LayoutDashboard,
-  BarChart3,
   CheckSquare,
   FolderKanban,
   Users,
@@ -29,13 +29,13 @@ import {
   Settings,
   LifeBuoy,
   Bell,
+  ChevronRight,
 } from "lucide-react";
 
 const navItems = [
   // Overview Group
   { heading: "Overview" },
   { href: "/", label: "Dashboard", icon: LayoutDashboard, permission: null },
-  { href: "/analytics", label: "Analytics", icon: BarChart3, permission: null },
 
   // Work Management Group
   { heading: "Work" },
@@ -68,12 +68,12 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const userPermissions = usePermissions();
+  const appIdentity = getAppIdentity();
+  const AppIcon = appIdentity.icon;
 
   // Filter nav items based on user permissions
   const filteredNavItems = navItems.filter((item) => {
-    // If no permission required, always show
     if (!item.permission) return true;
-    // If permission required, check if user has it
     return userPermissions?.permissions.includes(item.permission);
   });
 
@@ -81,9 +81,7 @@ export function AppSidebar() {
   const finalNavItems = filteredNavItems.filter((item, index, array) => {
     if (!("heading" in item)) return true;
 
-    // Keep heading if there are non-heading items after it before the next heading
     const nextHeadingIndex = array.findIndex((i, idx) => idx > index && "heading" in i);
-
     const itemsAfterHeading = array.slice(
       index + 1,
       nextHeadingIndex === -1 ? undefined : nextHeadingIndex
@@ -108,46 +106,70 @@ export function AppSidebar() {
     [] as Array<{ heading?: string; items: typeof navItems }>
   );
 
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname?.startsWith(href);
+  };
+
   return (
-    <Sidebar>
-      <SidebarHeader>
+    <Sidebar className="sidebar-startup">
+      {/* Header - App Branding */}
+      <SidebarHeader className="border-b border-sidebar-border/50 px-3 py-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center overflow-hidden rounded-lg bg-primary">
-                  <Image
-                    src="/logo.svg"
-                    alt="Naiera Logo"
-                    width={32}
-                    height={32}
-                    className="size-6"
-                  />
+            <SidebarMenuButton size="lg" asChild className="hover:bg-white/20">
+              <Link href="/" className="flex items-center gap-3">
+                {/* App Icon with Gradient */}
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-lg">
+                  <AppIcon className="size-5 text-primary" strokeWidth={2.5} />
                 </div>
+
+                {/* App Info */}
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Naiera</span>
-                  <span className="truncate text-xs text-muted-foreground">Admin Dashboard</span>
+                  <span className="truncate font-semibold text-sidebar-text">{appIdentity.shortName}</span>
+                  <span className="truncate text-xs text-sidebar-text-muted/70">{appIdentity.tagline}</span>
                 </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <AppSwitcher />
-      <SidebarContent>
+
+      {/* App Switcher */}
+      <div className="px-3 py-3">
+        <AppSwitcher />
+      </div>
+
+      {/* Navigation */}
+      <SidebarContent className="px-3">
         {groupedItems.map((group, idx) => (
-          <SidebarGroup key={idx}>
-            {group.heading && <SidebarGroupLabel>{group.heading}</SidebarGroupLabel>}
+          <SidebarGroup key={idx} className="mb-4">
+            {group.heading && (
+              <SidebarGroupLabel className="sidebar-heading px-2 py-1.5 text-xs">
+                {group.heading}
+              </SidebarGroupLabel>
+            )}
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
                   if ("heading" in item) return null;
+                  const active = isActive(item.href);
                   return (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href}>
-                        <Link href={item.href}>
-                          <item.icon className="h-5 w-5" />
-                          <span>{item.label}</span>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        className={active
+                          ? "sidebar-item-startup-active"
+                          : "sidebar-item-startup"
+                        }
+                      >
+                        <Link href={item.href} className="flex items-center gap-3">
+                          <item.icon className={`size-4 ${active ? "" : ""}`} />
+                          <span className={active ? "" : ""}>{item.label}</span>
+                          {active && (
+                            <ChevronRight className="ml-auto size-3.5" />
+                          )}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -158,6 +180,20 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
+
+      {/* Footer */}
+      <SidebarFooter className="border-t border-sidebar-border/50 p-3">
+        <div className="flex items-center gap-3 rounded-lg border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-white shadow">
+            <AppIcon className="size-4 text-primary" />
+          </div>
+          <div className="flex-1 text-xs">
+            <div className="font-medium text-sidebar-text">{appIdentity.name}</div>
+            <div className="text-sidebar-text-muted/70">v{appIdentity.version}</div>
+          </div>
+        </div>
+      </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );

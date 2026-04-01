@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, AlertCircle, MessageSquare, User, Clock, Paperclip } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2, AlertCircle, MessageSquare, User, Clock, Paperclip, Send, RefreshCw, XCircle } from "lucide-react";
 import { AttachmentPreview } from "@/components/ticketing/attachment-preview";
 import { formatDistanceToNow } from "date-fns";
 import { id } from "date-fns/locale";
@@ -49,6 +51,8 @@ interface ApiResponse {
   message?: string;
 }
 
+type ErrorType = "TOKEN_EXPIRED" | "INVALID_TOKEN" | "ACCESS_DENIED" | "OTHER";
+
 interface Props {
   ticketId: string;
   token: string;
@@ -58,11 +62,31 @@ export function TicketDetailPublic({ ticketId, token }: Props) {
   const [data, setData] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<ErrorType | null>(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Determine error type for appropriate UI
+  const getErrorType = (errorMessage: string, errorCode?: string): ErrorType => {
+    if (errorCode === "TOKEN_EXPIRED" || errorMessage.includes("kadaluarsa")) {
+      return "TOKEN_EXPIRED";
+    }
+    if (errorCode === "INVALID_TOKEN" || errorMessage.includes("tidak valid")) {
+      return "INVALID_TOKEN";
+    }
+    if (errorCode === "ACCESS_DENIED" || errorMessage.includes("akses")) {
+      return "ACCESS_DENIED";
+    }
+    return "OTHER";
+  };
 
   useEffect(() => {
     const fetchTicket = async () => {
       setLoading(true);
       setError(null);
+      setErrorType(null);
 
       try {
         const res = await fetch(`/api/integrated/tickets/${ticketId}?token=${encodeURIComponent(token)}`);
@@ -70,16 +94,26 @@ export function TicketDetailPublic({ ticketId, token }: Props) {
         const responseData: ApiResponse = await res.json();
 
         if (!res.ok) {
-          throw new Error(responseData.message || responseData.error || "Gagal memuat tiket");
+          const errorMsg = responseData.message || responseData.error || "Gagal memuat tiket";
+          const errorCode = responseData.error;
+          setError(errorMsg);
+          setErrorType(getErrorType(errorMsg, errorCode));
+          return;
         }
 
         if (!responseData.ticket) {
-          throw new Error("Tiket tidak ditemukan");
+          setError("Tiket tidak ditemukan");
+          setErrorType("OTHER");
+          return;
         }
 
         setData(responseData.ticket);
+        setError(null);
+        setErrorType(null);
       } catch (err: any) {
-        setError(err.message || "Terjadi kesalahan saat memuat tiket");
+        const errorMsg = err.message || "Terjadi kesalahan saat memuat tiket";
+        setError(errorMsg);
+        setErrorType(getErrorType(errorMsg));
       } finally {
         setLoading(false);
       }
@@ -87,6 +121,63 @@ export function TicketDetailPublic({ ticketId, token }: Props) {
 
     fetchTicket();
   }, [ticketId, token]);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data?.messages]);
+
+  // Refresh ticket data
+  const refreshTicket = async () => {
+    try {
+      const res = await fetch(`/api/integrated/tickets/${ticketId}?token=${encodeURIComponent(token)}`);
+      const responseData: ApiResponse = await res.json();
+
+      if (res.ok && responseData.ticket) {
+        setData(responseData.ticket);
+      }
+    } catch (err) {
+      console.error("Failed to refresh ticket:", err);
+    }
+  };
+
+  // Handle send message
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim() || sendingMessage) return;
+
+    setSendingMessage(true);
+    setSendError(null);
+
+    try {
+      const res = await fetch(`/api/integrated/tickets/${ticketId}/messages?token=${encodeURIComponent(token)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: newMessage.trim(),
+        }),
+      });
+
+      const responseData = await res.json();
+
+      if (!res.ok) {
+        throw new Error(responseData.message || "Gagal mengirim pesan");
+      }
+
+      // Clear input
+      setNewMessage("");
+
+      // Refresh ticket data to show new message
+      await refreshTicket();
+    } catch (err: any) {
+      setSendError(err.message || "Terjadi kesalahan saat mengirim pesan");
+    } finally {
+      setSendingMessage(false);
+    }
+  };
+
+  // Check if ticket is closed (cannot send message to closed tickets)
+  const isClosed = data?.status === "CLOSED";
 
   // Status badge variant
   const getStatusVariant = (status: Ticket["status"]) => {
@@ -163,10 +254,87 @@ export function TicketDetailPublic({ ticketId, token }: Props) {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background p-4">
-        <Alert variant="destructive" className="max-w-md">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <Card className="max-w-md w-full">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              {/* Icon based on error type */}
+              <div className="flex justify-center">
+                {errorType === "TOKEN_EXPIRED" ? (
+                  <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
+                    <Clock className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center">
+                    <XCircle className="h-8 w-8 text-destructive" />
+                  </div>
+                )}
+              </div>
+
+              {/* Error title */}
+              <div>
+                {errorType === "TOKEN_EXPIRED" && (
+                  <h1 className="text-xl font-bold">Token Kadaluarsa</h1>
+                )}
+                {errorType === "INVALID_TOKEN" && (
+                  <h1 className="text-xl font-bold">Token Tidak Valid</h1>
+                )}
+                {errorType === "ACCESS_DENIED" && (
+                  <h1 className="text-xl font-bold">Akses Ditolak</h1>
+                )}
+                {!errorType && (
+                  <h1 className="text-xl font-bold">Terjadi Kesalahan</h1>
+                )}
+              </div>
+
+              {/* Error message with explanation */}
+              <div className="text-sm text-muted-foreground space-y-2">
+                {errorType === "TOKEN_EXPIRED" && (
+                  <p>
+                    Token akses Anda telah kedaluwarsa. Token hanya berlaku selama 30 menit untuk keamanan.
+                  </p>
+                )}
+                {errorType === "INVALID_TOKEN" && (
+                  <p>
+                    Token akses tidak valid. Silakan akses tiket melalui aplikasi terintegrasi.
+                  </p>
+                )}
+                {errorType === "ACCESS_DENIED" && (
+                  <p>
+                    Anda tidak memiliki akses ke tiket ini. Pastikan Anda menggunakan akun yang benar.
+                  </p>
+                )}
+                {!errorType && <p>{error}</p>}
+              </div>
+
+              {/* Action buttons */}
+              <div className="space-y-2 pt-2">
+                {/* Primary action based on error type */}
+                {errorType === "TOKEN_EXPIRED" || errorType === "INVALID_TOKEN" ? (
+                  <Button
+                    onClick={() => window.close()}
+                    className="w-full"
+                  >
+                    Kembali ke Aplikasi
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => window.location.reload()}
+                    variant="outline"
+                    className="w-full gap-2"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    Coba Lagi
+                  </Button>
+                )}
+
+                {/* Help text */}
+                <p className="text-xs text-muted-foreground pt-2">
+                  Jika masalah berlanjut, hubungi tim support Anda atau buat tiket baru.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -313,9 +481,74 @@ export function TicketDetailPublic({ ticketId, token }: Props) {
                   </div>
                 ))
               )}
+              <div ref={messagesEndRef} />
             </div>
           </CardContent>
         </Card>
+
+        {/* Message Input Form */}
+        {!isClosed && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Kirim Pesan</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSendMessage} className="space-y-4">
+                {sendError && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{sendError}</AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="space-y-2">
+                  <Textarea
+                    placeholder="Ketik pesan Anda di sini..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    rows={4}
+                    maxLength={5000}
+                    disabled={sendingMessage}
+                    className="resize-none"
+                  />
+                  <div className="flex justify-between items-center text-xs text-muted-foreground">
+                    <span>{newMessage.length}/5000 karakter</span>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={!newMessage.trim() || sendingMessage}
+                  className="w-full gap-2"
+                >
+                  {sendingMessage ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Mengirim...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Kirim Pesan
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Closed ticket notice */}
+        {isClosed && (
+          <Card className="bg-muted/50">
+            <CardContent className="py-6">
+              <div className="text-center text-muted-foreground">
+                <p className="font-medium">Tiket ini telah ditutup</p>
+                <p className="text-sm mt-1">Silakan buat tiket baru untuk bantuan lebih lanjut.</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Footer info */}
         <div className="text-center text-sm text-muted-foreground">

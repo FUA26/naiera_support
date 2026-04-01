@@ -107,15 +107,19 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
       accessorKey: "ticketNumber",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Ticket" />,
       cell: ({ row }) => (
-        <div className="font-mono text-sm">{row.getValue("ticketNumber")}</div>
+        <div className="font-mono text-sm whitespace-nowrap">{row.getValue("ticketNumber")}</div>
       ),
+      size: 100,
     },
     {
       accessorKey: "subject",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Subject" />,
       cell: ({ row }) => (
-        <div className="font-medium max-w-md truncate">{row.getValue("subject")}</div>
+        <div className="font-medium max-w-[200px] truncate" title={row.getValue("subject")}>
+          {row.getValue("subject")}
+        </div>
       ),
+      size: 200,
     },
     {
       accessorKey: "status",
@@ -132,6 +136,7 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
         const status = row.getValue(columnId) as string;
         return filterValue.includes(status);
       },
+      size: 100,
     },
     {
       accessorKey: "priority",
@@ -148,6 +153,7 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
         const priority = row.getValue(columnId) as string;
         return filterValue.includes(priority);
       },
+      size: 80,
     },
     {
       accessorKey: "customer",
@@ -161,24 +167,25 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
           <div className="flex items-center gap-2">
             {name ? (
               <>
-                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-muted">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-muted shrink-0">
                   <HugeiconsIcon icon={UserIcon} className="h-3.5 w-3.5 text-muted-foreground" />
                 </div>
-                <div className="max-w-[150px]">
-                  <div className="text-sm font-medium truncate">{name}</div>
+                <div className="min-w-0 max-w-[120px]">
+                  <div className="text-sm font-medium truncate" title={name}>{name}</div>
                   {email && email !== name && (
-                    <div className="text-xs text-muted-foreground truncate">{email}</div>
+                    <div className="text-xs text-muted-foreground truncate" title={email}>{email}</div>
                   )}
                 </div>
               </>
             ) : email ? (
-              <div className="text-sm text-muted-foreground truncate max-w-[150px]">{email}</div>
+              <div className="text-sm text-muted-foreground truncate min-w-0 max-w-[120px]" title={email}>{email}</div>
             ) : (
               <span className="text-muted-foreground">—</span>
             )}
           </div>
         );
       },
+      size: 180,
     },
     {
       accessorKey: "assignedTo",
@@ -189,12 +196,12 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
           <div className="flex items-center gap-2">
             {assignedTo?.name ? (
               <>
-                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/10">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/10 shrink-0">
                   <span className="text-xs font-medium text-primary">
                     {assignedTo.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <span className="text-sm">{assignedTo.name}</span>
+                <span className="text-sm truncate" title={assignedTo.name}>{assignedTo.name}</span>
               </>
             ) : (
               <span className="text-muted-foreground text-sm">Unassigned</span>
@@ -212,6 +219,7 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
         }
         return true;
       },
+      size: 140,
     },
     {
       accessorKey: "updatedAt",
@@ -219,11 +227,12 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
       cell: ({ row }) => {
         const date = new Date(row.getValue("updatedAt"));
         return (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
             {formatDistanceToNow(date, { addSuffix: true })}
           </span>
         );
       },
+      size: 120,
     },
     {
       id: "actions",
@@ -234,7 +243,7 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
             variant="ghost"
             size="sm"
             onClick={() => router.push(`/tickets/${row.original.id}`)}
-            className="gap-1"
+            className="gap-1 whitespace-nowrap"
           >
             View
             <HugeiconsIcon icon={ArrowRightIcon} className="h-3.5 w-3.5" />
@@ -242,6 +251,7 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
         );
       },
       enableSorting: false,
+      size: 80,
     },
   ];
 
@@ -256,13 +266,13 @@ export function TicketsDataTable({ tickets, currentUserId }: TicketsDataTablePro
           (table.getColumn("subject")?.getFilterValue() as string)?.length > 0;
 
         return (
-          <div className="flex items-center justify-between gap-4 flex-1">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-wrap">
               <Input
                 placeholder="Search tickets..."
                 value={(table.getColumn("subject")?.getFilterValue() as string) ?? ""}
                 onChange={(event) => table.getColumn("subject")?.setFilterValue(event.target.value)}
-                className="w-[200px]"
+                className="w-[180px] sm:w-[200px]"
               />
               <DataTableFacetedFilter
                 title="Status"

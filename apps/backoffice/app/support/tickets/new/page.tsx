@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,20 +18,29 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, CheckCircle2, AlertCircle, MessageSquare, Mail, User, Phone } from "lucide-react";
 import { AttachmentUpload, type AttachmentFile } from "@/components/ticketing/attachment-upload";
 
+interface TokenData {
+  email?: string;
+  externalUserId?: string;
+  channelSlug: string;
+  appId: string;
+}
+
 function TicketForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const appSlug = searchParams.get("app");
   const channelParam = searchParams.get("channel");
   const embed = searchParams.get("embed") === "true";
   const tokenParam = searchParams.get("token");
 
   const [submitted, setSubmitted] = useState(false);
-  const [ticketNumber, setTicketNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [appInfo, setAppInfo] = useState<any>(null);
   const [appLoading, setAppLoading] = useState(true);
   const [tokenValid, setTokenValid] = useState(false);
+  const [tokenData, setTokenData] = useState<TokenData | null>(null);
+  const [createdTicketId, setCreatedTicketId] = useState<string | null>(null);
 
   // Form state
   const [subject, setSubject] = useState("");
@@ -42,9 +51,9 @@ function TicketForm() {
   const [guestPhone, setGuestPhone] = useState("");
   const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
 
-  // Validate token and pre-fill email
+  // Validate token and pre-fill user info
   useEffect(() => {
-    const validateTokenAndGetEmail = async () => {
+    const validateTokenAndGetInfo = async () => {
       if (!tokenParam) return;
 
       try {
@@ -56,8 +65,14 @@ function TicketForm() {
 
         if (res.ok) {
           const data = await res.json();
-          setGuestEmail(data.email);
+          setTokenData(data);
           setTokenValid(true);
+
+          // Pre-fill based on token type
+          if (data.email) {
+            setGuestEmail(data.email);
+          }
+          // For externalUserId, we don't pre-fill any guest info
         } else {
           const data = await res.json();
           setError(data.message || "Invalid or expired access token");
@@ -68,7 +83,7 @@ function TicketForm() {
       }
     };
 
-    validateTokenAndGetEmail();
+    validateTokenAndGetInfo();
   }, [tokenParam]);
 
   // Fetch app info
@@ -113,8 +128,10 @@ function TicketForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          // When using token, send it to use INTEGRATED_APP channel
+          ...(tokenParam && { token: tokenParam }),
           appSlug,
-          channelType: "WEB_FORM",
+          channelType: tokenValid ? undefined : "WEB_FORM", // Let API determine channel when using token
           subject,
           message,
           priority,
@@ -131,8 +148,13 @@ function TicketForm() {
         throw new Error(data.message || "Failed to create ticket");
       }
 
-      setTicketNumber(data.ticketNumber);
+      setCreatedTicketId(data.id);
       setSubmitted(true);
+
+      // If using token, redirect to ticket detail page
+      if (tokenValid && tokenParam && data.id) {
+        router.push(`/support/tickets/${data.id}?token=${tokenParam}`);
+      }
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {
@@ -150,7 +172,7 @@ function TicketForm() {
     setGuestPhone("");
     setAttachments([]);
     setSubmitted(false);
-    setTicketNumber("");
+    setCreatedTicketId(null);
     setError(null);
   };
 
@@ -175,8 +197,17 @@ function TicketForm() {
     );
   }
 
-  // Success state
-  if (submitted) {
+  // Show redirect/loading when ticket created with token
+  if (submitted && tokenValid && tokenParam && createdTicketId) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  // Success state (for non-token users)
+  if (submitted && !tokenValid) {
     return (
       <Card className="max-w-lg mx-auto">
         <CardHeader className="text-center">
@@ -191,7 +222,7 @@ function TicketForm() {
         <CardContent className="text-center space-y-4">
           <div className="bg-muted p-4 rounded-lg">
             <p className="text-sm text-muted-foreground">Ticket Number</p>
-            <p className="text-2xl font-bold">{ticketNumber}</p>
+            <p className="text-2xl font-bold">{createdTicketId || "Loading..."}</p>
           </div>
           <p className="text-sm text-muted-foreground">
             We have sent a confirmation email with your ticket details. You can use the ticket number to check the status of your request.
@@ -203,6 +234,9 @@ function TicketForm() {
       </Card>
     );
   }
+
+  // Check if using externalUserId-based token (hide all guest info fields)
+  const isExternalUserIdToken = tokenValid && tokenData?.externalUserId;
 
   return (
     <Card className={embed ? "border-0 shadow-none" : "max-w-2xl mx-auto"}>
@@ -225,66 +259,85 @@ function TicketForm() {
             </Alert>
           )}
 
-          {/* Guest Information Section */}
-          <div className="space-y-4">
-            <h3 className="font-medium">Your Information</h3>
+          {/* Guest Information Section - Hide for externalUserId tokens */}
+          {!isExternalUserIdToken && (
+            <div className="space-y-4">
+              <h3 className="font-medium">Your Information</h3>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="guestName">
-                  <User className="h-4 w-4 inline mr-1" />
-                  Name
-                </Label>
-                <Input
-                  id="guestName"
-                  placeholder="Your name"
-                  value={guestName}
-                  onChange={(e) => setGuestName(e.target.value)}
-                />
-              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="guestName">
+                    <User className="h-4 w-4 inline mr-1" />
+                    Name
+                  </Label>
+                  <Input
+                    id="guestName"
+                    placeholder="Your name"
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="guestEmail">
-                  <Mail className="h-4 w-4 inline mr-1" />
-                  Email *
+                <div className="space-y-2">
+                  <Label htmlFor="guestEmail">
+                    <Mail className="h-4 w-4 inline mr-1" />
+                    Email *
+                    {tokenValid && (
+                      <span className="ml-2 text-xs text-green-600 dark:text-green-400 font-normal">
+                        (Pre-filled from secure access)
+                      </span>
+                    )}
+                  </Label>
+                  <Input
+                    id="guestEmail"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    required
+                    readOnly={tokenValid}
+                    className={tokenValid ? "bg-muted cursor-not-allowed" : ""}
+                  />
                   {tokenValid && (
-                    <span className="ml-2 text-xs text-green-600 dark:text-green-400 font-normal">
-                      (Pre-filled from secure access)
-                    </span>
+                    <p className="text-xs text-muted-foreground">
+                      Email is verified and locked for security
+                    </p>
                   )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="guestPhone">
+                  <Phone className="h-4 w-4 inline mr-1" />
+                  Phone (Optional)
                 </Label>
                 <Input
-                  id="guestEmail"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={guestEmail}
-                  onChange={(e) => setGuestEmail(e.target.value)}
-                  required
-                  readOnly={tokenValid}
-                  className={tokenValid ? "bg-muted cursor-not-allowed" : ""}
+                  id="guestPhone"
+                  type="tel"
+                  placeholder="+62 812 3456 7890"
+                  value={guestPhone}
+                  onChange={(e) => setGuestPhone(e.target.value)}
                 />
-                {tokenValid && (
-                  <p className="text-xs text-muted-foreground">
-                    Email is verified and locked for security
-                  </p>
-                )}
               </div>
             </div>
+          )}
 
-            <div className="space-y-2">
-              <Label htmlFor="guestPhone">
-                <Phone className="h-4 w-4 inline mr-1" />
-                Phone (Optional)
-              </Label>
-              <Input
-                id="guestPhone"
-                type="tel"
-                placeholder="+62 812 3456 7890"
-                value={guestPhone}
-                onChange={(e) => setGuestPhone(e.target.value)}
-              />
+          {/* ExternalUserId Token Badge - Show that user is authenticated */}
+          {isExternalUserIdToken && (
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <div>
+                  <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                    You are signed in as <strong>{tokenData?.externalUserId}</strong>
+                  </p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400">
+                    Your information is securely linked to your account
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Ticket Details Section */}
           <div className="space-y-4">
@@ -300,7 +353,7 @@ function TicketForm() {
                   <SelectItem value="LOW">Low - General inquiry</SelectItem>
                   <SelectItem value="NORMAL">Normal - Standard request</SelectItem>
                   <SelectItem value="HIGH">High - Urgent issue</SelectItem>
-                  <SelectItem value="CRITICAL">Critical - System down</SelectItem>
+                  <SelectItem value="URGENT">Urgent - Critical issue</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -347,6 +400,7 @@ function TicketForm() {
               value={attachments}
               onFilesChange={setAttachments}
               uploadEndpoint="ticket-attachment"
+              token={tokenParam || undefined}
             />
             <p className="text-xs text-muted-foreground">
               Max 3 files, 5MB each. Images: JPG, PNG, GIF, WebP | Documents: PDF, DOC, DOCX, XLS, XLSX

@@ -6,6 +6,8 @@
  * Handles multiple file uploads for ticket attachments with validation.
  * Files are validated for type (images, PDF, Office docs) and size (max 5MB).
  * Maximum 3 files per request.
+ *
+ * Supports both authenticated users and token-based (integrated app) access.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -17,10 +19,37 @@ import {
   isImageAttachment,
 } from "@/lib/file-upload/attachment-validation";
 import type { FileCategory } from "@prisma/client";
+import { verifyAccessToken } from "@/lib/services/ticketing/integration-service";
 
 export async function POST(req: NextRequest) {
-  const session = await requireAuth();
-  const userId = session.user.id;
+  let userId: string | undefined;
+
+  // Try token-based auth first
+  const authHeader = req.headers.get("authorization");
+  const token = authHeader?.replace("Bearer ", "");
+
+  if (token) {
+    try {
+      const tokenPayload = await verifyAccessToken(token);
+      // For token-based uploads, use externalUserId as the user identifier
+      userId = tokenPayload.externalUserId || tokenPayload.email;
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
+  } else {
+    // Fall back to session-based auth
+    const session = await requireAuth().catch(() => null);
+    if (!session) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+    userId = session.user.id;
+  }
 
   try {
     const formData = await req.formData();

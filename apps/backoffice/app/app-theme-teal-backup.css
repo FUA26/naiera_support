@@ -1,0 +1,596 @@
+/* ========================================
+   NAIEARA SUPPORT APP THEME - STARTUP STYLE
+   ========================================
+
+   Design Philosophy: Fresh, Modern, Professional
+   - Soft but visible borders (not harsh)
+   - Clean whitespace
+   - Subtle depth with shadows
+   - Smooth transitions
+   - Professional color palette
+   - SIDEBAR with dominant app identity color
+
+   APP IDENTITY:
+   - Primary: Teal/Turquoise (friendly, modern, calming)
+   - Personality: Professional yet approachable
+   - Use Case: Support ticketing system
+
+   ======================================== */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ========================================
+     NAIEARA SUPPORT BRAND COLORS
+     ======================================== */
+
+  /* Primary - Teal/Turquoise (Friendly & Modern) */
+  --primary: oklch(0.58 0.16 190);
+  --primary-hover: oklch(0.52 0.15 190);
+  --primary-active: oklch(0.46 0.14 190);
+  --primary-light: oklch(0.94 0.04 190);
+  --primary-lighter: oklch(0.97 0.02 190);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Accent - Soft for hover states */
+  --accent: oklch(0.97 0.02 190);
+  --accent-hover: oklch(0.94 0.04 190);
+  --accent-active: oklch(0.90 0.06 190);
+  --accent-light: oklch(0.985 0.01 190);
+  --accent-lighter: oklch(0.99 0.005 190);
+  --accent-foreground: oklch(0.58 0.16 190);
+
+  /* ========================================
+     SOFT BORDER SYSTEM (Visible but Soft)
+     ======================================== */
+
+  /* Main border - visible but soft, not harsh */
+  --border: oklch(0.92 0.006 264); /* Soft gray, visible */
+  --border-subtle: oklch(0.94 0.005 264); /* More subtle */
+  --border-strong: oklch(0.88 0.008 264); /* Slightly stronger */
+
+  /* Border variants */
+  --border-light: oklch(0.95 0.005 264);
+  --border-medium: oklch(0.90 0.006 264);
+  --border-dark: oklch(0.85 0.01 264);
+
+  /* ========================================
+     APP-SPECIFIC COLORS
+     ======================================== */
+
+  /* Ticket Status Colors */
+  --ticket-open: oklch(0.58 0.16 190);
+  --ticket-pending: oklch(0.70 0.15 75);
+  --ticket-resolved: oklch(0.586 0.15 130);
+  --ticket-closed: oklch(0.55 0.02 264);
+
+  /* Channel Colors */
+  --channel-webform: oklch(0.58 0.16 190);
+  --channel-widget: oklch(0.55 0.18 300);
+  --channel-integrated: oklch(0.6 0.18 15);
+
+  /* ========================================
+     GRADIENT PRESETS
+     ======================================== */
+
+  --gradient-primary: linear-gradient(135deg,
+    oklch(0.58 0.16 190),
+    oklch(0.62 0.14 200)
+  );
+
+  --gradient-surface: linear-gradient(180deg,
+    oklch(1 0 0),
+    oklch(0.99 0.002 264)
+  );
+
+  /* SIDEBAR GRADIENT - Dominant app identity */
+  --gradient-sidebar: linear-gradient(180deg,
+    oklch(0.94 0.06 190) 0%,
+    oklch(0.97 0.04 190) 50%,
+    oklch(0.995 0.002 264) 100%
+  );
+
+  /* ========================================
+     SHADOW SYSTEM
+     ======================================== */
+
+  --shadow-xs: 0 1px 2px oklch(0.5 0.02 264 / 0.06);
+  --shadow-sm: 0 1px 3px oklch(0.5 0.02 264 / 0.08),
+               0 2px 6px oklch(0.5 0.02 264 / 0.05);
+  --shadow-md: 0 2px 8px oklch(0.5 0.02 264 / 0.1),
+               0 4px 16px oklch(0.5 0.02 264 / 0.05);
+  --shadow-lg: 0 4px 12px oklch(0.5 0.02 264 / 0.12),
+               0 8px 32px oklch(0.5 0.02 264 / 0.07);
+  --shadow-xl: 0 8px 24px oklch(0.5 0.02 264 / 0.15),
+               0 16px 48px oklch(0.5 0.02 264 / 0.1);
+
+  /* Colored shadows */
+  --shadow-primary: 0 4px 16px oklch(0.58 0.16 190 / 0.18);
+  --shadow-primary-lg: 0 8px 32px oklch(0.58 0.16 190 / 0.22);
+
+  /* ========================================
+     RADIUS (Rounded but Professional)
+     ======================================== */
+
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  /* ========================================
+     SIDEBAR SPECIFIC - Colorful Identity
+     ======================================== */
+
+  --sidebar-bg: oklch(0.96 0.04 190);
+  --sidebar-bg-top: oklch(0.93 0.06 190);
+  --sidebar-border: oklch(0.90 0.06 190);
+  --sidebar-item-hover: oklch(0.98 0.01 190 / 0.5);
+  --sidebar-item-active: oklch(0.58 0.16 190);
+  --sidebar-item-active-bg: oklch(1 0 0);
+  --sidebar-text: oklch(0.35 0.02 264);
+  --sidebar-text-muted: oklch(0.50 0.02 264);
+  --sidebar-divider: oklch(0.88 0.06 190);
+}
+
+/* ========================================
+   DARK MODE COLORS
+   ======================================== */
+
+.dark {
+  /* Primary - Teal (Brighter for dark mode) */
+  --primary: oklch(0.68 0.14 190);
+  --primary-hover: oklch(0.62 0.15 190);
+  --primary-active: oklch(0.56 0.14 190);
+  --primary-light: oklch(0.26 0.04 190);
+  --primary-lighter: oklch(0.20 0.03 190);
+  --primary-foreground: oklch(0.145 0 0);
+
+  /* Accent */
+  --accent: var(--primary-lighter);
+  --accent-hover: var(--primary-light);
+  --accent-light: var(--primary-lighter);
+  --accent-lighter: var(--primary-lighter);
+  --accent-foreground: var(--primary);
+
+  /* Dark mode borders - visible but soft */
+  --border: oklch(0.32 0.012 264 / 0.6);
+  --border-subtle: oklch(0.30 0.01 264 / 0.4);
+  --border-strong: oklch(0.35 0.015 264 / 0.7);
+
+  --border-light: oklch(0.28 0.01 264 / 0.3);
+  --border-medium: oklch(0.32 0.012 264 / 0.5);
+  --border-dark: oklch(0.38 0.015 264 / 0.7);
+
+  /* Dark mode shadows */
+  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.5),
+               0 2px 6px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 2px 8px oklch(0 0 0 / 0.6),
+               0 4px 16px oklch(0 0 0 / 0.4);
+  --shadow-lg: 0 4px 12px oklch(0 0 0 / 0.7),
+               0 8px 32px oklch(0 0 0 / 0.5);
+
+  --shadow-primary: 0 4px 16px oklch(0.68 0.14 190 / 0.25);
+  --shadow-primary-lg: 0 8px 32px oklch(0.68 0.14 190 / 0.3);
+
+  /* Gradients - Dark Mode */
+  --gradient-surface: linear-gradient(180deg,
+    oklch(0.18 0.005 264),
+    oklch(0.16 0.005 264)
+  );
+
+  /* SIDEBAR GRADIENT - Dominant app identity in dark mode */
+  --gradient-sidebar: linear-gradient(180deg,
+    oklch(0.28 0.08 190) 0%,
+    oklch(0.24 0.06 190) 50%,
+    oklch(0.16 0.005 264) 100%
+  );
+
+  /* Sidebar - Dark Mode */
+  --sidebar-bg: oklch(0.22 0.06 190);
+  --sidebar-bg-top: oklch(0.26 0.08 190);
+  --sidebar-border: oklch(0.30 0.08 190);
+  --sidebar-item-hover: oklch(0.35 0.08 190 / 0.3);
+  --sidebar-item-active: oklch(0.68 0.14 190);
+  --sidebar-item-active-bg: oklch(0.18 0.02 264);
+  --sidebar-text: oklch(0.90 0.01 190);
+  --sidebar-text-muted: oklch(0.75 0.02 190);
+  --sidebar-divider: oklch(0.35 0.08 190);
+}
+
+/* ========================================
+   TAILWIND THEME MAPPING
+   ======================================== */
+
+@theme inline {
+  /* Override Primary Colors */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-light: var(--primary-light);
+  --color-primary-lighter: var(--primary-lighter);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Override Accent Colors */
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-light: var(--accent-light);
+  --color-accent-lighter: var(--accent-lighter);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Override Borders */
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-light: var(--border-light);
+  --color-border-medium: var(--border-medium);
+  --color-border-dark: var(--border-dark);
+
+  /* Ticket & Channel Colors */
+  --color-ticket-open: var(--ticket-open);
+  --color-ticket-pending: var(--ticket-pending);
+  --color-ticket-resolved: var(--ticket-resolved);
+  --color-ticket-closed: var(--ticket-closed);
+  --color-channel-webform: var(--channel-webform);
+  --color-channel-widget: var(--channel-widget);
+  --color-channel-integrated: var(--channel-integrated);
+
+  /* Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  /* Sidebar colors */
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-text: var(--sidebar-text);
+  --color-sidebar-text-muted: var(--sidebar-text-muted);
+  --color-sidebar-divider: var(--sidebar-divider);
+}
+
+/* ========================================
+   BASE OVERRIDES
+   ======================================== */
+
+@layer base {
+  /* Soft borders for all elements */
+  * {
+    border-color: var(--border);
+  }
+
+  /* Inputs - soft border, subtle shadow */
+  input:not([type="radio"]):not([type="checkbox"]),
+  textarea,
+  select {
+    border: 1px solid var(--border-light);
+    background: oklch(0.99 0.002 264);
+    transition: all 0.15s ease;
+  }
+
+  input:not([type="radio"]):not([type="checkbox"]):focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: oklch(1 0 0);
+    box-shadow: 0 0 0 3px oklch(0.58 0.16 190 / 0.1);
+  }
+
+  .dark input:not([type="radio"]):not([type="checkbox"]),
+  .dark textarea,
+  .dark select {
+    background: oklch(0.20 0.005 264);
+    border-color: var(--border-light);
+  }
+
+  .dark input:not([type="radio"]):not([type="checkbox"]):focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    background: oklch(0.22 0.005 264);
+    border-color: var(--primary);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+@layer utilities {
+  /* Gradients */
+  .bg-app-gradient {
+    background: var(--gradient-primary);
+  }
+
+  .bg-surface-gradient {
+    background: var(--gradient-surface);
+  }
+
+  .bg-sidebar-gradient {
+    background: var(--gradient-sidebar);
+  }
+
+  /* ========================================
+     CARD STYLES (Soft Borders)
+     ======================================== */
+
+  .card-soft {
+    @apply bg-background rounded-lg;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-xs);
+    transition: all 0.2s ease;
+  }
+
+  .card-soft:hover {
+    border-color: var(--border-medium);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-interactive {
+    @apply bg-background rounded-lg cursor-pointer;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-xs);
+    transition: all 0.2s ease;
+  }
+
+  .card-interactive:hover {
+    border-color: var(--border);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* ========================================
+     BUTTON STYLES
+     ======================================== */
+
+  .btn-primary {
+    @apply text-white font-medium rounded-lg;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-primary);
+    border: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    box-shadow: var(--shadow-primary-lg);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    @apply bg-background text-foreground rounded-lg;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+    transition: all 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--border-medium);
+    background: oklch(0.985 0.002 264);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-foreground rounded-lg;
+    transition: all 0.15s ease;
+  }
+
+  .btn-ghost:hover {
+    background: oklch(0.95 0.005 264);
+  }
+
+  /* ========================================
+     BADGE STYLES (Soft Backgrounds)
+     ======================================== */
+
+  .badge-ticket-open {
+    @apply text-[color:var(--ticket-open)];
+    background: oklch(0.58 0.16 190 / 0.1);
+    border: 1px solid oklch(0.58 0.16 190 / 0.15);
+  }
+
+  .badge-ticket-pending {
+    @apply text-[color:var(--ticket-pending)];
+    background: oklch(0.70 0.15 75 / 0.1);
+    border: 1px solid oklch(0.70 0.15 75 / 0.15);
+  }
+
+  .badge-ticket-resolved {
+    @apply text-[color:var(--ticket-resolved)];
+    background: oklch(0.586 0.15 130 / 0.1);
+    border: 1px solid oklch(0.586 0.15 130 / 0.15);
+  }
+
+  .badge-ticket-closed {
+    @apply text-[color:var(--ticket-closed)];
+    background: oklch(0.55 0.02 264 / 0.08);
+    border: 1px solid oklch(0.55 0.02 264 / 0.1);
+  }
+
+  /* Channel badges */
+  .badge-channel-webform {
+    @apply text-[color:var(--channel-webform)];
+    background: oklch(0.58 0.16 190 / 0.1);
+    border: 1px solid oklch(0.58 0.16 190 / 0.15);
+  }
+
+  .badge-channel-widget {
+    @apply text-[color:var(--channel-widget)];
+    background: oklch(0.55 0.18 300 / 0.1);
+    border: 1px solid oklch(0.55 0.18 300 / 0.15);
+  }
+
+  .badge-channel-integrated {
+    @apply text-[color:var(--channel-integrated)];
+    background: oklch(0.6 0.18 15 / 0.1);
+    border: 1px solid oklch(0.6 0.18 15 / 0.15);
+  }
+
+  /* ========================================
+     SIDEBAR STYLES - Colorful Identity
+     ======================================== */
+
+  .sidebar-startup {
+    background: var(--gradient-sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    color: var(--sidebar-text);
+  }
+
+  .sidebar-item-startup {
+    @apply rounded-lg transition-all;
+    color: var(--sidebar-text-muted);
+    border: 1px solid transparent;
+  }
+
+  .sidebar-item-startup:hover {
+    background: var(--sidebar-item-hover);
+    border-color: oklch(1 0 0 / 0.2);
+    box-shadow: var(--shadow-xs);
+    color: var(--sidebar-text);
+  }
+
+  .sidebar-item-startup-active {
+    background: var(--sidebar-item-active-bg);
+    color: var(--sidebar-item-active);
+    font-weight: 600;
+    border-color: var(--sidebar-item-active);
+    box-shadow: 0 0 0 1px var(--sidebar-item-active),
+                var(--shadow-xs);
+  }
+
+  .sidebar-heading {
+    color: var(--sidebar-text);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  .sidebar-divider {
+    background: var(--sidebar-divider);
+  }
+
+  /* ========================================
+     HEADER STYLES
+     ======================================== */
+
+  .header-startup {
+    @apply bg-background/80 backdrop-blur-md;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-startup-scrolled {
+    @apply bg-background/95 backdrop-blur-lg;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ========================================
+     TABLE STYLES
+     ======================================== */
+
+  .table-row-startup {
+    @apply transition-colors;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .table-row-startup:hover {
+    background: oklch(0.98 0.004 264);
+  }
+
+  .dark .table-row-startup:hover {
+    background: oklch(0.22 0.005 264);
+  }
+
+  /* ========================================
+     DIVIDER STYLES
+     ======================================== */
+
+  .divider-soft {
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  .divider-gradient {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--border),
+      transparent
+    );
+  }
+
+  /* ========================================
+     INPUT STYLES
+     ======================================== */
+
+  .input-soft {
+    @apply rounded-lg;
+    border: 1px solid var(--border-light);
+    background: oklch(0.99 0.002 264);
+    transition: all 0.15s ease;
+  }
+
+  .input-soft:focus {
+    border-color: var(--primary);
+    background: oklch(1 0 0);
+    box-shadow: 0 0 0 3px oklch(0.58 0.16 190 / 0.1);
+  }
+
+  /* ========================================
+     POPOVER/DIALOG STYLES
+     ======================================== */
+
+  .popover-soft {
+    @apply bg-background rounded-lg p-1;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .dialog-soft {
+    @apply bg-background rounded-xl;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* ========================================
+   APP IDENTITY INDICATORS
+   ======================================== */
+
+/* Sidebar brand indicator */
+.app-brand-indicator {
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Active nav indicator */
+.nav-active-indicator {
+  background: oklch(0.58 0.16 190 / 0.1);
+  color: oklch(0.58 0.16 190);
+}
+
+/* Page header */
+.page-header-soft {
+  @apply pb-4;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Floating card */
+.float-card {
+  @apply bg-background rounded-xl p-6;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Stat card */
+.stat-card {
+  @apply bg-background rounded-xl p-5;
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-md);
+}

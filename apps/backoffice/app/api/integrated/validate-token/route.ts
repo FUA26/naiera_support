@@ -2,18 +2,25 @@
  * Token Validation API Route
  * POST /api/integrated/validate-token
  *
- * Validates a JWT access token and returns the user's email and channel info.
+ * Validates a JWT access token and returns user info and channel info.
  * This endpoint is used by the support ticket creation page to pre-fill
- * the user's email when accessed via an external app integration.
+ * the user's information when accessed via an external app integration.
  *
  * Request body:
  * {
  *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  * }
  *
- * Response:
+ * Response (email-based):
  * {
  *   "email": "user@example.com",
+ *   "channelSlug": "support",
+ *   "appId": "xxx"
+ * }
+ *
+ * Response (externalUserId-based):
+ * {
+ *   "externalUserId": "user_123",
  *   "channelSlug": "support",
  *   "appId": "xxx"
  * }
@@ -47,14 +54,25 @@ export async function POST(request: NextRequest) {
     // Verify token - accepts any purpose for form access
     const payload = await verifyAccessToken(token);
 
-    return NextResponse.json(
-      {
-        email: payload.email,
-        channelSlug: payload.channelSlug,
-        appId: payload.appId,
-      },
-      { status: 200 }
-    );
+    // Return appropriate data based on identifier type
+    const responseData: {
+      email?: string;
+      externalUserId?: string;
+      externalUserName?: string;
+      channelSlug: string;
+      appId: string;
+    } = {
+      channelSlug: payload.channelSlug,
+      appId: payload.appId,
+    };
+
+    if (payload.externalUserId) {
+      responseData.externalUserId = payload.externalUserId;
+    } else if (payload.email) {
+      responseData.email = payload.email;
+    }
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error validating token:", error);
 

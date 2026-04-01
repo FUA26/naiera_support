@@ -96,6 +96,7 @@ export async function createTicket(data: CreateTicketInput): Promise<any> {
     guestInfo,
     attachments,
     createdBy,
+    externalUserId,
   } = data;
 
   // Validate app exists and is active
@@ -133,6 +134,7 @@ export async function createTicket(data: CreateTicketInput): Promise<any> {
       guestEmail: guestInfo?.email,
       guestName: guestInfo?.name,
       guestPhone: guestInfo?.phone,
+      externalUserId,
       status: TicketStatus.OPEN,
       messages: {
         create: {

@@ -90,8 +90,8 @@
   --muted: oklch(0.968 0.007 280); /* extremely subtle purple-gray */
   --muted-foreground: oklch(0.551 0.027 280); /* slate/purple-500 */
 
-  --border: oklch(0.922 0.008 264); /* slate-200 */
-  --input: oklch(0.922 0.008 264);
+  --border: oklch(0.92 0.006 264); /* Soft but visible */
+  --input: oklch(0.92 0.006 264);
   --ring: var(--primary);
 
   /* ========================================
@@ -223,8 +223,8 @@
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
 
-  --border: oklch(0.269 0.01 264);
-  --input: oklch(0.269 0.01 264);
+  --border: oklch(0.32 0.012 264 / 0.5); /* Soft but visible in dark mode */
+  --input: oklch(0.32 0.012 264 / 0.5);
   --ring: oklch(0.707 0.165 254);
 
   /* Category Colors - Dark Mode */

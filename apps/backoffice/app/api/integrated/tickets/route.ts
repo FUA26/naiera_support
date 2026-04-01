@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createTicket } from "@/lib/services/ticketing/ticket-service";
 import { integratedTicketSchema } from "@/lib/validations/ticket-validation";
+import { verifyAccessToken } from "@/lib/services/ticketing/integration-service";
 
 /**
- * Verify API Key and return channel info
+ * Verify API Key and return channel info (deprecated - use JWT tokens)
  */
 async function verifyApiKey(apiKey: string) {
   const channel = await prisma.channel.findUnique({
@@ -30,59 +31,105 @@ async function verifyApiKey(apiKey: string) {
 /**
  * GET /api/integrated/tickets - List tickets for an external user
  *
- * Headers:
- *   X-API-Key: <your_channel_api_key>
+ * Supports two authentication methods:
+ * 1. JWT Token (recommended): ?token=<jwt_token>
+ * 2. API Key (deprecated): X-API-Key header
  *
  * Query params:
- *   externalUserId: <user_id_from_your_app> (required if email not provided)
- *   email: <user_email> (required if externalUserId not provided)
+ *   token: <jwt_token> (preferred method)
+ *   externalUserId: <user_id_from_your_app> (only used with API Key)
+ *   email: <user_email> (only used with API Key)
  */
 export async function GET(request: NextRequest) {
   try {
-    // Verify API Key
-    const apiKey = request.headers.get("X-API-Key");
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "Missing API key. Use X-API-Key header." },
-        { status: 401 }
-      );
-    }
-
-    const channel = await verifyApiKey(apiKey);
-    if (!channel) {
-      return NextResponse.json(
-        { error: "Invalid API key or inactive channel" },
-        { status: 401 }
-      );
-    }
-
-    // Get query params
     const { searchParams } = new URL(request.url);
-    const externalUserId = searchParams.get("externalUserId");
-    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+    let channel: any = null;
+    let externalUserId: string | null = null;
+    let email: string | null = null;
 
-    // Require exactly one of externalUserId or email
-    if (!externalUserId && !email) {
-      return NextResponse.json(
-        { error: "Either externalUserId or email is required" },
-        { status: 400 }
-      );
+    // Method 1: JWT Token (preferred)
+    if (token) {
+      try {
+        const tokenPayload = await verifyAccessToken(token);
+
+        // Accept list_tickets purpose
+        if (tokenPayload.purpose !== "list_tickets" && tokenPayload.purpose !== "view_ticket" && tokenPayload.purpose !== "create_ticket") {
+          return NextResponse.json(
+            { error: "INVALID_TOKEN_PURPOSE", message: "Token tidak valid untuk melihat daftar tiket" },
+            { status: 401 }
+          );
+        }
+
+        // Get channel info
+        channel = await prisma.channel.findUnique({
+          where: { id: tokenPayload.channelId },
+          include: { app: true },
+        });
+
+        if (!channel || !channel.isActive || !channel.app.isActive) {
+          return NextResponse.json(
+            { error: "CHANNEL_INACTIVE", message: "Channel tidak aktif" },
+            { status: 401 }
+          );
+        }
+
+        // Use identifier from token
+        externalUserId = tokenPayload.externalUserId || null;
+        email = tokenPayload.email || null;
+      } catch (tokenError: any) {
+        console.error("Token verification error:", tokenError);
+        return NextResponse.json(
+          {
+            error: tokenError.message === "TOKEN_EXPIRED" ? "TOKEN_EXPIRED" : "INVALID_TOKEN",
+            message: tokenError.message === "TOKEN_EXPIRED"
+              ? "Token telah kadaluarsa"
+              : "Token tidak valid"
+          },
+          { status: 401 }
+        );
+      }
     }
+    // Method 2: API Key (deprecated)
+    else {
+      const apiKey = request.headers.get("X-API-Key");
+      if (!apiKey) {
+        return NextResponse.json(
+          { error: "MISSING_AUTH", message: "Token atau API Key diperlukan" },
+          { status: 401 }
+        );
+      }
 
-    if (externalUserId && email) {
-      return NextResponse.json(
-        { error: "Provide only one of externalUserId or email, not both" },
-        { status: 400 }
-      );
+      channel = await verifyApiKey(apiKey);
+      if (!channel) {
+        return NextResponse.json(
+          { error: "INVALID_API_KEY", message: "API Key tidak valid atau channel tidak aktif" },
+          { status: 401 }
+        );
+      }
+
+      // Get query params for API Key method
+      externalUserId = searchParams.get("externalUserId");
+      email = searchParams.get("email");
+
+      // Require exactly one of externalUserId or email
+      if (!externalUserId && !email) {
+        return NextResponse.json(
+          { error: "MISSING_IDENTIFIER", message: "externalUserId atau email diperlukan" },
+          { status: 400 }
+        );
+      }
+
+      if (externalUserId && email) {
+        return NextResponse.json(
+          { error: "DUPLICATE_IDENTIFIER", message: "Gunakan hanya satu: externalUserId atau email" },
+          { status: 400 }
+        );
+      }
     }
 
     // Build where clause based on filter type
-    const whereClause: {
-      appId: string;
-      channelId: string;
-      externalUserId?: string;
-      guestEmail?: string;
-    } = {
+    const whereClause: any = {
       appId: channel.appId,
       channelId: channel.id,
     };
@@ -91,7 +138,15 @@ export async function GET(request: NextRequest) {
       whereClause.externalUserId = externalUserId;
     } else if (email) {
       whereClause.guestEmail = email;
+    } else {
+      // If token has neither, return empty
+      return NextResponse.json({
+        tickets: [],
+        message: "Token tidak memiliki identifier user"
+      });
     }
+
+    console.log("[DEBUG] Fetching tickets with whereClause:", JSON.stringify(whereClause));
 
     // Get tickets for this external user or email
     const tickets = await prisma.ticket.findMany({
@@ -113,6 +168,8 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    console.log("[DEBUG] Found tickets:", tickets.length);
+
     return NextResponse.json({
       tickets: tickets.map((t) => ({
         id: t.id,
@@ -132,7 +189,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching integrated tickets:", error);
     return NextResponse.json(
-      { error: "Failed to fetch tickets" },
+      {
+        error: "INTERNAL_ERROR",
+        message: error instanceof Error ? error.message : "Gagal mengambil data tiket"
+      },
       { status: 500 }
     );
   }

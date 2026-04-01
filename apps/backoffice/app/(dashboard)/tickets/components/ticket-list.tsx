@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useApp } from "@/lib/contexts/app-context";
-import { TicketsDataTable } from "@/components/admin/tickets-data-table";
+import { TicketsClient } from "./tickets-client";
 
 interface Props {
   currentUserId: string;
@@ -49,5 +49,7 @@ export function TicketList({ currentUserId }: Props) {
     );
   }
 
-  return <TicketsDataTable tickets={data?.items || []} currentUserId={currentUserId} />;
+  const tickets = data?.items ?? [];
+
+  return <TicketsClient tickets={tickets} currentUserId={currentUserId} />;
 }

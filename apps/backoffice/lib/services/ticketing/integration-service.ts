@@ -21,7 +21,8 @@ const TOKEN_ISSUER = "naiera-support";
 type TokenPurpose = "create_ticket" | "view_ticket" | "list_tickets";
 
 export interface TokenPayload {
-  email: string;
+  email?: string; // Optional: email-based identification
+  externalUserId?: string; // Optional: external user ID-based identification
   channelId: string;
   channelSlug: string;
   appId: string;
@@ -60,17 +61,19 @@ type ChannelWithApp = {
  * Generate a signed JWT token for external app access
  *
  * @param channelSlug - Channel identifier from external app config (currently uses apiKey)
- * @param email - User email from external app
+ * @param identifier - Email or externalUserId for ticket filtering
  * @param purpose - What the token will be used for
  * @param ticketId - Required for view_ticket purpose
+ * @param identifierType - Type of identifier ('email' or 'externalUserId')
  * @returns Signed JWT token
  * @throws Error if channel not found or inactive
  */
 export async function generateAccessToken(
   channelSlug: string,
-  email: string,
+  identifier: string,
   purpose: TokenPurpose,
-  ticketId?: string
+  ticketId?: string,
+  identifierType: "email" | "externalUserId" = "email"
 ): Promise<GeneratedToken> {
   // Validate channel exists and is active via slug
   const channel = await prisma.channel.findFirst({
@@ -122,14 +125,20 @@ export async function generateAccessToken(
   const expiresInSeconds = TOKEN_EXPIRY_MINUTES * 60;
   const expiresAt = Math.floor(Date.now() / 1000) + expiresInSeconds;
 
-  // Build payload
+  // Build payload - include identifier type for proper filtering
   const payload: TokenPayload = {
-    email,
     channelId: channel.id,
     channelSlug: channel.slug || channelSlug, // Store slug for reference
     appId: channel.appId,
     purpose,
   };
+
+  // Set the appropriate identifier field
+  if (identifierType === "externalUserId") {
+    payload.externalUserId = identifier;
+  } else {
+    payload.email = identifier;
+  }
 
   if (ticketId) {
     payload.ticketId = ticketId;
@@ -198,7 +207,8 @@ export async function verifyAccessToken(
     }
 
     return {
-      email: verifiedPayload.email as string,
+      email: verifiedPayload.email as string | undefined,
+      externalUserId: verifiedPayload.externalUserId as string | undefined,
       channelId: verifiedPayload.channelId as string,
       channelSlug: verifiedPayload.channelSlug as string,
       appId: verifiedPayload.appId as string,

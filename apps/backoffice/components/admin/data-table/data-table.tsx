@@ -130,7 +130,7 @@ export function DataTableContent<TData, TValue>({
       {toolbar && toolbar(table, density, setDensity)}
 
       {/* Table */}
-      <div className="rounded-md border">
+      <div className="rounded-lg border border-border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

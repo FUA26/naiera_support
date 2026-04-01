@@ -47,6 +47,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
 
+    console.log("[DEBUG] Fetching ticket:", ticketId, "Token present:", !!token);
+
     // Token is required
     if (!token) {
       return NextResponse.json(
@@ -59,15 +61,37 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Verify token with view_ticket purpose
+    // Verify token - accept view_ticket, create_ticket, and list_tickets purposes
     let tokenPayload;
     try {
-      tokenPayload = await verifyAccessToken(token, "view_ticket");
+      // Try to verify without purpose check first
+      tokenPayload = await verifyAccessToken(token);
+
+      // Debug: log token purpose
+      console.log("[DEBUG] Token purpose:", tokenPayload.purpose, "Ticket ID:", ticketId);
+
+      // Then check if purpose is valid for viewing
+      // Accept: view_ticket (for direct viewing), create_ticket (for newly created), list_tickets (for browsing)
+      const validPurposes = ["view_ticket", "create_ticket", "list_tickets"];
+      if (!validPurposes.includes(tokenPayload.purpose)) {
+        console.log("[DEBUG] Invalid purpose, expected one of:", validPurposes, "got:", tokenPayload.purpose);
+        return NextResponse.json(
+          {
+            success: false,
+            error: "INVALID_TOKEN_PURPOSE",
+            message: "Token tidak valid untuk melihat tiket",
+          },
+          { status: 401 }
+        );
+      }
     } catch (error: any) {
+      console.log("[DEBUG] Token verification error:", error.message, error);
       if (
         error.message === "TOKEN_EXPIRED" ||
         error.message === "INVALID_TOKEN" ||
-        error.message === "INVALID_TOKEN_PURPOSE"
+        error.message === "INVALID_TOKEN_PURPOSE" ||
+        error.message === "CHANNEL_NOT_FOUND" ||
+        error.message === "CHANNEL_INACTIVE"
       ) {
         return NextResponse.json(
           {
@@ -132,6 +156,33 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         },
         { status: 403 }
       );
+    }
+
+    // For create_ticket and list_tickets tokens, verify the ticket belongs to the user
+    if (tokenPayload.purpose === "create_ticket" || tokenPayload.purpose === "list_tickets") {
+      // Check by externalUserId or email
+      const externalUserIdMatch = tokenPayload.externalUserId && ticket.externalUserId === tokenPayload.externalUserId;
+      const emailMatch = tokenPayload.email && ticket.guestEmail === tokenPayload.email;
+      // For create_ticket, also allow if ticket was just created (within last 5 minutes)
+      const recentlyCreated = tokenPayload.purpose === "create_ticket" &&
+        (Date.now() - new Date(ticket.createdAt).getTime() < 300000);
+
+      const hasAccess = externalUserIdMatch || emailMatch || recentlyCreated;
+
+      if (!hasAccess) {
+        console.log("[DEBUG] Access denied - externalUserId:", tokenPayload.externalUserId,
+          "ticket.externalUserId:", ticket.externalUserId,
+          "email:", tokenPayload.email,
+          "ticket.guestEmail:", ticket.guestEmail);
+        return NextResponse.json(
+          {
+            success: false,
+            error: "ACCESS_DENIED",
+            message: "Anda tidak memiliki akses ke tiket ini",
+          },
+          { status: 403 }
+        );
+      }
     }
 
     // Format response - exclude internal data
