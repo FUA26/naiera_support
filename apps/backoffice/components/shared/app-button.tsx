@@ -1,7 +1,7 @@
 /**
- * App-Branded Button Component (Startup Style)
+ * App-Branded Button Component (Pisky Style)
  *
- * Fresh, modern buttons with soft borders and subtle shadows.
+ * Modern buttons with soft borders and neutral shadows using Pisky design system.
  *
  * PATTERN FOR OTHER APPS:
  * Copy this file to your app's components/shared/
@@ -9,16 +9,16 @@
 
 import * as React from "react";
 import { Button, type ButtonProps } from "@workspace/ui";
-import { cn } from "@workspace/utils";
+import { cn } from "@/lib/utils";
 
 export interface AppButtonProps extends ButtonProps {
   variant?: "default" | "primary" | "secondary" | "ghost" | "outline";
 }
 
 /**
- * App-branded button (Startup style)
+ * App-branded button (Pisky style)
  *
- * - default/primary: Gradient with colored shadow
+ * - default/primary: Pisky blue with neutral shadow
  * - secondary: White with soft border
  * - ghost: Transparent with subtle hover
  * - outline: Border only, transparent background
@@ -32,7 +32,7 @@ export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
           return {
             variant: "default" as const,
             className: cn(
-              "btn-primary rounded-lg px-4 py-2",
+              "btn-pisky-primary rounded-lg px-4 py-2",
               size === "sm" && "px-3 py-1.5 text-sm",
               size === "lg" && "px-6 py-3 text-base",
               className
@@ -42,7 +42,7 @@ export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
           return {
             variant: "default" as const,
             className: cn(
-              "btn-secondary rounded-lg px-4 py-2",
+              "btn-pisky-secondary rounded-lg px-4 py-2",
               size === "sm" && "px-3 py-1.5 text-sm",
               size === "lg" && "px-6 py-3 text-base",
               className
@@ -88,7 +88,7 @@ export function AppActionButton({ className, ...props }: ButtonProps) {
     <Button
       size="sm"
       className={cn(
-        "btn-primary rounded-lg text-sm",
+        "btn-pisky-primary rounded-lg text-sm",
         className
       )}
       {...props}
