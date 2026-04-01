@@ -248,7 +248,7 @@ export function AppsClient() {
           </p>
         </div>
         {canManage && (
-          <button onClick={appDialog.openCreate} className="btn-primary">
+          <button onClick={appDialog.openCreate} className="btn-pisky-primary">
             <Plus className="mr-2 h-4 w-4" />
             New App
           </button>
@@ -261,7 +261,7 @@ export function AppsClient() {
           placeholder="Search apps..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:max-w-sm input-soft pl-10"
+          className="w-full sm:max-w-sm input-pisky pl-10"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
       </div>
@@ -411,7 +411,7 @@ function EmptyState({
         {hasSearch ? "Try a different search term" : "Create your first app to get started"}
       </p>
       {canManage && !hasSearch && (
-        <button onClick={onCreateApp} className="btn-primary">
+        <button onClick={onCreateApp} className="btn-pisky-primary">
           <Plus className="mr-2 h-4 w-4" />
           Create First App
         </button>
@@ -461,7 +461,7 @@ function AppDialog({
               value={formData.name}
               onChange={(e) => onNameChange(e.target.value)}
               placeholder="e.g., Customer Support"
-              className="input-soft"
+              className="input-pisky"
             />
           </div>
           <div className="space-y-2">
@@ -471,7 +471,7 @@ function AppDialog({
               value={formData.slug}
               onChange={(e) => onSlugChange(e.target.value)}
               placeholder="e.g., customer-support"
-              className="input-soft"
+              className="input-pisky"
             />
             <p className="text-xs text-muted-foreground">
               Leave empty to auto-generate from name
@@ -485,7 +485,7 @@ function AppDialog({
               onChange={(e) => onDescriptionChange(e.target.value)}
               placeholder="Brief description of this app..."
               rows={3}
-              className="input-soft"
+              className="input-pisky"
             />
           </div>
           <div className="flex items-center justify-between rounded-lg border p-3">
@@ -502,7 +502,7 @@ function AppDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={isSaving} className="btn-primary">
+          <Button onClick={onSave} disabled={isSaving} className="btn-pisky-primary">
             {isSaving ? "Saving..." : dialog.mode === "create" ? "Create" : "Save"}
           </Button>
         </DialogFooter>
@@ -552,13 +552,13 @@ function ChannelDialog({
               value={formData.name}
               onChange={(e) => onNameChange(e.target.value)}
               placeholder="e.g., Website Form"
-              className="input-soft"
+              className="input-pisky"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="channelType">Type *</Label>
             <Select value={formData.type} onValueChange={onTypeChange}>
-              <SelectTrigger id="channelType" className="input-soft">
+              <SelectTrigger id="channelType" className="input-pisky">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -590,7 +590,7 @@ function ChannelDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={isSaving} className="btn-primary">
+          <Button onClick={onSave} disabled={isSaving} className="btn-pisky-primary">
             {isSaving ? "Saving..." : dialog.mode === "create" ? "Add" : "Save"}
           </Button>
         </DialogFooter>
@@ -881,13 +881,13 @@ function ManageChannelSheet({
                   value={formData.name}
                   onChange={(e) => onNameChange(e.target.value)}
                   placeholder="e.g., Website Form"
-                  className="input-soft"
+                  className="input-pisky"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="manageChannelType">Type *</Label>
                 <Select value={formData.type} onValueChange={onTypeChange}>
-                  <SelectTrigger id="manageChannelType" className="input-soft">
+                  <SelectTrigger id="manageChannelType" className="input-pisky">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -921,7 +921,7 @@ function ManageChannelSheet({
                 <DeleteIcon />
                 Delete Channel
               </Button>
-              <Button onClick={onSave} disabled={isSaving} className="btn-primary">
+              <Button onClick={onSave} disabled={isSaving} className="btn-pisky-primary">
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>
             </SheetFooter>
