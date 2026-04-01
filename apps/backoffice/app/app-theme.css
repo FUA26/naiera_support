@@ -368,6 +368,17 @@
     box-shadow: var(--shadow);
   }
 
+  .sidebar-heading-pisky {
+    color: var(--sidebar-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0 0.5rem 0;
+    border-radius: var(--radius-md);
+  }
+
   .sidebar-item-pisky {
     color: var(--sidebar-text-secondary);
     padding: 0.75rem 1rem;
@@ -476,6 +487,20 @@
     border-left: 4px solid var(--pisky-blue-500);
     background: var(--pisky-blue-50);
     margin-bottom: 1rem;
+  }
+
+  /* Header Components */
+  .header-pisky {
+    background: white;
+    border-bottom: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Divider Components */
+  .divider-pisky {
+    height: 1px;
+    background: var(--border-200);
+    margin: 1rem 0;
   }
 
   .alert-pisky.success {
