@@ -1,5 +1,5 @@
 /**
- * App-Branded Card Component (Attio Style)
+ * App-Branded Card Component (Pisky Style)
  *
  * Clean cards without visible borders - using subtle shadows instead.
  *
@@ -8,7 +8,7 @@
  */
 
 import * as React from "react";
-import { cn } from "@workspace/utils";
+import { cn } from "@/lib/utils";
 
 export interface AppCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "interactive" | "floating" | "glass";
@@ -16,7 +16,7 @@ export interface AppCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * App-branded card (Attio style)
+ * App-branded card (Pisky style)
  *
  * - default: Subtle shadow, no visible border
  * - interactive: Hover effect with lift
@@ -39,8 +39,8 @@ export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>(
           "rounded-xl bg-background",
           paddingStyles[padding],
           {
-            "card-attio": variant === "default",
-            "card-attio-interactive": variant === "interactive",
+            "card-pisky": variant === "default",
+            "card-pisky-interactive": variant === "interactive",
             "shadow-lg": variant === "floating",
             "glass-card": variant === "glass",
           },
@@ -173,5 +173,5 @@ export function AppStatCard({
  * Divider - subtle line for visual separation
  */
 export function AppDivider({ className }: { className?: string }) {
-  return <div className={cn("divider-attio my-4", className)} />;
+  return <div className={cn("divider-pisky my-4", className)} />;
 }
