@@ -112,7 +112,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="sidebar-startup">
+    <Sidebar className="sidebar-pisky">
       {/* Header - App Branding */}
       <SidebarHeader className="border-b border-sidebar-border/50 px-3 py-4">
         <SidebarMenu>
@@ -145,7 +145,7 @@ export function AppSidebar() {
         {groupedItems.map((group, idx) => (
           <SidebarGroup key={idx} className="mb-4">
             {group.heading && (
-              <SidebarGroupLabel className="sidebar-heading px-2 py-1.5 text-xs">
+              <SidebarGroupLabel className="sidebar-heading-pisky px-2 py-1.5 text-xs">
                 {group.heading}
               </SidebarGroupLabel>
             )}
@@ -160,8 +160,8 @@ export function AppSidebar() {
                         asChild
                         isActive={active}
                         className={active
-                          ? "sidebar-item-startup-active"
-                          : "sidebar-item-startup"
+                          ? "sidebar-item-pisky-active"
+                          : "sidebar-item-pisky"
                         }
                       >
                         <Link href={item.href} className="flex items-center gap-3">

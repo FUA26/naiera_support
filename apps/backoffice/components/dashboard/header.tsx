@@ -22,7 +22,7 @@ export function Header({ user }: HeaderProps) {
   const { icon: PageIcon } = getPageTitle(pathname);
 
   return (
-    <header className="header-startup sticky top-0 z-10 flex h-14 shrink-0 items-center gap-3 px-4">
+    <header className="header-pisky sticky top-0 z-10 flex h-14 shrink-0 items-center gap-3 px-4">
       {/* Sidebar Trigger - Clean Style */}
       <SidebarTrigger className="text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg" />
 

@@ -15,15 +15,15 @@
 
 import { getAppIdentity } from "@/lib/config/app-identity";
 import { type VariantProps, cva } from "class-variance-authority";
-import { cn } from "@workspace/utils";
+import { cn } from "@/lib/utils";
 
 const bannerVariants = cva(
   "relative overflow-hidden border-b transition-all",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-br from-primary/5 via-accent/5 to-background py-6",
-        compact: "bg-gradient-to-r from-primary/5 to-accent/5 py-3",
+        default: "bg-gradient-to-br from-primary/5 via-primary/5 to-background py-6",
+        compact: "bg-gradient-to-r from-primary/5 to-primary/5 py-3",
         minimal: "bg-background border-primary/20 py-2",
       },
       radius: {
