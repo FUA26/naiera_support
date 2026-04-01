@@ -12,7 +12,8 @@ import { Button, type ButtonProps } from "@workspace/ui";
 import { cn } from "@/lib/utils";
 
 export interface AppButtonProps extends ButtonProps {
-  variant?: "default" | "primary" | "secondary" | "ghost" | "outline";
+  variant?: "default" | "primary" | "secondary" | "ghost" | "outline" | "app-ghost" | "app-outline";
+  children?: React.ReactNode;
 }
 
 /**
@@ -49,6 +50,7 @@ export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
             ),
           };
         case "ghost":
+        case "app-ghost":
           return {
             variant: "ghost" as const,
             className: cn(
@@ -57,6 +59,7 @@ export const AppButton = React.forwardRef<HTMLButtonElement, AppButtonProps>(
             ),
           };
         case "outline":
+        case "app-outline":
           return {
             variant: "outline" as const,
             className: cn(

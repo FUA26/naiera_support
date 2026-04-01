@@ -70,11 +70,11 @@ export function AppIdentityBanner({
       )}
 
       {/* Accent line at top - primary app color */}
-      <div className="absolute left-0 right-0 top-0 h-1 bg-app-gradient" />
+      <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
 
       <div className="relative flex items-center gap-4">
         {/* App Icon */}
-        <div className="flex size-12 items-center justify-center rounded-xl bg-app-gradient shadow-lg shadow-primary/20">
+        <div className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-primary/20">
           <AppIcon className="size-6 text-white" strokeWidth={2} />
         </div>
 

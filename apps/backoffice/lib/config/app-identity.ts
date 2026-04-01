@@ -29,7 +29,7 @@ export const appIdentity = {
 
   // Visual Identity
   icon: LifeBuoy,
-  iconColor: "oklch(0.58 0.16 190)", // Teal
+  iconColor: "oklch(0.58 0.16 220)", // Blue
 
   // App Description
   description:
@@ -44,10 +44,10 @@ export const appIdentity = {
 
   // Branding Colors (for programmatic usage)
   colors: {
-    primary: "oklch(0.58 0.16 190)", // Teal-500
-    primaryLight: "oklch(0.92 0.06 190)", // Teal-100
-    primaryDark: "oklch(0.46 0.14 190)", // Teal-700
-    accent: "oklch(0.65 0.14 200)", // Light Teal
+    primary: "oklch(0.58 0.16 220)", // Blue-500
+    primaryLight: "oklch(0.92 0.06 220)", // Blue-100
+    primaryDark: "oklch(0.46 0.14 220)", // Blue-700
+    accent: "oklch(0.65 0.14 230)", // Light Blue
   },
 
   // Feature Highlights (for landing/about pages)
@@ -82,7 +82,7 @@ export const appIdentity = {
   theme: {
     style: "modern-friendly",
     mood: "professional-approachable",
-    primaryColorFamily: "teal",
+    primaryColorFamily: "blue",
     borderStyle: "rounded", // 'rounded' | 'sharp' | 'mixed'
     animationStyle: "smooth", // 'smooth' | 'bouncy' | 'minimal'
   },

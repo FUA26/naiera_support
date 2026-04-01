@@ -125,7 +125,7 @@ export default function AppIdentityDemoPage() {
         <CardContent>
           <div className="flex flex-wrap gap-3">
             <AppButton>Default Button</AppButton>
-            <AppButton variant="app-gradient">Gradient Button</AppButton>
+            <AppButton variant="primary">Primary Button</AppButton>
             <AppButton variant="app-ghost">Ghost Button</AppButton>
             <AppButton variant="app-outline">Outline Button</AppButton>
             <AppActionButton>Action Button</AppActionButton>
@@ -198,7 +198,7 @@ export default function AppIdentityDemoPage() {
                   key={metric.id}
                   className="flex items-center gap-3 rounded-lg border p-4"
                 >
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-app-gradient">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600">
                     <Icon className="size-5 text-white" />
                   </div>
                   <div>

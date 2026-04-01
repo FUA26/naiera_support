@@ -113,7 +113,7 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
             return (
               <div
                 key={ticket.id}
-                className="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-all border border-slate-200 dark:border-slate-700 hover:border-teal-200 dark:hover:border-teal-800"
+                className="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-all border border-slate-200 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800"
               >
                 <div className="flex items-start gap-4">
                   {/* Status Icon */}
@@ -169,7 +169,7 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
                       e.stopPropagation();
                       window.open(`/support/tickets/${ticket.id}?token=${token}`, '_blank');
                     }}
-                    className="shrink-0 gap-1.5 hover:bg-teal-50 dark:hover:bg-teal-950 hover:text-teal-600 dark:hover:text-teal-400"
+                    className="shrink-0 gap-1.5 hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 dark:hover:text-blue-400"
                     title="Open in new tab"
                   >
                     <ExternalLink className="w-4 h-4" />
