@@ -3,7 +3,7 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "./header";
 import { CommandDialog } from "./search-command/command-dialog";
-import { AppSidebar } from "./sidebar";
+import { AppSidebar } from "./layout/app-sidebar";
 
 interface DashboardLayoutProps {
   user: {
