@@ -21,6 +21,7 @@ import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
 import { NavSecondary } from './nav-secondary'
 import { navItemsConfig } from './nav-items-config'
+import { AppSwitcher } from '../app-switcher'
 
 const navSecondaryItems = [
   {
@@ -74,6 +75,9 @@ export function AppSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <div className="px-3 py-2">
+        <AppSwitcher />
+      </div>
       <SidebarContent className="gap-0">
         <NavMain items={navItemsConfig} />
         <SidebarSeparator className="mx-2 my-2 bg-sidebar-border/50" />
