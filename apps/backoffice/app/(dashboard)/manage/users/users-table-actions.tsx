@@ -72,14 +72,19 @@ export function UsersTableWithActions() {
   }
 
   return (
-    <>
+    <div className="space-y-6">
+      {/* Page Header */}
       <div className="flex items-center justify-between">
-        <div className="flex-1" />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
+          <p className="text-muted-foreground">Manage user accounts, roles, and permissions</p>
+        </div>
         <Button onClick={() => setCreateDialogOpen(true)}>
           <HugeiconsIcon icon={AddCircleIcon} className="mr-2 h-4 w-4" />
           Add User
         </Button>
       </div>
+
       <UsersDataTable users={users} onRefresh={handleRefresh} />
       <UserDialog
         open={createDialogOpen}
@@ -87,6 +92,6 @@ export function UsersTableWithActions() {
         mode="create"
         onSuccess={handleRefresh}
       />
-    </>
+    </div>
   );
 }
