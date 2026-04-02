@@ -127,16 +127,16 @@ export function PermissionsTableWithActions() {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Dashboard */}
-      <PermissionsStats stats={stats} />
-
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold">Permission Management</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Permission Management</h1>
         <p className="text-muted-foreground">
           Create and manage permissions for role-based access control
         </p>
       </div>
+
+      {/* Statistics Dashboard */}
+      <PermissionsStats stats={stats} />
 
       {/* Data Table with integrated create button and search */}
       <PermissionsDataTable data={permissions} onRefresh={loadPermissions} />
