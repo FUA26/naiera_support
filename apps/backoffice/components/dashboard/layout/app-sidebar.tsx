@@ -4,10 +4,6 @@ import * as React from 'react'
 import {
   LifeBuoy,
   Send,
-  Settings2,
-  LayoutDashboard,
-  Users,
-  Briefcase,
   Layers,
 } from 'lucide-react'
 
@@ -24,68 +20,7 @@ import {
 import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
 import { NavSecondary } from './nav-secondary'
-
-const navMainItems = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: LayoutDashboard,
-    isActive: true,
-    requiredPermission: 'dashboard.view',
-  },
-  {
-    title: 'Projects',
-    url: '/projects',
-    icon: Briefcase,
-    requiredPermission: 'projects.read',
-  },
-  {
-    title: 'User Management',
-    url: '#',
-    icon: Users,
-    requiredPermission: 'users.read',
-    items: [
-      {
-        title: 'Users',
-        url: '/users',
-        requiredPermission: 'users.read',
-      },
-      {
-        title: 'Roles',
-        url: '/roles',
-        requiredPermission: 'roles.read',
-      },
-      {
-        title: 'Permissions',
-        url: '/permissions',
-        requiredPermission: 'permissions.read',
-      },
-      {
-        title: 'Resources',
-        url: '/resources',
-        requiredPermission: 'resources.read',
-      },
-    ],
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings2,
-    requiredPermission: 'settings.manage',
-    items: [
-      {
-        title: 'General',
-        url: '/settings',
-        requiredPermission: 'settings.manage',
-      },
-      {
-        title: 'Security',
-        url: '/settings/security',
-        requiredPermission: 'settings.security',
-      },
-    ],
-  },
-]
+import { navItemsConfig } from './nav-items-config'
 
 const navSecondaryItems = [
   {
@@ -120,13 +55,13 @@ export function AppSidebar({
               asChild
               className="h-14 data-[active=true]:bg-primary/5 rounded-xl"
             >
-              <a href="/dashboard" className="gap-3">
+              <a href="/" className="gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-sm">
                   <Layers className="h-5 w-5" />
                 </div>
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="truncate text-base font-bold tracking-tight">
-                    Feedback SaaS
+                    Naiera Support
                   </span>
                   <span className="truncate text-xs font-medium opacity-60">
                     {projects.length > 0
@@ -140,7 +75,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="gap-0">
-        <NavMain items={navMainItems} />
+        <NavMain items={navItemsConfig} />
         <SidebarSeparator className="mx-2 my-2 bg-sidebar-border/50" />
         <NavProjects projects={projects} />
         <SidebarSeparator className="mx-2 my-2 bg-sidebar-border/50" />
