@@ -151,14 +151,14 @@ export function RolesTableWithActions() {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Dashboard */}
-      <RolesStats stats={stats} />
-
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold">Role Management</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Role Management</h1>
         <p className="text-muted-foreground">Create and manage roles with permissions</p>
       </div>
+
+      {/* Statistics Dashboard */}
+      <RolesStats stats={stats} />
 
       {/* Data Table */}
       <RolesTanStackTable
