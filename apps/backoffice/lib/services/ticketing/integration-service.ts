@@ -128,7 +128,7 @@ export async function generateAccessToken(
   // Build payload - include identifier type for proper filtering
   const payload: TokenPayload = {
     channelId: channel.id,
-    channelSlug: channel.slug || channelSlug, // Store slug for reference
+    channelSlug: (channel as any).slug || channelSlug, // Store slug for reference
     appId: channel.appId,
     purpose,
   };
