@@ -1,20 +1,27 @@
 import { Providers } from "@/components/shared/providers";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans } from "next/font/google";
+import { Fira_Code, Inter, Merriweather } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const notoSans = Noto_Sans({ variable: "--font-sans" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
+  weight: ["300", "400", "700", "900"],
   subsets: ["latin"],
+  display: "swap",
+});
+
+const firaCode = Fira_Code({
+  variable: "--font-fira-code",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,8 +44,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={notoSans.variable}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={inter.variable}>
+      <body className={`${merriweather.variable} ${firaCode.variable} antialiased`}>
         <Providers>{children}</Providers>
         <Toaster />
         <Script src="https://cdn.jsdelivr.net/npm/eruda" strategy="afterInteractive" />
