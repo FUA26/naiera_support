@@ -101,11 +101,9 @@ const navSecondaryItems = [
 ]
 
 export function AppSidebar({
-  userPermissions = [],
   projects = [],
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  userPermissions?: string[]
   projects?: Array<{
     name: string
     url: string
@@ -142,7 +140,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="gap-0">
-        <NavMain items={navMainItems} userPermissions={userPermissions} />
+        <NavMain items={navMainItems} />
         <SidebarSeparator className="mx-2 my-2 bg-sidebar-border/50" />
         <NavProjects projects={projects} />
         <SidebarSeparator className="mx-2 my-2 bg-sidebar-border/50" />

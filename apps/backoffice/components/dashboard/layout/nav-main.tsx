@@ -28,10 +28,10 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
+import { usePermissions } from '@/lib/rbac-client/provider'
 
 export function NavMain({
   items,
-  userPermissions = [],
 }: {
   items: {
     title: string
@@ -45,17 +45,17 @@ export function NavMain({
       requiredPermission?: string
     }[]
   }[]
-  userPermissions?: string[]
 }) {
   const { state } = useSidebar()
   const isCollapsed = state === 'collapsed'
   const pathname = usePathname()
+  const userPermissions = usePermissions()
 
-  const hasWildcard = userPermissions.includes('*')
+  const hasWildcard = userPermissions?.permissions.includes('*') || false
 
   const hasPermission = (permission?: string) => {
     if (!permission) return true
-    return hasWildcard || userPermissions.includes(permission)
+    return hasWildcard || userPermissions?.permissions.includes(permission) || false
   }
 
   const isUrlActive = (url: string) => {
@@ -90,6 +90,10 @@ export function NavMain({
       </SidebarGroupLabel>
       <SidebarMenu className="mt-1">
         {filteredItems.map((item) => {
+          // If no items remain after permission filtering, don't render
+          if (item.items && item.items.length === 0) {
+            return null
+          }
           const hasSubItems = item.items && item.items.length > 0
           const isItemActive = isUrlActive(item.url)
           const isSubActive = hasActiveSubItem(item.items)
@@ -177,7 +181,7 @@ export function NavMain({
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-6">
                   <SidebarMenuSub className="mt-1 gap-0.5">
-                    {item.items?.map((subItem) => {
+                    {item.items && item.items.map((subItem) => {
                       const isSubItemActive = isUrlActive(subItem.url)
                       return (
                         <SidebarMenuSubItem key={subItem.title}>
