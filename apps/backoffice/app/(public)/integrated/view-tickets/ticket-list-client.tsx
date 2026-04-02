@@ -108,7 +108,7 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
           {tickets.map((ticket) => {
             const status = statusConfig[ticket.status] || statusConfig.OPEN;
             const priority = priorityConfig[ticket.priority] || priorityConfig.NORMAL;
-            const StatusIcon = status.icon;
+            const StatusIcon = status?.icon;
 
             return (
               <div
@@ -119,9 +119,9 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
                   {/* Status Icon */}
                   <div
                     onClick={() => setSelectedTicket(ticket)}
-                    className={cn("flex w-12 h-12 items-center justify-center rounded-xl shrink-0 cursor-pointer", status.bgColor)}
+                    className={cn("flex w-12 h-12 items-center justify-center rounded-xl shrink-0 cursor-pointer", status?.bgColor)}
                   >
-                    <StatusIcon className={cn("w-6 h-6", status.color)} />
+                    <StatusIcon className={cn("w-6 h-6", status?.color)} />
                   </div>
 
                   {/* Content */}
@@ -133,11 +133,11 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
                       <span className="font-mono text-sm text-slate-500 dark:text-slate-400">
                         #{ticket.ticketNumber}
                       </span>
-                      <Badge className={cn("shrink-0", status.bgColor, status.color, "border-0")}>
-                        {status.label}
+                      <Badge className={cn("shrink-0", status?.bgColor, status?.color, "border-0")}>
+                        {status?.label}
                       </Badge>
-                      <Badge className={cn("shrink-0", priority.bgColor, priority.color, "border-0")}>
-                        {priority.label}
+                      <Badge className={cn("shrink-0", priority?.bgColor, priority?.color, "border-0")}>
+                        {priority?.label}
                       </Badge>
                     </div>
 
@@ -193,11 +193,11 @@ export function TicketListClient({ tickets, token, channelName, appName }: Ticke
                     #{selectedTicket.ticketNumber}
                   </span>
                   <Badge className={cn(
-                    statusConfig[selectedTicket.status].bgColor,
-                    statusConfig[selectedTicket.status].color,
+                    statusConfig[selectedTicket.status]?.bgColor,
+                    statusConfig[selectedTicket.status]?.color,
                     "border-0"
                   )}>
-                    {statusConfig[selectedTicket.status].label}
+                    {statusConfig[selectedTicket.status]?.label}
                   </Badge>
                 </div>
                 <DialogTitle className="text-xl">{selectedTicket.subject}</DialogTitle>
