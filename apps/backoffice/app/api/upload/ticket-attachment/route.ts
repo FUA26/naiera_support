@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
         file,
         filename: file.name,
         category,
-        userId,
+        userId: userId || "anonymous",
         isPublic: false,
       });
 
