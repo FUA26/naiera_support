@@ -1,34 +1,34 @@
 /* Pisky Design System Theme */
-/* Primary Colors: Crimson #DC143C */
+/* Primary Colors: Blue #1B53D9, Coral #E07A5F */
 
 :root {
-  /* Primary Colors - Crimson */
-  --pisky-blue-50: #FFF5F5;
-  --pisky-blue-100: #FEE2E2;
-  --pisky-blue-200: #FECACA;
-  --pisky-blue-300: #FCA5A5;
-  --pisky-blue-400: #F87171;
-  --pisky-blue-500: #EF4444;
-  --pisky-blue-600: #DC143C;
-  --pisky-blue-700: #B91C1C;
-  --pisky-blue-800: #991B1B;
-  --pisky-blue-900: #7F1D1D;
-  --pisky-blue-hover: #C41E3A;
-  --pisky-blue-active: #9B1C1C;
-  --pisky-blue-light: #F87171;
-  --pisky-blue-focus: #FCA5A5;
+  /* Primary Colors - Blue */
+  --pisky-blue-50: #EDF2FF;
+  --pisky-blue-100: #D9E2FF;
+  --pisky-blue-200: #B3CCFF;
+  --pisky-blue-300: #8CB4FF;
+  --pisky-blue-400: #669CFF;
+  --pisky-blue-500: #4084FF;
+  --pisky-blue-600: #1B53D9;
+  --pisky-blue-700: #1642B8;
+  --pisky-blue-800: #113197;
+  --pisky-blue-900: #0C2176;
+  --pisky-blue-hover: #1642B8;
+  --pisky-blue-active: #113197;
+  --pisky-blue-light: #669CFF;
+  --pisky-blue-focus: #8CB4FF;
 
-  /* Secondary - Orange */
-  --coral-50: #FFFBEB;
-  --coral-100: #FEF3C7;
-  --coral-200: #FDE68A;
-  --coral-300: #FCD34D;
-  --coral-400: #FBBF24;
-  --coral-500: #F97316;
-  --coral-600: #D97706;
-  --coral-700: #B45309;
-  --coral-800: #92400E;
-  --coral-900: #78350F;
+  /* Secondary - Coral */
+  --coral-50: #FEF5F0;
+  --coral-100: #FDE8DC;
+  --coral-200: #FBD1B9;
+  --coral-300: #F9B996;
+  --coral-400: #F7A174;
+  --coral-500: #E07A5F;
+  --coral-600: #C46249;
+  --coral-700: #A84A33;
+  --coral-800: #8C321D;
+  --coral-900: #701A07;
 
   /* Semantic Colors */
   --success-50: #ECFDF5;
@@ -86,16 +86,16 @@
   --border-700: #1F2937;
 
   /* Ticket Status Colors */
-  --ticket-open: #DC143C;
+  --ticket-open: #1B53D9;
   --ticket-pending: #F59E0B;
   --ticket-resolved: #10B981;
   --ticket-closed: #6B7280;
 
   /* Channel Colors */
-  --channel-web-form: #DC143C;
-  --channel-in-app: #EF4444;
-  --channel-integrated: #F87171;
-  --channel-email: #F97316;
+  --channel-web-form: #1B53D9;
+  --channel-in-app: #4084FF;
+  --channel-integrated: #669CFF;
+  --channel-email: #E07A5F;
 
   /* Border System */
   --border-sm: 1px solid var(--border-100);
@@ -117,13 +117,13 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
 
-  /* Sidebar Colors - Solid Crimson */
-  --sidebar-bg: #DC143C;
-  --sidebar-border: #7F1D1D;
+  /* Sidebar Colors - Solid Blue */
+  --sidebar-bg: #1B53D9;
+  --sidebar-border: #0C2176;
   --sidebar-text-primary: #FFFFFF;
-  --sidebar-text-secondary: #FCA5A5;
-  --sidebar-item-hover: #B91C1C;
-  --sidebar-item-active: #991B1B;
+  --sidebar-text-secondary: #8CB4FF;
+  --sidebar-item-hover: #1642B8;
+  --sidebar-item-active: #113197;
 
   /* Dark Mode Colors */
   --dark-bg: #111827;
