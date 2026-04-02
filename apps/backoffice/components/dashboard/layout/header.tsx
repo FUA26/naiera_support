@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Github } from 'lucide-react'
-import { Button } from '@workspace/ui'
+import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/shared/theme-toggle'
 
 export function Header() {

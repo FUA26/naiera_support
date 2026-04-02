@@ -5,8 +5,8 @@ import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Loader2, LogOut, User, KeyRound } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui'
-import { Button } from '@workspace/ui'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@workspace/ui'
+} from '@/components/ui/dropdown-menu'
 
 export function HeaderUser({
   user,

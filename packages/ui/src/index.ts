@@ -13,12 +13,6 @@ export * from "./form"
 export * from "./badge"
 export * from "./avatar"
 export * from "./textarea"
-export * from "./collapsible"
-export * from "./sidebar"
-export * from "./sheet"
-export * from "./separator"
-export * from "./skeleton"
-export * from "./tooltip"
 
 // Custom components
 export * from "./components/forms/form-field"

@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-} from '@workspace/ui'
+} from '@/components/ui/sidebar'
 import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
 import { NavSecondary } from './nav-secondary'
