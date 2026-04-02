@@ -6,12 +6,14 @@ interface PageProps {
   searchParams: Promise<{ error?: string }>;
 }
 
-const errorConfig: Record<string, {
+interface ErrorConfig {
   title: string;
   description: string;
   icon: "expired" | "invalid" | "generic";
   action?: "retry" | "close";
-}> = {
+}
+
+const errorConfig: Record<string, ErrorConfig> = {
   TOKEN_EXPIRED: {
     title: "Token Kadaluarsa",
     description: "Token akses Anda telah kedaluwarsa. Token hanya berlaku selama 30 menit untuk keamanan. Silakan kembali ke aplikasi dan minta link akses baru.",
@@ -47,7 +49,7 @@ const errorConfig: Record<string, {
 export default async function SupportErrorPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const errorKey = params.error || "UNKNOWN";
-  const config = errorConfig[errorKey] || errorConfig.UNKNOWN;
+  const config: ErrorConfig = errorConfig[errorKey] || errorConfig.UNKNOWN;
 
   const IconComponent = () => {
     switch (config.icon) {

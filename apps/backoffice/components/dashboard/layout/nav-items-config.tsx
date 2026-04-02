@@ -8,6 +8,9 @@ import {
   Key,
   Settings,
   Bell,
+  UserCog,
+  ShieldCheck,
+  KeySquare,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -70,16 +73,19 @@ export const navItemsConfig: NavItem[] = [
       {
         title: 'Users',
         url: '/manage/users',
+        icon: UserCog,
         requiredPermission: 'ADMIN_USERS_MANAGE',
       },
       {
         title: 'Roles',
         url: '/manage/roles',
+        icon: Shield,
         requiredPermission: 'ADMIN_ROLES_MANAGE',
       },
       {
         title: 'Permissions',
         url: '/manage/permissions',
+        icon: KeySquare,
         requiredPermission: 'ADMIN_PERMISSIONS_MANAGE',
       },
     ],

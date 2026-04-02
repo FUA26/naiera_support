@@ -11,9 +11,11 @@ import * as React from "react";
 import { Button, type ButtonProps } from "@workspace/ui";
 import { cn } from "@/lib/utils";
 
-export interface AppButtonProps extends ButtonProps {
+export interface AppButtonProps extends Omit<ButtonProps, 'variant'> {
   variant?: "default" | "primary" | "secondary" | "ghost" | "outline" | "app-ghost" | "app-outline";
   children?: React.ReactNode;
+  className?: string;
+  size?: ButtonProps['size'];
 }
 
 /**
@@ -86,13 +88,13 @@ AppButton.displayName = "AppButton";
 /**
  * Action button for cards/tables
  */
-export function AppActionButton({ className, ...props }: ButtonProps) {
+export function AppActionButton(props: ButtonProps) {
   return (
     <Button
       size="sm"
       className={cn(
         "btn-pisky-primary rounded-lg text-sm",
-        className
+        props.className
       )}
       {...props}
     />
@@ -102,14 +104,14 @@ export function AppActionButton({ className, ...props }: ButtonProps) {
 /**
  * Icon button - soft hover
  */
-export function AppIconButton({ className, ...props }: ButtonProps) {
+export function AppIconButton(props: ButtonProps) {
   return (
     <Button
       size="icon"
       variant="ghost"
       className={cn(
         "rounded-lg transition-all hover:bg-accent/50 hover:scale-105",
-        className
+        props.className
       )}
       {...props}
     />

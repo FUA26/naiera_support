@@ -99,8 +99,8 @@ export function UserAppsDialog({
       const currentAppIds = (userAppsData.apps || []).map((app: App) => app.id);
 
       // Calculate additions and removals
-      const toAdd = selectedAppIds.filter((id) => !currentAppIds.includes(id));
-      const toRemove = currentAppIds.filter((id) => !selectedAppIds.includes(id));
+      const toAdd = selectedAppIds.filter((id: string) => !currentAppIds.includes(id));
+      const toRemove = currentAppIds.filter((id: string) => !selectedAppIds.includes(id));
 
       // Add new assignments
       for (const appId of toAdd) {

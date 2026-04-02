@@ -46,7 +46,7 @@ export function getIntegrationCode(app: App, channel: Channel): IntegrationGuide
 POST ${baseUrl}/api/integrated/auth/token
 Content-Type: application/json\n
 {
-  "channelSlug": "${channel.slug}",
+  "channelSlug": "${channel.id}",
   "externalUserId": "user_123",
   "purpose": "list_tickets"
 }
